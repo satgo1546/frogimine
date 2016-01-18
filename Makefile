@@ -8,8 +8,9 @@ kernel.o: kernel.c
 	i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 mine.bin: boot.o kernel.o
 	i686-elf-gcc -T linker.ld -o mine.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
-frogimine.iso: mine.bin
+frogimine.iso: mine.bin grub.cfg
 	mkdir -p isodir/boot/grub
 	cp mine.bin isodir/boot/
 	cp grub.cfg isodir/boot/grub/
-	grub-mkrescue -o frogimine.iso isodir
+	grub-mkrescue --fonts="" --locales="" --themes="" \
+		--compress=xz --output=frogimine.iso isodir
