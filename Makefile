@@ -13,4 +13,4 @@ frogimine.iso: mine.bin grub.cfg
 	cp mine.bin isodir/boot/
 	cp grub.cfg isodir/boot/grub/
 	grub-mkrescue --fonts="" --locales="" --themes="" \
-		--compress=xz --output=frogimine.iso isodir
+		--compress=no --output=frogimine.iso isodir
