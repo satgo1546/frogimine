@@ -49,7 +49,7 @@ uint16_t* terminal_buffer;
 void terminal_initialize() {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = make_color(COLOR_BLACK, COLOR_WHITE);
+	terminal_color = make_color(COLOR_BLACK, COLOR_LIGHT_GREY);
 	terminal_buffer = (uint16_t*) 0xB8000;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -99,5 +99,5 @@ void kernel_main() {
 	terminal_writestring("Created by Frog Chen a.k.a. satgo1546. All rights reserved.");
 	terminal_row++;
 	terminal_column = 4;
-	terminal_writestring("Version 0.0 (2016-01-17).");
+	terminal_writestring("Version 0.01.");
 }
