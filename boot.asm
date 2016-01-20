@@ -1,20 +1,21 @@
-; Declare constants used for creating a multiboot header.
-MBALIGN     equ  1<<0                   ; align loaded modules on page boundaries
-MEMINFO     equ  1<<1                   ; provide memory map
-FLAGS       equ  MBALIGN | MEMINFO      ; this is the Multiboot 'flag' field
-MAGIC       equ  0x1BADB002             ; 'magic number' lets bootloader find the header
-CHECKSUM    equ -(MAGIC + FLAGS)        ; checksum of above, to prove we are multiboot
-
-; Declare a header as in the Multiboot Standard. We put this into a special
-; section so we can force the header to be in the start of the final program.
-; You don't need to understand all these details as it is just magic values that
-; is documented in the multiboot standard. The bootloader will search for this
-; magic sequence and recognize us as a multiboot kernel.
+; 本段参照Multiboot规范中“OS image format”一段。
+; https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#OS-image-format
+FLAGS equ 0b111 ; 对齐页面 + 提供memory map + 指定图像模式
+MULTIBOOT_MAGIC equ 0x1badb002 ; 魔法，参照Multiboot规范
+GRAPHICS_MODE equ 0 ; 线性图像模式（linear graphics mode）
+GRAPHICS_WIDTH equ 320 ; 分辨率（横向）
+GRAPHICS_HEIGHT equ 200 ; 分辨率（纵向）
+GRAPHICS_DEPTH equ 8 ; 色深
 section .multiboot
 align 4
-	dd MAGIC
+	dd MULTIBOOT_MAGIC
 	dd FLAGS
-	dd CHECKSUM
+	dd -(MULTIBOOT_MAGIC + FLAGS)
+	resb 5 << 2
+	dd GRAPHICS_MODE
+	dd GRAPHICS_WIDTH
+	dd GRAPHICS_HEIGHT
+	dd GRAPHICS_DEPTH
 
 ; Currently the stack pointer register (esp) points at anything and using it may
 ; cause massive harm. Instead, we'll provide our own stack. We will allocate
@@ -52,22 +53,19 @@ _start:
 	; a stack. Note that the processor is not fully initialized yet and stuff
 	; such as floating point instructions are not available yet.
 
-	; To set up a stack, we simply set the esp register to point to the top of
-	; our stack (as it grows downwards).
+	; 创建自己的堆栈
 	mov esp, stack_top
 
-	; We are now ready to actually execute C code. We cannot embed that in an
-	; assembly file, so we'll create a kernel.c file in a moment. In that file,
-	; we'll create a C entry point called kernel_main and call it here.
+	; 调用系统内核的主程序
 	extern kernel_main
 	call kernel_main
+	;mov dword edx, [ebx + 80]
+	;mov dword [0xb8000], eax
+	;mov dword [0xb80a0], edx
 
-	; In case the function returns, we'll want to put the computer into an
-	; infinite loop. To do that, we use the clear interrupt ('cli') instruction
-	; to disable interrupts, the halt instruction ('hlt') to stop the CPU until
-	; the next interrupt arrives, and jumping to the halt instruction if it ever
-	; continues execution, just to be safe.
-	cli
-.hang:
+	; 当内核主程序返回后，就让电脑进入死循环
+	cli ; 禁用中断
+.loop:
+	; 等待到下一次中断来临
 	hlt
-	jmp .hang
+	jmp .loop
