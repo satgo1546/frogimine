@@ -8,7 +8,7 @@ void write_memory(int address, char value) {
 
 void kernel_main() {
 	int i;
-	for (i = 0xa0000; i < 0xa0a00; i++) {
+	for (i = 0xa0000; i < 0xaffff; i++) {
 		write_memory(i, i & 0xff);
 	}
 }
