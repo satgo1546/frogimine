@@ -1,7 +1,10 @@
 all: frogimine.iso
 run: all
 	qemu-system-i386 -cdrom frogimine.iso
-.PHONY: all run
+clean:
+	rm -rf isodir
+	rm -f *.o mine.bin frogimine.iso
+.PHONY: all run clean
 boot.o: boot.asm
 	nasm -felf32 boot.asm -o boot.o
 kernel.o: kernel.c
