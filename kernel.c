@@ -8,6 +8,27 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define GRAPHICS_WIDTH 320
+#define GRAPHICS_HEIGHT 200
+enum color {
+	C_BLACK = 0,
+	C_MAROON,
+	C_GREEN,
+	C_OLIVE,
+	C_NAVY,
+	C_PURPLE,
+	C_TEAL,
+	C_SILVER,
+	C_GRAY,
+	C_RED,
+	C_LIME,
+	C_YELLOW,
+	C_BLUE,
+	C_FUCHSIA,
+	C_AQUA,
+	C_WHITE
+};
+
 //---------------------------------------------------------------------------
 // ● 根据地址写入内存
 //---------------------------------------------------------------------------

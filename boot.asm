@@ -35,6 +35,45 @@ _start:
 	; 创建自己的堆栈
 	mov esp, stack_top
 	
+	; 设置调色板
+	; 参照：http://wiki.osdev.org/VGA_Hardware#Port_0x3C8
+	pushfd
+	cli
+	mov dx, 0x03c9
+	mov al, 0
+	out 0x03c8, al
+	%macro color 3
+		mov al, %1 >> 2
+		out dx, al
+		mov al, %2 >> 2
+		out dx, al
+		mov al, %3 >> 2
+		out dx, al
+	%endmacro
+	; 调色板数据
+	; 由于内部使用的是0~63数据范围，因此即使在这里指定得很精确也毫无作用。
+	; 在这里用0~255的范围仅是为了方便处理而使用。
+	; 0~16：HTML规定的标准16色、Windows cmd.exe默认颜色等。可参照：
+	; https://www.w3.org/TR/REC-html40/types.html#idx-color
+	color 0, 0, 0
+	color 128, 0, 0
+	color 0, 128, 0
+	color 128, 128, 0
+	color 0, 0, 128
+	color 128, 0, 128
+	color 0, 128, 128
+	color 192, 192, 192
+	color 128, 128, 128
+	color 255, 0, 0
+	color 0, 255, 0
+	color 255, 255, 0
+	color 0, 0, 255
+	color 255, 0, 255
+	color 0, 255, 255
+	color 255, 255, 255
+	%unmacro color 3
+	popfd
+	
 	; 调用系统内核的主程序
 	extern kernel_main
 	call kernel_main
