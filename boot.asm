@@ -1,4 +1,5 @@
-; 本段参照Multiboot规范中“OS image format”一段。
+; Multiboot的头
+; 参照Multiboot规范中“OS image format”一段：
 ; https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#OS-image-format
 FLAGS equ 0b111 ; 对齐页面 + 提供memory map + 指定图像模式
 MULTIBOOT_MAGIC equ 0x1badb002 ; 魔法，参照Multiboot规范
