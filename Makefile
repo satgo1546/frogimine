@@ -1,19 +1,20 @@
-all: frogimine.iso
+CC=i686-pc-linux-gnu-gcc
+
+all: mine.bin
 run: all
-	qemu-system-i386 -cdrom frogimine.iso
+	qemu-system-i386 -kernel mine.bin
+debug: all
+	qemu-system-i386 -kernel mine.bin -gdb tcp::1234 -S &
+	sleep 1 # gdb要等qemu就绪
+	gdb
 clean:
 	rm -rf isodir
 	rm -f *.o mine.bin frogimine.iso
 .PHONY: all run clean
 boot.o: boot.asm
-	nasm -felf32 boot.asm -o boot.o
+	nasm -felf32 boot.asm -o boot.o -ggdb
 kernel.o: kernel.c
-	i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+	${CC} -m32 -g -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 mine.bin: boot.o kernel.o
-	i686-elf-gcc -T linker.ld -o mine.bin -ffreestanding -O2 -nostdlib $^ -lgcc
-frogimine.iso: mine.bin grub.cfg
-	mkdir -p isodir/boot/grub
-	cp mine.bin isodir/boot/
-	cp grub.cfg isodir/boot/grub/
-	grub-mkrescue --fonts="" --locales="" --themes="" \
-		--compress=no --output=frogimine.iso isodir
+	${CC} -m32 -g -T linker.ld -o mine.bin -ffreestanding -O2 -nostdlib $^ -lgcc
+
