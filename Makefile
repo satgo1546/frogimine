@@ -10,7 +10,7 @@ boot.o: boot.asm
 kernel.o: kernel.c
 	i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 mine.bin: boot.o kernel.o
-	i686-elf-gcc -T linker.ld -o mine.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+	i686-elf-gcc -T linker.ld -o mine.bin -ffreestanding -O2 -nostdlib $^ -lgcc
 frogimine.iso: mine.bin grub.cfg
 	mkdir -p isodir/boot/grub
 	cp mine.bin isodir/boot/
