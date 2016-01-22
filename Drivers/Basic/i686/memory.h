@@ -9,6 +9,8 @@
 #ifndef INCLUDE_MEMORY_H_
 #define INCLUDE_MEMORY_H_
 
+#define SL_RW_P 3 // attributes: supervisor level, read/write, present.
+
 //---------------------------------------------------------------------------
 // ● 将页表绑定入页目录
 //---------------------------------------------------------------------------

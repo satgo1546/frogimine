@@ -60,12 +60,11 @@ void memory_init () {
 	{
 		// As the address is page aligned, it will always leave 12 bits zeroed.
 		// Those bits are used by the attributes ;)
-		kern_page_table[i] = (i * 0x1000) | 3; 
-			// attributes: supervisor level, read/write, present.
+		kern_page_table[i] = (i * 0x1000) | SL_RW_P; 
 	}
 	
 	// Put the Page Table in the Page Directory
-	map_pages_to_dir(0, (uint32_t*)kern_page_table, 3);
+	map_pages_to_dir(0, (uint32_t*)kern_page_table, SL_RW_P);
 	
 	// enable it
 	asm volatile ("movl %%eax, %%cr3" :: "a" (&page_directory)); // load PDPT into CR3
