@@ -23,7 +23,7 @@ run: all
 debug: all
 	qemu-system-i386 -kernel mine.bin -gdb tcp::1234 -S &
 	sleep 1 # gdb要等qemu就绪
-	gdb
+	cgdb -x gdbinit
 clean:
 	rm -rf isodir
 	rm -f ${C_OBJECTS} ${S_OBJECTS} mine.bin

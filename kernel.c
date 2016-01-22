@@ -8,6 +8,9 @@
 
 #include "Drivers/Basic/i686/types.h"
 #include "Drivers/Basic/i686/io.h"
+#include "Drivers/Basic/i686/memory.h"
+
+#include "arch_init.h"
 
 /*	debug	*/ 	
 #include "Drivers/Basic/i686/debug.h"
@@ -17,8 +20,10 @@
 //---------------------------------------------------------------------------
 void kernel_main() {
 	
+	arch_init ();
+	
 #ifdef X86DEBUG
-	x86debugputchar('K'); // 进了kernel了
+	x86debugputchar('K'); // 进了kernel且完成paging了
 #endif
 	
 	for (;;) {

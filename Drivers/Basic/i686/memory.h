@@ -1,13 +1,14 @@
 //=============================================================================
-// ■ kernel.c
+// ■ memory.h
 //-----------------------------------------------------------------------------
-//   General Config
+//   Driver > Basic > i686 > memory
 //=============================================================================
 
-#ifndef INCLUDE_CONFIG_H_
-#define INCLUDE_CONFIG_H_
+#include "Drivers/Basic/i686/types.h"
 
-#define i686
-#define X86DEBUG
+#ifndef INCLUDE_MEMORY_H_
+#define INCLUDE_MEMORY_H_
+
+void memory_init();
 
 #endif
