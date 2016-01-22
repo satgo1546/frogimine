@@ -6,8 +6,16 @@
 
 #include "memory.h"
 
+//---------------------------------------------------------------------------
+// ● 页表&页目录
+//---------------------------------------------------------------------------
 uint32_t volatile page_directory[1024] __attribute__((aligned(4096)));
-uint32_t volatile first_page_table[1024] __attribute__((aligned(4096)));
+uint32_t volatile kern_page_table[1024] __attribute__((aligned(4096)));
+
+//---------------------------------------------------------------------------
+// ● 物理内存表
+//---------------------------------------------------------------------------
+uint32_t volatile phy_directory[1024] __attribute__((aligned(4096)));
 
 //---------------------------------------------------------------------------
 // ● 将页表绑定入页目录
@@ -52,12 +60,12 @@ void memory_init () {
 	{
 		// As the address is page aligned, it will always leave 12 bits zeroed.
 		// Those bits are used by the attributes ;)
-		first_page_table[i] = (i * 0x1000) | 3; 
+		kern_page_table[i] = (i * 0x1000) | 3; 
 			// attributes: supervisor level, read/write, present.
 	}
 	
 	// Put the Page Table in the Page Directory
-	map_pages_to_dir(0, (uint32_t*)first_page_table, 3);
+	map_pages_to_dir(0, (uint32_t*)kern_page_table, 3);
 	
 	// enable it
 	asm volatile ("movl %%eax, %%cr3" :: "a" (&page_directory)); // load PDPT into CR3
