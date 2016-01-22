@@ -5,7 +5,7 @@
 #/=============================================================================
 
 CC=clang++ -m32
-CCLD=ld -m32
+CCLD=ld -melf_i386
 ARCH=i686
 
 C_SOURCES = $(shell find . -name "*.cpp")
