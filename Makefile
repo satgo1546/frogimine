@@ -1,4 +1,21 @@
-CC=i686-pc-linux-gnu-gcc
+#/=============================================================================
+#/ ■ Makefile
+#/-----------------------------------------------------------------------------
+#/   GENERAL 
+#/=============================================================================
+
+CC=clang -m32
+CCLD=ld -m32
+ARCH=i686
+
+C_SOURCES = $(shell find . -name "*.c")
+C_OBJECTS = $(patsubst %.c, %.o, $(C_SOURCES))
+S_SOURCES = $(shell find . -name "*.asm")
+S_OBJECTS = $(patsubst %.asm, %.o, $(S_SOURCES))
+
+C_FLAGS = -c -Wall -m32 -ggdb -nostdinc -fno-builtin -fno-stack-protector -I. -O2
+LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -nostdlib
+ASM_FLAGS = -f elf32 -g -F stabs
 
 all: mine.bin
 run: all
@@ -9,12 +26,21 @@ debug: all
 	gdb
 clean:
 	rm -rf isodir
-	rm -f *.o mine.bin frogimine.iso
+	rm -f ${C_OBJECTS} ${S_OBJECTS} mine.bin
 .PHONY: all run clean
+
+.c.o: .c
+	@echo 编译C代码文件 $< ...
+	$(CC) $(C_FLAGS) $< -o $@
+
 boot.o: boot.asm
-	nasm -felf32 boot.asm -o boot.o -ggdb
-kernel.o: kernel.c
-	${CC} -m32 -g -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-mine.bin: boot.o kernel.o
-	${CC} -m32 -g -T linker.ld -o mine.bin -ffreestanding -O2 -nostdlib $^ -lgcc
+	@echo 编译multiboot文件 $< ...
+	nasm $(ASM_FLAGS) $<
+
+.asm.o: .c
+	@echo 编译nasm汇编文件 $< ...
+	nasm $(ASM_FLAGS) $<
+	
+mine.bin: ${C_OBJECTS} ${S_OBJECTS}
+	${CCLD} -g -T linker.ld -o mine.bin -O2 -nostdlib $^
 

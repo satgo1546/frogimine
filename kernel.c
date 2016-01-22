@@ -4,22 +4,12 @@
 //   这个文件是干什么的？
 //=============================================================================
 
-#define X86DEBUG
+#include "Drivers/Basic/i686/types.h"
+#include "Drivers/Basic/i686/io.h"
 
-#include "types.h"
 
-//---------------------------------------------------------------------------
-// ● 根据地址写入内存
-//---------------------------------------------------------------------------
-void write_memory(int address, char value) {
-	*((char*) address) = value;
-}
-
-#ifdef X86DEBUG
-void x86debugputchar(char c) {	// 调试用，等IO OBJ完成支持驱动之后就扔了
-	write_memory(0xb8000,c);
-}
-#endif
+/*	debug	*/ 	
+#include "Drivers/Basic/i686/debug.h"
 
 //---------------------------------------------------------------------------
 // ● 主程序
@@ -31,6 +21,6 @@ void kernel_main() {
 #endif
 	
 	for (;;) {
-		__asm__ ("hlt");	// 挂起
+		cpu_hlt ();	// 挂起
 	}
 }
