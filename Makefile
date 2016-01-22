@@ -4,12 +4,12 @@
 #/   GENERAL 
 #/=============================================================================
 
-CC=clang -m32
+CC=clang++ -m32
 CCLD=ld -m32
 ARCH=i686
 
-C_SOURCES = $(shell find . -name "*.c")
-C_OBJECTS = $(patsubst %.c, %.o, $(C_SOURCES))
+C_SOURCES = $(shell find . -name "*.cpp")
+C_OBJECTS = $(patsubst %.cpp, %.o, $(C_SOURCES))
 S_SOURCES = $(shell find . -name "*.asm")
 S_OBJECTS = $(patsubst %.asm, %.o, $(S_SOURCES))
 
@@ -29,8 +29,8 @@ clean:
 	rm -f ${C_OBJECTS} ${S_OBJECTS} mine.bin
 .PHONY: all run clean
 
-.c.o: .c
-	@echo 编译C代码文件 $< ...
+.cpp.o: .c
+	@echo 编译C++代码文件 $< ...
 	$(CC) $(C_FLAGS) $< -o $@
 
 boot.o: boot.asm
