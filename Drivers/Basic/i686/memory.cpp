@@ -7,27 +7,16 @@
 #include "memory.h"
 
 //---------------------------------------------------------------------------
-// ● 页表&页目录
-//---------------------------------------------------------------------------
-uint32_t volatile page_directory[1024] __attribute__((aligned(4096)));
-uint32_t volatile kern_page_table[1024] __attribute__((aligned(4096)));
-
-//---------------------------------------------------------------------------
-// ● 物理内存表
-//---------------------------------------------------------------------------
-uint32_t volatile phy_directory[1024] __attribute__((aligned(4096)));
-
-//---------------------------------------------------------------------------
 // ● 将页表绑定入页目录
 //---------------------------------------------------------------------------
-void map_pages_to_dir(int page_id, uint32_t* page_tab, uint8_t flag) {
+void Memory::map_pages_to_dir(int page_id, uint32_t* page_tab, uint8_t flag) {
 	page_directory[page_id] = ((uint32_t)page_tab) | flag;
 }
 
 //---------------------------------------------------------------------------
 // ● 将内存绑定入页表 (KByte计数)
 //---------------------------------------------------------------------------
-void map_physical_to_page_tab(uint32_t* page_tab, uint8_t flag, uint32_t f, uint32_t t) {
+void Memory::map_physical_to_page_tab(uint32_t* page_tab, uint8_t flag, uint32_t f, uint32_t t) {
 	for(uint32_t i = f; i < t; i++)
 	{
 		page_tab[i] = (i * 0x1000) | flag; 
@@ -38,7 +27,7 @@ void map_physical_to_page_tab(uint32_t* page_tab, uint8_t flag, uint32_t f, uint
 //---------------------------------------------------------------------------
 // ● 内存初始化
 //---------------------------------------------------------------------------
-void memory_init () {
+Memory::Memory () {
 	
 	// Init paging ===================================================
 	//set each entry to not present

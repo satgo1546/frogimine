@@ -14,7 +14,7 @@ S_SOURCES = $(shell find . -name "*.asm")
 S_OBJECTS = $(patsubst %.asm, %.o, $(S_SOURCES))
 
 C_FLAGS = -c -Wall -m32 -ggdb -nostdinc -fno-builtin -fno-stack-protector -I. -O2
-LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -nostdlib
+LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -lgcc
 ASM_FLAGS = -f elf32 -g -F stabs
 
 all: mine.bin
