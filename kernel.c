@@ -4,9 +4,10 @@
 //   这个文件是干什么的？
 //=============================================================================
 
+#include "config.h"
+
 #include "Drivers/Basic/i686/types.h"
 #include "Drivers/Basic/i686/io.h"
-
 
 /*	debug	*/ 	
 #include "Drivers/Basic/i686/debug.h"
