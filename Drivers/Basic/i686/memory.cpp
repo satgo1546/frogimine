@@ -18,7 +18,18 @@ void Memory::map_pages_to_dir(int page_id, uint32_t* page_tab, uint8_t flag) {
 //---------------------------------------------------------------------------
 void Memory::AllocPhy(uint32_t f, uint32_t t) {
 	for(uint32_t i = f; i < t; i++) {
-		*(phy_c + i) = TRUE;
+		phy_c[i] = 0;
+	}
+	for(uint32_t i = f; i > f - 3; i--) {
+		char temp = phy_c[i + 1] + 1;
+		if (temp > 4) {
+			temp = 4;
+		}
+		if (phy_c[i] > temp) {
+			phy_c[i] = temp;
+		} else {
+			break;
+		}
 	}
 }
 
@@ -26,18 +37,33 @@ void Memory::AllocPhy(uint32_t f, uint32_t t) {
 // ● 释放物理内存(页计数)
 //---------------------------------------------------------------------------
 void Memory::ReleasePhy(uint32_t f, uint32_t t) {
-	for(uint32_t i = f; i < t; i++) {
-		*(phy_c + i) = FALSE;
+	for(uint32_t i = t; i > f; i--) {
+		if (phy_c[i+1]==4) {
+			phy_c[i] = 4;
+		} else {
+			phy_c[i] = phy_c[i+1]+1;
+		}
+	}
+	for(uint32_t i = f; i > f - 3; i--) {
+		char temp = phy_c[i + 1] + 1;
+		if (temp > 4) {
+			temp = 4;
+		}
+		if (phy_c[i] > temp) {
+			phy_c[i] = temp;
+		} else {
+			break;
+		}
 	}
 }
 
 //---------------------------------------------------------------------------
-// ● 寻找空闲内存(页计数) - 返回空闲内存区起点 - 0为未找到
+// ● 寻找连续空闲内存(页计数) - 返回空闲内存区起点 - 0为未找到
 //---------------------------------------------------------------------------
 uint32_t Memory::SearchFree(uint32_t length) {
 	uint32_t count = 0;
 	for(uint32_t i = 256; i < page_count; i++) { // 反正也用不了lower memory，直接跳过那部分
-		if (*(phy_c + i)) {
+		if (phy_c[i]>0) {
 			count++;
 			if (count >= length) {
 				return i - count + 1;			
@@ -70,7 +96,7 @@ Memory::Memory () {
 	upper_mem = glb_mboot_ptr->mem_upper;
 	mem_size = upper_mem + 1024;
 	page_count = mem_size >> 2;
-	phy_c = (bool*)0x120000;
+	phy_c = (char*)0x120000;
 	
 	// Init paging ===================================================
 	//set each entry to not present
@@ -95,7 +121,7 @@ Memory::Memory () {
 		// Those bits are used by the attributes ;)
 		kern_page_table[i] = (i << 12) | SL_RW_P;
 	}
-	AllocPhy(256, 256 + 32 + (page_count >> 2) + 1);
+	AllocPhy(0, 256 + 32 + (page_count >> 12) + 1);
 	
 	// Put the Page Table in the Page Directory
 	map_pages_to_dir(0, (uint32_t*)kern_page_table, SL_RW_P);
