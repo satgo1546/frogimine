@@ -32,6 +32,24 @@ void Memory::ReleasePhy(uint32_t f, uint32_t t) {
 }
 
 //---------------------------------------------------------------------------
+// ● 寻找空闲内存(页计数) - 返回空闲内存区起点 - 0为未找到
+//---------------------------------------------------------------------------
+uint32_t Memory::SearchFree(uint32_t length) {
+	uint32_t count = 0;
+	for(uint32_t i = 256; i < page_count; i++) { // 反正也用不了lower memory，直接跳过那部分
+		if (*(phy_c + i)) {
+			count++;
+			if (count >= length) {
+				return i - count + 1;			
+			}
+		} else {
+			count = 0;
+		}
+	}
+	return 0;
+}
+
+//---------------------------------------------------------------------------
 // ● 将内存绑定入页表 (页计数)
 //---------------------------------------------------------------------------
 void Memory::map_physical_to_page_tab(uint32_t* page_tab, uint8_t flag, uint32_t f, uint32_t t) {
@@ -51,6 +69,7 @@ Memory::Memory () {
 	// Setup
 	upper_mem = glb_mboot_ptr->mem_upper;
 	mem_size = upper_mem + 1024;
+	page_count = mem_size >> 2;
 	phy_c = (bool*)0x120000;
 	
 	// Init paging ===================================================
@@ -64,19 +83,19 @@ Memory::Memory () {
 		//   Not Present: The page table is not present
 		page_directory[j] = 0x00000002;
 	}
-	ReleasePhy(0, mem_size >> 2);
+	ReleasePhy(0, page_count);
 	
 	// holds the physical address where we want to start mapping these pages to.
 	// in this case, we want to map these pages to the very beginning of memory.
 	// we will fill 512 entries in the table, mapping 1.5 megabytes
 	// (lower memory 1M, kernel 128KByte, rest are for phy alloc)
-	for(uint32_t i = 0; i < (256 + 32 + (mem_size >> 14 ) + 1); i++)
+	for(uint32_t i = 0; i < (256 + 32 + (page_count >> 12 ) + 1); i++)
 	{
 		// As the address is page aligned, it will always leave 12 bits zeroed.
 		// Those bits are used by the attributes ;)
-		kern_page_table[i] = (i * 0x1000) | SL_RW_P;
+		kern_page_table[i] = (i << 12) | SL_RW_P;
 	}
-	AllocPhy(256, 256 + 32 + (mem_size >> 14) + 1);
+	AllocPhy(256, 256 + 32 + (page_count >> 2) + 1);
 	
 	// Put the Page Table in the Page Directory
 	map_pages_to_dir(0, (uint32_t*)kern_page_table, SL_RW_P);
