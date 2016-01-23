@@ -25,7 +25,6 @@ debug: all
 	sleep 1 # gdb要等qemu就绪
 	cgdb -x gdbinit
 clean:
-	rm -rf isodir
 	rm -f ${C_OBJECTS} ${S_OBJECTS} mine.bin
 .PHONY: all run clean
 
@@ -38,5 +37,5 @@ ${S_OBJECTS}: ${S_SOURCES}
 	nasm $(ASM_FLAGS) $<
 	
 mine.bin: ${C_OBJECTS} ${S_OBJECTS}
-	${CCLD} -g -T linker.ld -o mine.bin -O2 -nostdlib $^
+	${CCLD} -g -T scripts/linker.ld -o mine.bin -O2 -nostdlib $^
 
