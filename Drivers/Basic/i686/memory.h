@@ -20,7 +20,7 @@ class Memory {
 	uint32_t volatile page_directory[1024] __attribute__((aligned(4096)));
 	uint32_t volatile kern_page_table[1024] __attribute__((aligned(4096)));
 	uint32_t mem_size, upper_mem, page_count;
-	char volatile *phy_c;
+	uint8_t volatile *phy_c;
 	// 0 1 4 8 256 -> 0 4 16 32 1024
 
 	public:
