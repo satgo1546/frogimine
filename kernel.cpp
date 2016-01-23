@@ -10,20 +10,18 @@
 #include "Basic/io.h"
 #include "Basic/memory.h"
 
-//#include "c++.h"
-
-/*	debug	*/ 	
-#include "Drivers/Basic/i686/debug.h"
+/*	debug	*/
+#include "Basic/debug.h"
 
 //---------------------------------------------------------------------------
 // ● Multiarch初始化
 //---------------------------------------------------------------------------
 void arch_init () {
-	
+
 #ifdef i686
 	Memory mem = Memory();
 #endif
-	
+
 	return;
 }
 
@@ -32,13 +30,9 @@ extern "C" {
 // ● 主程序
 //---------------------------------------------------------------------------
 void kernel_main() {
-	
+
 	arch_init ();
-	
-#ifdef X86DEBUG
-//	x86debugputchar('K'); // 进了kernel且完成paging了
-#endif
-	
+
 	for (;;) {
 		cpu_hlt ();	// 挂起
 	}
