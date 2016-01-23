@@ -6,6 +6,8 @@
 
 #include "memory.h"
 
+#define PAIR_PMM // 这里用算法实现
+
 //---------------------------------------------------------------------------
 // ● 将页表绑定入页目录
 //---------------------------------------------------------------------------
@@ -21,7 +23,7 @@ void Memory::AllocPhy(uint32_t f, uint32_t t) {
 		phy_c[i] = 0;
 	}
 	for(uint32_t i = f; i > f - 3; i--) {
-		char temp = phy_c[i + 1] + 1;
+		uint8_t temp = phy_c[i + 1] + 1;
 		if (temp > 4) {
 			temp = 4;
 		}
@@ -45,7 +47,7 @@ void Memory::ReleasePhy(uint32_t f, uint32_t t) {
 		}
 	}
 	for(uint32_t i = f; i > f - 3; i--) {
-		char temp = phy_c[i + 1] + 1;
+		uint8_t temp = phy_c[i + 1] + 1;
 		if (temp > 4) {
 			temp = 4;
 		}
@@ -60,7 +62,9 @@ void Memory::ReleasePhy(uint32_t f, uint32_t t) {
 //---------------------------------------------------------------------------
 // ● 寻找连续空闲内存(页计数) - 返回空闲内存区起点 - 0为未找到
 //---------------------------------------------------------------------------
+// 这个函数建议只用来寻找16k以下的段除非之后把段最大精度改成不是16kb
 uint32_t Memory::SearchFree(uint32_t length) {
+#ifdef LEGACY_PMM
 	uint32_t count = 0;
 	for(uint32_t i = 256; i < page_count; i++) { // 反正也用不了lower memory，直接跳过那部分
 		if (phy_c[i]>0) {
@@ -72,15 +76,22 @@ uint32_t Memory::SearchFree(uint32_t length) {
 			count = 0;
 		}
 	}
-	/*char min = 4;
-	if (length <= 4) {
-		for (uint32_t i = 256; i < page_count; i++) {
-			if (phy_c[i] > length) {
+	return 0;
+#endif
+#ifdef PAIR_PMM
+	uint8_t min = 4 +１;
+	uint32_t min_pos = 0;
+	for (uint32_t i = 256; i < page_count; i++) {
+		if ((phy_c[i] < min)&&(phy_c[i] >= length)) {
+			min_pos = i;
+			min = phy_c[i];
+			if (min=length) {
+				return min_pos;
+			}
 		}
 	}
-	
-	*/
-	return 0;
+	return min_pos;
+#endif
 }
 
 //---------------------------------------------------------------------------
