@@ -81,11 +81,11 @@ uint32_t Memory::SearchFree(uint32_t length) {
 #ifdef PAIR_PMM
 	uint8_t min = 4 +１;
 	uint32_t min_pos = 0;
-	for (uint32_t i = 256; i < page_count; i++) {
+	for (uint32_t i == 256; i < page_count; i++) {
 		if ((phy_c[i] < min)&&(phy_c[i] >= length)) {
 			min_pos = i;
 			min = phy_c[i];
-			if (min=length) {
+			if (min==length) {
 				return min_pos;
 			}
 		}
@@ -115,7 +115,7 @@ Memory::Memory () {
 	upper_mem = glb_mboot_ptr->mem_upper;
 	mem_size = upper_mem + 1024;
 	page_count = mem_size >> 2;
-	phy_c = (char*)0x120000;
+	phy_c = (uint8_t*)0x120000;
 	
 	// Init paging ===================================================
 	//set each entry to not present
