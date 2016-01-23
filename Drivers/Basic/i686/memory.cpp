@@ -81,7 +81,7 @@ uint32_t Memory::SearchFree(uint32_t length) {
 #ifdef PAIR_PMM
 	uint8_t min = 4 + 1;
 	uint32_t min_pos = 0;
-	for (uint32_t i == 256; i < page_count; i++) {
+	for (uint32_t i = 256; i < page_count; i++) {
 		if ((phy_c[i] < min)&&(phy_c[i] >= length)) {
 			min_pos = i;
 			min = phy_c[i];
