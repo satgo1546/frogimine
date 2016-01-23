@@ -7,7 +7,7 @@
 #ifndef INCLUDE_MULTIBOOT_H_
 #define INCLUDE_MULTIBOOT_H_
 
-#include "types.h"
+#include "Basic/types.h"
 
 /**
  * 启动后，在32位内核进入点，机器状态如下：

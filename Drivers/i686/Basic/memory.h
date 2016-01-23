@@ -7,8 +7,8 @@
 #ifndef INCLUDE_MEMORY_H_
 #define INCLUDE_MEMORY_H_
 
-#include "Drivers/Basic/i686/types.h"
-#include "multiboot.h"
+#include "Basic/types.h"
+#include "Basic/multiboot.h"
 
 #define SL_RW_P 3 // attributes: supervisor level, read/write, present.
 

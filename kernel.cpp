@@ -6,9 +6,9 @@
 
 #include "config.h"
 
-#include "Drivers/Basic/i686/types.h"
-#include "Drivers/Basic/i686/io.h"
-#include "Drivers/Basic/i686/memory.h"
+#include "Basic/types.h"
+#include "Basic/io.h"
+#include "Basic/memory.h"
 
 //#include "c++.h"
 
