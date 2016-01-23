@@ -72,6 +72,14 @@ uint32_t Memory::SearchFree(uint32_t length) {
 			count = 0;
 		}
 	}
+	/*char min = 4;
+	if (length <= 4) {
+		for (uint32_t i = 256; i < page_count; i++) {
+			if (phy_c[i] > length) {
+		}
+	}
+	
+	*/
 	return 0;
 }
 
@@ -109,7 +117,10 @@ Memory::Memory () {
 		//   Not Present: The page table is not present
 		page_directory[j] = 0x00000002;
 	}
-	ReleasePhy(0, page_count);
+	for(uint32_t i = 0; i < page_count; i++) {
+		phy_c[i] = 4;
+	}
+	phy_c[page_count + 1] = 0; // For safe
 	
 	// holds the physical address where we want to start mapping these pages to.
 	// in this case, we want to map these pages to the very beginning of memory.
@@ -121,7 +132,9 @@ Memory::Memory () {
 		// Those bits are used by the attributes ;)
 		kern_page_table[i] = (i << 12) | SL_RW_P;
 	}
-	AllocPhy(0, 256 + 32 + (page_count >> 12) + 1);
+	for(uint32_t i = 0; i < 256 + 32 + (page_count >> 12) + 1; i++) {
+		phy_c[i] = 0;
+	}
 	
 	// Put the Page Table in the Page Directory
 	map_pages_to_dir(0, (uint32_t*)kern_page_table, SL_RW_P);
