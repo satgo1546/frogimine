@@ -137,8 +137,8 @@ Memory::Memory () {
 	// in this case, we want to map these pages to the very beginning of memory.
 	// we will fill 512 entries in the table, mapping 1.5 megabytes
 	// (lower memory 1M, kernel 128KByte, rest are for phy alloc)
-	for(uint32_t i = 0; i < (256 + 32 + (page_count >> 12 ) + 1); i++)
-	{
+	for(uint32_t i = 1; i < (256 + 32 + (page_count >> 12 ) + 1); i++) {
+		// 第一页不映射，这样能捕捉NULL指针
 		// As the address is page aligned, it will always leave 12 bits zeroed.
 		// Those bits are used by the attributes ;)
 		kern_page_table[i] = (i << 12) | SL_RW_P;
