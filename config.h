@@ -8,6 +8,6 @@
 #define INCLUDE_CONFIG_H_
 
 #define i686
-#define X86DEBUG
+#define DEBUG
 
 #endif
