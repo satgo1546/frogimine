@@ -33,11 +33,7 @@ clean:
 	@echo 编译C++代码文件 $< ...
 	$(CC) $(C_FLAGS) $< -o $@
 
-boot.o: boot.asm
-	@echo 编译multiboot文件 $< ...
-	nasm $(ASM_FLAGS) $<
-
-.asm.o: .c
+${S_OBJECTS}: ${S_SOURCES}
 	@echo 编译nasm汇编文件 $< ...
 	nasm $(ASM_FLAGS) $<
 	
