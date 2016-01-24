@@ -52,7 +52,7 @@ IDT::IDT() {
 	io.out8(0x21, 0x0);
 	io.out8(0xA1, 0x0);
 
-	//fillchar((uint8_t*)interrupt_handlers, sizeof(interrupt_handlers_t), 0x00);
+	fillchar((uint8_t*)interrupt_handlers, sizeof(interrupt_handler_t), 0x00);
 	fillchar((uint8_t*)idt_entries, sizeof(idt_entry_t), 0x00);
 	
 }
