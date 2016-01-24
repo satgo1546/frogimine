@@ -22,6 +22,9 @@
 #include "Basic/types.h"
 #include "Basic/io.h"
 #include "Basic/memory.h"
+#include "Basic/idt.h"
+
+#include "StdC++/std.h"
 
 // 调试用
 #ifdef DEBUG
@@ -33,6 +36,7 @@
 //---------------------------------------------------------------------------
 void arch_init () {
 	Memory mem = Memory();
+	IDT idt = IDT();
 	return;
 }
 
