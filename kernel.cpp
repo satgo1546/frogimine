@@ -23,6 +23,7 @@
 #include "Basic/io.h"
 #include "Basic/memory.h"
 #include "Basic/idt.h"
+#include "Basic/timer.h"
 
 #include "StdC++/std.h"
 
@@ -37,6 +38,7 @@
 void arch_init () {
 	Memory mem = Memory();
 	IDT idt = IDT();
+	Timer timer = Timer(200);
 	return;
 }
 
