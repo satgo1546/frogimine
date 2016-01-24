@@ -22,14 +22,28 @@
 #ifndef INCLUDE_DEBUG_H_
 #define INCLUDE_DEBUG_H_
 
-#define X86DEBUG
+#include "config.h"
 
 #ifdef X86DEBUG
+#define INTERFACE8024 0xb8000
 //---------------------------------------------------------------------------
-// ● X86 8024 debug字符放置
+// ● X86 debug字符放置 (放入interface)
 //---------------------------------------------------------------------------
-void debugputchar(char c) {	// 调试用，等IO OBJ完成支持驱动之后就扔了
-	*((char*) 0xb8000) = c;
+void debugputchar(void* interface, char c) {
+	*((char*) interface) = c;
+}
+
+//---------------------------------------------------------------------------
+// ● X86 debug字符串放置 (放入interface)
+//---------------------------------------------------------------------------
+void debugputstring(char* interface, char* st) {
+	uint32_t i = 0;
+	char* s = st;
+	while (*s) {
+		*(interface + i) = *s++;
+		*(interface + i + 1) = 0x3F;
+		i+=2;
+	}
 }
 #endif
 

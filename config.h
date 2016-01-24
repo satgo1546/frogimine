@@ -24,5 +24,6 @@
 
 #define i686
 #define DEBUG
+#define X86DEBUG
 
 #endif

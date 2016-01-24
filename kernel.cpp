@@ -26,7 +26,9 @@
 #include "Basic/memory.h"
 
 /*	debug	*/
+#ifdef DEBUG
 #include "Basic/debug.h"
+#endif
 
 //---------------------------------------------------------------------------
 // ● Multiarch初始化
@@ -44,7 +46,7 @@ void arch_init () {
 void idle () {
 
 #ifdef DEBUG
-	debugputchar('K');
+	debugputstring((char*) INTERFACE8024, (char*) "In Kernel");
 #endif
 
 	IO io = IO();

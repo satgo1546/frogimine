@@ -28,7 +28,7 @@ C_OBJECTS = $(patsubst %.cpp, %.o, $(C_SOURCES))
 S_SOURCES = $(shell find . -name "*.asm")
 S_OBJECTS = $(patsubst %.asm, %.o, $(S_SOURCES))
 
-C_FLAGS = -c -Wall -m32 -ggdb -nostdinc -fno-builtin -fno-stack-protector -IDrivers/${ARCH} -O2
+C_FLAGS = -c -Wall -m32 -ggdb -nostdinc -fno-builtin -fno-stack-protector -IDrivers/${ARCH} -I./ -O2
 LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -lgcc
 ASM_FLAGS = -f elf32 -g -F stabs
 
