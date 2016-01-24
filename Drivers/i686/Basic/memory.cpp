@@ -1,22 +1,20 @@
-/* Copyright 2016 Iceberg OS
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
-
+// Copyright 2016 Iceberg OS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //=============================================================================
-// ■ memory.c
+// ■ memory.cpp
 //-----------------------------------------------------------------------------
-//   Driver > Basic > i686 > memory
+//   i686基础驱动：内存。
 //=============================================================================
 
 #include "Basic/memory.h"
@@ -31,7 +29,7 @@ void Memory::map_pages_to_dir(int page_id, uint32_t* page_tab, uint8_t flag) {
 }
 
 //---------------------------------------------------------------------------
-// ● 占有物理内存(页计数)
+// ● 占有物理内存（页计数）
 //---------------------------------------------------------------------------
 void Memory::AllocPhy(uint32_t f, uint32_t t) {
 	for(uint32_t i = f; i < t; i++) {
@@ -51,7 +49,7 @@ void Memory::AllocPhy(uint32_t f, uint32_t t) {
 }
 
 //---------------------------------------------------------------------------
-// ● 释放物理内存(页计数)
+// ● 释放物理内存（页计数）
 //---------------------------------------------------------------------------
 void Memory::ReleasePhy(uint32_t f, uint32_t t) {
 	for(uint32_t i = t; i > f; i--) {
@@ -75,17 +73,19 @@ void Memory::ReleasePhy(uint32_t f, uint32_t t) {
 }
 
 //---------------------------------------------------------------------------
-// ● 寻找连续空闲内存(页计数) - 返回空闲内存区起点 - 0为未找到
+// ● 寻找连续空闲内存（页计数）
+//   返回空闲内存区起点，0为未找到。
+//   这个函数建议只用来寻找16k以下的段，除非之后把段最大精度改成不是16kb。
 //---------------------------------------------------------------------------
-// 这个函数建议只用来寻找16k以下的段除非之后把段最大精度改成不是16kb
 uint32_t Memory::SearchFree(uint32_t length) {
 #ifdef LEGACY_PMM
 	uint32_t count = 0;
-	for(uint32_t i = 256; i < page_count; i++) { // 反正也用不了lower memory，直接跳过那部分
+	// 反正也用不了lower memory，直接跳过那部分
+	for(uint32_t i = 256; i < page_count; i++) {
 		if (phy_c[i]>0) {
 			count++;
 			if (count >= length) {
-				return i - count + 1;			
+				return i - count + 1;
 			}
 		} else {
 			count = 0;
@@ -110,7 +110,7 @@ uint32_t Memory::SearchFree(uint32_t length) {
 }
 
 //---------------------------------------------------------------------------
-// ● 将内存绑定入页表 (页计数)
+// ● 将内存绑定入页表（页计数）
 //---------------------------------------------------------------------------
 void Memory::map_physical_to_page_tab(uint32_t* page_tab, uint8_t flag, uint32_t f, uint32_t t) {
 	for(uint32_t i = f; i < t; i++) {
@@ -126,14 +126,14 @@ extern multiboot_t *glb_mboot_ptr;
 //---------------------------------------------------------------------------
 Memory::Memory () {
 	
-	// Setup
+	// 初始操作
 	upper_mem = glb_mboot_ptr->mem_upper;
 	mem_size = upper_mem + 1024;
 	page_count = mem_size >> 2;
 	phy_c = (uint8_t*)0x120000;
 	
-	// Init paging ===================================================
-	//set each entry to not present
+	// 初始分页
+	// 将每个entry设置为not present
 	int j;
 	for(j = 0; j < 1024; j++)
 	{
@@ -165,10 +165,10 @@ Memory::Memory () {
 	// Put the Page Table in the Page Directory
 	map_pages_to_dir(0, (uint32_t*)kern_page_table, SL_RW_P);
 	
-	// enable it
+	// 启用
 	asm volatile ("movl %%eax, %%cr3" :: "a" (&page_directory)); // load PDPT into CR3
 	asm volatile ("movl %cr0, %eax; orl $0x80000000, %eax; movl %eax, %cr0;");
 	
+	// 返回到内核中
 	return;
-		// Use this return to return back to the kernel
 }
