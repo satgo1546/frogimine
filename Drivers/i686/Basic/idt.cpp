@@ -26,12 +26,38 @@
 
 
 void irq_handler(IDT::pt_regs *regs) {
+	IO io = IO();
+#ifdef DEBUG
 	debugputstring((char*) INTERFACE8024, (char*) "IRQ! ");
+#endif
+	// 发送中断结束信号给 PICs
+	// 按照我们的设置，从 32 号中断起为用户自定义中断
+	// 因为单片的 Intel 8259A 芯片只能处理 8 级中断
+	// 故大于等于 40 的中断号是由从片处理的
+	if (regs->int_no >= 40) {
+		// 发送重设信号给从片
+		io.out8(0xA0, 0x20);
+	}
+	// 发送重设信号给主片
+	io.out8(0x20, 0x20);
+	
+	if (interrupt_handlers[regs->int_no]) {
+		interrupt_handlers[regs->int_no] (regs);
+	}
 }
 
 void isr_handler(IDT::pt_regs *regs)
 {
-	debugputstring((char*) INTERFACE8024, (char*) "ISR! ");
+	if (interrupt_handlers[regs->int_no]) {
+#ifdef DEBUG
+		debugputstring((char*) INTERFACE8024, (char*) "ISR! ");
+#endif
+		interrupt_handlers[regs->int_no] (regs);
+	} else {
+#ifdef DEBUG
+		debugputstring((char*) INTERFACE8024, (char*) "Unhandled interrupt!");
+#endif
+	}
 }
 	
 //---------------------------------------------------------------------------
@@ -103,8 +129,8 @@ void IDT::idt_set_gates()
 	idt_set_gate(46, (uint32_t)irq14, 0x08, 0x8E);
 	idt_set_gate(47, (uint32_t)irq15, 0x08, 0x8E);
 
-	// 255 将来用于实现系统调用
-	idt_set_gate(255, (uint32_t)isr180, 0x08, 0x8E);
+	// 180 将来用于实现系统调用
+	idt_set_gate(180, (uint32_t)isr180, 0x08, 0x8E);
 }
 
 //---------------------------------------------------------------------------
