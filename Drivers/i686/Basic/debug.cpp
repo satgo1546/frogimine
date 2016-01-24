@@ -12,27 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-// ■ debug.h
+// ■ debug.cpp
 //-----------------------------------------------------------------------------
-//   i686基础驱动：调试。
+//   Drivers > i686 > Basic > debug
 //=============================================================================
 
-#ifndef INCLUDE_DEBUG_H_
-#define INCLUDE_DEBUG_H_
+#include "debug.h"
 
-#include "config.h"
-#include "StdC++/std.h"
-
-#ifdef X86DEBUG
-#define INTERFACE8024 0xb8000
 //---------------------------------------------------------------------------
 // ● X86 debug字符放置 (放入interface)
 //---------------------------------------------------------------------------
-void debugputchar(void* interface, char c);
+void debugputchar(void* interface, char c) {
+	*((char*) interface) = c;
+}
+
 //---------------------------------------------------------------------------
 // ● X86 debug字符串放置 (放入interface)
 //---------------------------------------------------------------------------
-void debugputstring(char* interface, char* st);
-#endif
-
-#endif
+void debugputstring(char* interface, char* st) {
+	uint32_t i = 0;
+	char* s = st;
+	while (*s) {
+		*(interface + i) = *s++;
+		*(interface + i + 1) = 0x3F;
+		i+=2;
+	}
+}
