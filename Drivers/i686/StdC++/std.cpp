@@ -14,61 +14,26 @@
 */
 
 //=============================================================================
-// ■ kernel.c
+// ■ std.cpp
 //-----------------------------------------------------------------------------
-//   这个文件是干什么的？
+//   Driver > Basic > StdC++ > std
 //=============================================================================
 
-#include "config.h"
-
-#include "Basic/types.h"
-#include "Basic/io.h"
-#include "Basic/memory.h"
-#include "Basic/idt.h"
-
-#include "StdC++/std.h"
-
-/*	debug	*/
-#ifdef DEBUG
-#include "Basic/debug.h"
-#endif
+#include "std.h"
 
 //---------------------------------------------------------------------------
-// ● Multiarch初始化
+// ● 标准C函数：内存复制
 //---------------------------------------------------------------------------
-void arch_init () {
-
-	Memory mem = Memory();
-	IDT idt = IDT();
-
-	return;
-}
-
-//---------------------------------------------------------------------------
-// ● 内核IDLE
-//---------------------------------------------------------------------------
-void idle () {
-
-#ifdef DEBUG
-	debugputstring((char*) INTERFACE8024, (char*) "In Kernel");
-#endif
-
-	IO io = IO();
-	for (;;) {
-		io.cpu_hlt ();	// 挂起
+void* memcpy(void *desc, const void * src, size_t size) {
+	if((desc == NULL) && (src == NULL)) {	// 在Paging那里用了些技巧捕捉漏了的空指针
+		return NULL;
 	}
-
-	return;
-}
-
-extern "C" {
-//---------------------------------------------------------------------------
-// ● 主程序
-//---------------------------------------------------------------------------
-void kernel_main() {
-
-	arch_init ();
-
-	idle ();
-}
+	uint8_t *desc1 = (uint8_t*)desc;
+	uint8_t *src1 = (uint8_t*)src;
+	while(size-- >0) {
+		*desc1 = *src1;
+		desc1++;
+		src1++;
+	}
+	return desc;
 }
