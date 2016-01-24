@@ -29,7 +29,7 @@ S_OBJECTS = $(patsubst %.asm, %.o, $(S_SOURCES))
 OBJECTS = $(C_OBJECTS) $(S_OBJECTS)
 
 C_FLAGS = -c -Wall -m32 -ggdb -nostdinc -fno-builtin -fno-stack-protector -IDrivers/${ARCH} -I./ -O2
-LD_FLAGS = -T scripts/linker.ld -m elf_i386 -no-builtin -nostdlib -O3
+LD_FLAGS = -T scripts/linker.ld -m elf_i386 -no-builtin -nostdlib -O4
 ASM_FLAGS = -f elf32 -g -F stabs
 
 #----------------------------------------------------------------------------
