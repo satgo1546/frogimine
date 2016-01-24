@@ -46,7 +46,7 @@ void arch_init () {
 void idle () {
 
 #ifdef DEBUG
-	debugputstring((char*) INTERFACE8024, (char*) "In Kernel");
+	debugputstring((char*) INTERFACE8024, (char*) "In Kernel ");
 #endif
 
 	IO io = IO();
