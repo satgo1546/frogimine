@@ -37,3 +37,27 @@ void* memcpy(void *desc, const void * src, size_t size) {
 	}
 	return desc;
 }
+
+//---------------------------------------------------------------------------
+// ● 标准C函数：内存比较（字符串比较）
+//---------------------------------------------------------------------------
+int my_memcmp(const void *buffer1,const void *buffer2,int count) {
+     if (!count)
+        return(0);
+     while ( --count && *(char *)buffer1 == *(char *)buffer2)
+     {
+        buffer1 = (char *)buffer1 + 1;
+          buffer2 = (char *)buffer2 + 1;
+     }
+     return( *((unsigned char *)buffer1) - *((unsigned char *)buffer2) );
+}
+
+//---------------------------------------------------------------------------
+// ● 来自Pascal的函数：内存填充
+//---------------------------------------------------------------------------
+void fillchar(uint8_t* mem, size_t size, uint8_t pattern) {
+	for (uint32_t i = 0; i<size; i++) {
+		*(mem + i) = pattern;
+	}
+}
+
