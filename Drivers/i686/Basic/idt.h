@@ -23,6 +23,7 @@
 #define INCLUDE_IDT_H
 
 #include "Basic/types.h"
+#include "Basic/io.h"
 
 class IDT {
 	private:
