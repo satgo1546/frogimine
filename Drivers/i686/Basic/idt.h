@@ -195,6 +195,6 @@ extern "C" {
 //---------------------------------------------------------------------------
 // ● 中断处理函数的指针数组
 //---------------------------------------------------------------------------
-static IDT::interrupt_handler_t interrupt_handlers[256] __attribute__((packed));
+static IDT::interrupt_handler_t interrupt_handlers[256];
 	
 #endif
