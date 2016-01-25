@@ -40,7 +40,7 @@ run: all
 	qemu-system-i386 -kernel ivik.bin
 debug: all
 	qemu-system-i386 -kernel ivik.bin -gdb tcp::1234 -S &
-	sleep 1 # gdb要等qemu就绪
+	sleep 1 # GDB要等QEMU就绪
 	cgdb -x scripts/gdbinit
 clean:
 	rm -f ${C_OBJECTS} ${S_OBJECTS} ivik.bin
