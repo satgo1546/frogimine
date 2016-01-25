@@ -1,6 +1,6 @@
-Frogimine
+iViK
 =========
 
-这里是Frogimine内核。
+这里是iViK内核。
 
-参照：[项目Wiki](https://github.com/IcebergOS/frogimine/wiki)。
+参照：[项目Wiki](https://github.com/IcebergOS/iViK/wiki)。
