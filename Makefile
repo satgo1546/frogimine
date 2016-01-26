@@ -26,6 +26,10 @@ FN_GDBINIT = gdbinit
 all: $(FN_ISO)
 run: all
 	qemu-system-i386 -cdrom $(FN_ISO)
+debug: all $(FN_GDBINIT)
+	qemu-system-i386 -kernel $(FN_BIN) -S -gdb tcp::$(GDB_PORT) &
+	sleep 1
+	gdb -tui -x $(FN_GDBINIT)
 clean:
 	rm -rf isodir
 	rm -f *.o $(FN_BIN) $(FN_ISO) $(FN_GDBINIT)
@@ -43,3 +47,8 @@ $(FN_ISO): $(FN_BIN) grub.cfg
 	cp grub.cfg isodir/boot/grub/
 	grub-mkrescue --fonts="" --locales="" --themes="" \
 		--compress=no --output=$(FN_ISO) isodir
+$(FN_GDBINIT): Makefile
+	echo "file $(FN_BIN)" > $@
+	echo "target remote :$(GDB_PORT)" >> $@
+	echo "break kernel_main" >> $@
+	echo "continue" >> $@

@@ -1,3 +1,4 @@
 *.o
 *.bin
 frogimine.iso
+gdbinit
