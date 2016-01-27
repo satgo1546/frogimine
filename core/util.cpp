@@ -36,7 +36,7 @@ inline void write_memory(type_address address, char value) {
 // ● 端口写入（1字节）
 //---------------------------------------------------------------------------
 inline void asm_out8(type_port port, unsigned char value) {
-	asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
+	asm volatile("outb %1, %0" : : "dN" (port), "a" (value));
 }
 
 //---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ inline unsigned char asm_in8(type_port port) {
 //---------------------------------------------------------------------------
 inline unsigned short asm_in16(type_port port) {
 	unsigned short r;
-	asm volatile ("inw %1, %0" : "=a" (r) : "dN" (port));
+	asm volatile("inw %1, %0" : "=a" (r) : "dN" (port));
 	return r;
 }
 
