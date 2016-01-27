@@ -6,19 +6,15 @@
 
 #include "global.h"
 #include "core/util.cpp"
-#include "core/terminal.cpp"
+#include "core/graphics.cpp"
 
 //---------------------------------------------------------------------------
 // ● 初始化
 //---------------------------------------------------------------------------
 void initialize() {
-	terminal_width = 80;
-	terminal_height = 25;
-	terminal_set_pos((struct pos) {4, 4});
-	terminal_write_char((struct pos) {0, 0}, '%', (struct terminal_char_color) {
-		.fg = TERMINAL_COLOR_AQUA,
-		.bg = TERMINAL_COLOR_NAVY,
-	});
+	graphics_width = 320;
+	graphics_height = 200;
+	graphics_set_pixel((struct pos) {16, 16}, INDEXED_COLOR_LIME);
 	return;
 }
 
