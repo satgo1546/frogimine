@@ -65,6 +65,15 @@ namespace Graphics {
 			}
 		}
 	}
+	void fill_rect(int x, int y, int width, int height,
+	enum indexed_color color) {
+		fill_rect((struct rect) {
+			.x = x,
+			.y = y,
+			.width = width,
+			.height = height,
+		}, color);
+	}
 }
 
 #endif

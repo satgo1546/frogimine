@@ -21,12 +21,8 @@ void initialize() {
 	});
 	Graphics::width = 320;
 	Graphics::height = 200;
-	Graphics::fill_rect((struct rect) {
-		.x = 16,
-		.y = 16,
-		.width = Graphics::width - 16 * 2,
-		.height = Graphics::height - 16 * 2,
-	}, Graphics::TEAL);
+	Graphics::fill_rect(16, 16, Graphics::width - 16 * 2,
+		Graphics::height - 16 * 2, Graphics::TEAL);
 	Graphics::set_pixel((struct pos) {16, 16}, Graphics::LIME);
 	return;
 }
