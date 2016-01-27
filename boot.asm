@@ -33,7 +33,7 @@ section .text
 global _start
 _start:
 	; ▼ 欢迎来到内核模式！
-	
+
 	; 创建自己的堆栈
 	mov esp, stack_top
 
@@ -85,11 +85,11 @@ multiboot_end:
 	color 255, 255, 255
 	%unmacro color 3
 	popfd
-	
+
 	; 调用系统内核的主程序
 	extern kernel_main
 	call kernel_main
-	
+
 	; 当内核主程序返回后，就让电脑进入死循环
 	; 禁用中断
 	cli
