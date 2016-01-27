@@ -27,7 +27,7 @@ all: $(FN_ISO)
 run: all
 	qemu-system-i386 -cdrom $(FN_ISO)
 debug: all $(FN_GDBINIT)
-	qemu-system-i386 -kernel $(FN_BIN) -S -gdb tcp::$(GDB_PORT) &
+	qemu-system-i386 -cdrom $(FN_ISO) -S -gdb tcp::$(GDB_PORT) &
 	sleep 1
 	gdb -tui -x $(FN_GDBINIT)
 clean:
@@ -51,4 +51,3 @@ $(FN_GDBINIT): Makefile
 	echo "file $(FN_BIN)" > $@
 	echo "target remote :$(GDB_PORT)" >> $@
 	echo "break kernel_main" >> $@
-	echo "continue" >> $@
