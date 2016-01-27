@@ -36,7 +36,16 @@ _start:
 	
 	; 创建自己的堆栈
 	mov esp, stack_top
-	
+
+	; 判断是否为Multiboot引导，并传入参数
+	cmp eax, 0x2badb002
+	jne not_multiboot
+	push dword ebx
+	jmp multiboot_end
+not_multiboot:
+	push dword 0xffffffff
+multiboot_end:
+
 	; 设置调色板
 	; 参照：http://wiki.osdev.org/VGA_Hardware#Port_0x3C8
 	pushfd

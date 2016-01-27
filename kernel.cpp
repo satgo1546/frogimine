@@ -10,9 +10,16 @@
 #include "core/graphics.cpp"
 
 //---------------------------------------------------------------------------
-// ● 初始化
+// ● Multiboot
 //---------------------------------------------------------------------------
-void initialize() {
+void initialize_multiboot(type_address address) {
+	int a = read_memory32(address);
+}
+
+//---------------------------------------------------------------------------
+// ● 主程序
+//---------------------------------------------------------------------------
+void initialize_main() {
 	Terminal::width = 80;
 	Terminal::height = 25;
 	Terminal::write_char((struct pos) {4, 4}, '%', (struct Terminal::char_color) {
@@ -28,8 +35,9 @@ void initialize() {
 }
 
 //---------------------------------------------------------------------------
-// ● 主程序
+// ● 内核主程序
 //---------------------------------------------------------------------------
-extern "C" void kernel_main() {
-	initialize();
+extern "C" void kernel_main(type_address multiboot_info_address) {
+	initialize_multiboot(multiboot_info_address);
+	initialize_main();
 }

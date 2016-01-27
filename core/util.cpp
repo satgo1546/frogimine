@@ -16,9 +16,19 @@ inline void asm_hlt() {
 }
 
 //---------------------------------------------------------------------------
+// ● 根据地址读出内存
+//---------------------------------------------------------------------------
+inline char read_memory8(type_address address) {
+	return *((char*) address);
+}
+inline int read_memory32(type_address address) {
+	return *((int*) address);
+}
+
+//---------------------------------------------------------------------------
 // ● 根据地址写入内存
 //---------------------------------------------------------------------------
-inline void write_memory(unsigned int address, char value) {
+inline void write_memory(type_address address, char value) {
 	*((char*) address) = value;
 }
 
