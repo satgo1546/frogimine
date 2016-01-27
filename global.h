@@ -16,5 +16,11 @@ struct pos {
 	int x;
 	int y;
 };
+struct rect {
+	int x;
+	int y;
+	int width;
+	int height;
+};
 
 #endif

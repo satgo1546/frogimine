@@ -51,6 +51,20 @@ namespace Graphics {
 	void set_pixel(struct pos pos, enum indexed_color color) {
 		write_memory(memory_address(pos), color);
 	}
+
+	//-------------------------------------------------------------------------
+	// ● 填充矩形
+	//-------------------------------------------------------------------------
+	void fill_rect(struct rect rect, enum indexed_color color) {
+		int x, y;
+		int end_x = rect.x + rect.width;
+		int end_y = rect.y + rect.height;
+		for (y = rect.y; y < end_y; y++) {
+			for (x = rect.x; x < end_x; x++) {
+				set_pixel((struct pos) {x, y}, color);
+			}
+		}
+	}
 }
 
 #endif
