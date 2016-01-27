@@ -37,7 +37,7 @@ clean:
 
 boot.o: boot.asm
 	$(ASM) $(ASM_FLAGS) $< -o $@ -l $(basename $@).lst
-kernel.o: kernel.cpp core/util.cpp core/terminal.cpp
+kernel.o: kernel.cpp core/util.cpp core/terminal.cpp core/graphics.cpp
 	$(CC) -c $< -o $@ $(CC_FLAGS)
 $(FN_BIN): linker.ld boot.o kernel.o
 	$(LD) -T $^ -o $@ $(LD_FLAGS)
