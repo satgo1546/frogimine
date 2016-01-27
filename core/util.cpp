@@ -33,18 +33,18 @@ inline void asm_out8(type_port port, unsigned char value) {
 // ● 端口读出（1字节）
 //---------------------------------------------------------------------------
 inline unsigned char asm_in8(type_port port) {
-    unsigned char r;
-    asm volatile("inb %1, %0" : "=a" (r) : "dN" (port));
-    return r;
+	unsigned char r;
+	asm volatile("inb %1, %0" : "=a" (r) : "dN" (port));
+	return r;
 }
 
 //---------------------------------------------------------------------------
 // ● 端口读出（2字节）
 //---------------------------------------------------------------------------
 inline unsigned short asm_in16(type_port port) {
-    unsigned short r;
-    asm volatile ("inw %1, %0" : "=a" (r) : "dN" (port));
-    return r;
+	unsigned short r;
+	asm volatile ("inw %1, %0" : "=a" (r) : "dN" (port));
+	return r;
 }
 
 #endif
