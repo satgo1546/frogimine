@@ -44,7 +44,7 @@ namespace Graphics {
 	// ● 设定像素的颜色
 	//-------------------------------------------------------------------------
 	void set_pixel(struct pos pos, enum indexed_color color) {
-		write_memory(memory_address(pos), color);
+		Memory::write8_at(memory_address(pos), color);
 	}
 
 	//-------------------------------------------------------------------------

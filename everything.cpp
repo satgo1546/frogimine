@@ -7,7 +7,7 @@
 
 #include "src/global.cpp"
 #include "src/asm.cpp"
-#include "src/util.cpp"
+#include "src/memory.cpp"
 #include "src/terminal.cpp"
 #include "src/graphics.cpp"
 #include "src/kernel.cpp"

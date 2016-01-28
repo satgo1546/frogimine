@@ -8,7 +8,7 @@
 // ● Multiboot
 //---------------------------------------------------------------------------
 void initialize_multiboot(type_address address) {
-	int a = read_memory32(address);
+	int a = Memory::read32_at(address);
 }
 
 //---------------------------------------------------------------------------

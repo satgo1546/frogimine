@@ -66,8 +66,8 @@ namespace Terminal {
 	//-------------------------------------------------------------------------
 	void write_char(struct pos pos, char c, struct char_color color) {
 		type_address address = memory_address(pos);
-		write_memory(address, c);
-		unsigned char attribute = 1 << 7 | color.bg << 4 | color.fg;
-		write_memory(address + 1, attribute);
+		Memory::write8_at(address, c);
+		uint8_t attribute = 1 << 7 | color.bg << 4 | color.fg;
+		Memory::write8_at(address + 1, attribute);
 	}
 }
