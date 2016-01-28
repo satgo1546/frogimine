@@ -4,11 +4,6 @@
 //   图形模式显卡驱动。
 //=============================================================================
 
-#include "../global.cpp"
-#include "util.cpp"
-#ifndef INCLUDE_GRAPHICS_CPP
-#define INCLUDE_GRAPHICS_CPP
-
 namespace Graphics {
 	//-------------------------------------------------------------------------
 	// ● 定义类型
@@ -75,5 +70,3 @@ namespace Graphics {
 		}, color);
 	}
 }
-
-#endif

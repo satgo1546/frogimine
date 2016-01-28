@@ -4,11 +4,6 @@
 //   字符模式显卡驱动。
 //=============================================================================
 
-#include "../global.cpp"
-#include "util.cpp"
-#ifndef INCLUDE_TERMINAL_CPP
-#define INCLUDE_TERMINAL_CPP
-
 namespace Terminal {
 	//---------------------------------------------------------------------------
 	// ● 定义类型
@@ -76,5 +71,3 @@ namespace Terminal {
 		write_memory(address + 1, attribute);
 	}
 }
-
-#endif

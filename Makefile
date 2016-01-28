@@ -37,9 +37,9 @@ clean:
 
 boot.o: boot.asm
 	$(ASM) $(ASM_FLAGS) $< -o $@ -l $(basename $@).lst
-kernel.o: kernel.cpp core/util.cpp core/terminal.cpp core/graphics.cpp
+everything.cpp.o: everything.cpp src/
 	$(CC) -c $< -o $@ $(CC_FLAGS)
-$(FN_BIN): linker.ld boot.o kernel.o
+$(FN_BIN): linker.ld boot.o everything.cpp.o
 	$(LD) -T $^ -o $@ $(LD_FLAGS)
 $(FN_ISO): $(FN_BIN) grub.cfg
 	mkdir -p isodir/boot/grub
