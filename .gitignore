@@ -3,3 +3,4 @@
 *.lst
 frogimine.iso
 isodir/
+src/generated/

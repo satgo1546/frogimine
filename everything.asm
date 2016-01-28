@@ -71,7 +71,7 @@ multiboot_end:
 	; 调色板数据
 	; 由于内部使用的是0~63数据范围，因此即使在这里指定得很精确也毫无作用。
 	; 在这里用0~255的范围仅是为了方便处理而使用。
-	; 0~16：HTML规定的标准16色、Windows cmd.exe默认颜色等。可参照：
+	; 0~15：HTML规定的标准16色、Windows cmd.exe默认颜色等。可参照：
 	; https://www.w3.org/TR/REC-html40/types.html#idx-color
 	%include "src/generated/colors-nasm.txt"
 	%unmacro color 3
