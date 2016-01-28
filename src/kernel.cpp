@@ -32,6 +32,7 @@ void initialize_main() {
 	Graphics::fill_rect(16, 16, Graphics::width - 16 * 2,
 		Graphics::height - 16 * 2, Graphics::TEAL);
 	Graphics::set_pixel((struct pos) {16, 16}, Graphics::LIME);
+	Graphics::draw_a((struct pos) {20, 20}, Graphics::AQUA);
 	return;
 }
 

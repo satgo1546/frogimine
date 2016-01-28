@@ -6,15 +6,26 @@
 
 namespace Graphics {
 	//-------------------------------------------------------------------------
-	// ● 定义类型
+	// ● 定义
 	//-------------------------------------------------------------------------
+	const uint8_t a[11] = {
+		0b00000000,
+		0b00000000,
+		0b11111110,
+		0b10000001,
+		0b00000001,
+		0b11111111,
+		0b10000001,
+		0b10000001,
+		0b01111111,
+		0b00000000,
+		0b00000000,
+	};
+
 	enum indexed_color {
 		#include "generated/colors-cpp.txt"
 	};
 
-	//-------------------------------------------------------------------------
-	// ● 定义变量
-	//-------------------------------------------------------------------------
 	unsigned int width;
 	unsigned int height;
 
@@ -45,7 +56,7 @@ namespace Graphics {
 			}
 		}
 	}
-	void fill_rect(int x, int y, int width, int height,
+	void fill_rect(int x, int y, unsigned int width, unsigned int height,
 	enum indexed_color color) {
 		fill_rect((struct rect) {
 			.x = x,
@@ -53,5 +64,22 @@ namespace Graphics {
 			.width = width,
 			.height = height,
 		}, color);
+	}
+
+	//-------------------------------------------------------------------------
+	// ● 绘制“A”
+	//-------------------------------------------------------------------------
+	void draw_a(struct pos pos, enum indexed_color color) {
+		int i;
+		for (i = 0; i < 11; i++) {
+			if (a[i] & 1     ) { set_pixel((struct pos) {pos.x + 7, pos.y + i}, color); }
+			if (a[i] & 1 << 1) { set_pixel((struct pos) {pos.x + 6, pos.y + i}, color); }
+			if (a[i] & 1 << 2) { set_pixel((struct pos) {pos.x + 5, pos.y + i}, color); }
+			if (a[i] & 1 << 3) { set_pixel((struct pos) {pos.x + 4, pos.y + i}, color); }
+			if (a[i] & 1 << 4) { set_pixel((struct pos) {pos.x + 3, pos.y + i}, color); }
+			if (a[i] & 1 << 5) { set_pixel((struct pos) {pos.x + 2, pos.y + i}, color); }
+			if (a[i] & 1 << 6) { set_pixel((struct pos) {pos.x + 1, pos.y + i}, color); }
+			if (a[i] & 1 << 7) { set_pixel((struct pos) {pos.x    , pos.y + i}, color); }
+		}
 	}
 }
