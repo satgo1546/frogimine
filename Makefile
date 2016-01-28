@@ -32,7 +32,7 @@ debug: all $(FN_GDBINIT)
 	gdb -tui -x $(FN_GDBINIT)
 clean:
 	rm -rf isodir
-	rm -f *.o $(FN_BIN) $(FN_ISO) $(FN_GDBINIT)
+	rm -f *.o *.lst $(FN_BIN) $(FN_ISO) $(FN_GDBINIT)
 .PHONY: all run debug clean
 
 boot.o: boot.asm
