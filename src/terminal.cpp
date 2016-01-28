@@ -52,10 +52,10 @@ namespace Terminal {
 		cursor_x = pos.x;
 		cursor_y = pos.y;
 		uint8_t pos_info = pos.x + pos.y * width;
-		asm_out8(0x03d4, 14);
-		asm_out8(0x03d5, pos_info >> 8);
-		asm_out8(0x03d4, 15);
-		asm_out8(0x03d5, pos_info & 0xff);
+		ASM::out8(0x03d4, 14);
+		ASM::out8(0x03d5, pos_info >> 8);
+		ASM::out8(0x03d4, 15);
+		ASM::out8(0x03d5, pos_info & 0xff);
 	}
 
 	//-------------------------------------------------------------------------
