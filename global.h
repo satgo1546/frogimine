@@ -9,9 +9,14 @@
 
 //---------------------------------------------------------------------------
 // ● 定义类型
+//   因为没有头，所以只能这样定义uint*_t了。
 //---------------------------------------------------------------------------
-typedef unsigned int type_address;
-typedef unsigned short type_port;
+typedef __UINT8_TYPE__ uint8_t;
+typedef __UINT16_TYPE__ uint16_t;
+typedef __UINT32_TYPE__ uint32_t;
+typedef __UINT64_TYPE__ uint64_t;
+typedef uint32_t type_address;
+typedef uint16_t type_port;
 struct pos {
 	int x;
 	int y;
@@ -19,8 +24,8 @@ struct pos {
 struct rect {
 	int x;
 	int y;
-	int width;
-	int height;
+	unsigned int width;
+	unsigned int height;
 };
 
 #endif

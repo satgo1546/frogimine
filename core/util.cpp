@@ -18,32 +18,32 @@ inline void asm_hlt() {
 //---------------------------------------------------------------------------
 // ● 根据地址读出内存
 //---------------------------------------------------------------------------
-inline char read_memory8(type_address address) {
-	return *((char*) address);
+inline uint8_t read_memory8(type_address address) {
+	return *((uint8_t*) address);
 }
-inline int read_memory32(type_address address) {
-	return *((int*) address);
+inline uint32_t read_memory32(type_address address) {
+	return *((uint32_t*) address);
 }
 
 //---------------------------------------------------------------------------
 // ● 根据地址写入内存
 //---------------------------------------------------------------------------
-inline void write_memory(type_address address, char value) {
-	*((char*) address) = value;
+inline void write_memory(type_address address, uint8_t value) {
+	*((uint8_t*) address) = value;
 }
 
 //---------------------------------------------------------------------------
 // ● 端口写入（1字节）
 //---------------------------------------------------------------------------
-inline void asm_out8(type_port port, unsigned char value) {
+inline void asm_out8(type_port port, uint8_t value) {
 	asm volatile("outb %1, %0" : : "dN" (port), "a" (value));
 }
 
 //---------------------------------------------------------------------------
 // ● 端口读出（1字节）
 //---------------------------------------------------------------------------
-inline unsigned char asm_in8(type_port port) {
-	unsigned char r;
+inline uint8_t asm_in8(type_port port) {
+	uint8_t r;
 	asm volatile("inb %1, %0" : "=a" (r) : "dN" (port));
 	return r;
 }
@@ -51,8 +51,8 @@ inline unsigned char asm_in8(type_port port) {
 //---------------------------------------------------------------------------
 // ● 端口读出（2字节）
 //---------------------------------------------------------------------------
-inline unsigned short asm_in16(type_port port) {
-	unsigned short r;
+inline uint16_t asm_in16(type_port port) {
+	uint16_t r;
 	asm volatile("inw %1, %0" : "=a" (r) : "dN" (port));
 	return r;
 }
