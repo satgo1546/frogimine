@@ -2,52 +2,27 @@
 # ■ Makefile
 #==============================================================================
 
-#----------------------------------------------------------------------------
-# ● 定义变量
-#----------------------------------------------------------------------------
-ARCH = i686
+SOURCES = $(shell find src | grep --invert-match "/generated|^src$|/\\.")
 
-CC = clang++
-LD = ld
-ASM = nasm
-
-CC_FLAGS = -m32 -O2 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
-LD_FLAGS = -melf_i386 -O2 -nostdlib
-ASM_FLAGS = -f elf32
-
-GDB_PORT = 23333
-FN_BIN = mine.bin
-FN_ISO = frogimine.iso
-FN_GDBINIT = gdbinit
-
-#----------------------------------------------------------------------------
-# ● 一般目标
-#----------------------------------------------------------------------------
-all: $(FN_ISO)
-run: all
-	qemu-system-i386 -cdrom $(FN_ISO)
-debug: all $(FN_GDBINIT)
-	qemu-system-i386 -cdrom $(FN_ISO) -S -gdb tcp::$(GDB_PORT) &
-	sleep 1
-	gdb -tui -x $(FN_GDBINIT)
-clean:
-	rm -rf isodir
-	rm -f *.o *.lst $(FN_BIN) $(FN_ISO) $(FN_GDBINIT)
-.PHONY: all run debug clean
-
-everything.asm.o: everything.asm src/
-	$(ASM) $(ASM_FLAGS) $< -o $@ -l $(basename $@).lst
-everything.cpp.o: everything.cpp src/
-	$(CC) -c $< -o $@ $(CC_FLAGS)
-$(FN_BIN): linker.ld everything.asm.o everything.cpp.o
-	$(LD) -T $^ -o $@ $(LD_FLAGS)
-$(FN_ISO): $(FN_BIN) grub.cfg
+all:
+	mkdir -p src/generated
+	awk -f src/colors-cpp.awk src/indexed-colors.csv > src/generated/colors-cpp.txt
+	awk -f src/colors-nasm.awk src/indexed-colors.csv > src/generated/colors-nasm.txt
+	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
+	nasm -f elf32 everything.asm -o everything.asm.o -l everything.asm.lst
+	ld -T linker.ld everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib
 	mkdir -p isodir/boot/grub
-	cp $(FN_BIN) isodir/boot/
+	cp mine.bin isodir/boot/
 	cp grub.cfg isodir/boot/grub/
-	grub-mkrescue --fonts="" --locales="" --themes="" \
-		--compress=no --output=$(FN_ISO) isodir
-$(FN_GDBINIT): Makefile
-	echo "file $(FN_BIN)" > $@
-	echo "target remote :$(GDB_PORT)" >> $@
-	echo "break kernel_main" >> $@
+	grub-mkrescue --fonts="" --locales="" --themes="" --compress=no --output=frogimine.iso isodir
+run: all
+	qemu-system-i386 -cdrom frogimine.iso
+debug: all
+	qemu-system-i386 -cdrom frogimine.iso -S -gdb tcp::23333 &
+	sleep 1
+	gdb -tui
+clean:
+	rm -rf isodir src/generated
+	rm -f *.o *.lst 
+	rm -f mine.bin frogimine.iso
+.PHONY: all run debug clean

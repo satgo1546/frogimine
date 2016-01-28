@@ -9,22 +9,7 @@ namespace Graphics {
 	// ● 定义类型
 	//-------------------------------------------------------------------------
 	enum indexed_color {
-		BLACK = 0,
-		NAVY = 1,
-		GREEN = 2,
-		TEAL = 3,
-		MAROON = 4,
-		PURPLE = 5,
-		OLIVE = 6,
-		SILVER = 7,
-		GRAY = 8,
-		BLUE = 9,
-		LIME = 10,
-		AQUA = 11,
-		RED = 12,
-		FUCHSIA = 13,
-		YELLOW = 14,
-		WHITE = 15,
+		#include "generated/colors-cpp.txt"
 	};
 
 	//-------------------------------------------------------------------------

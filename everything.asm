@@ -73,22 +73,7 @@ multiboot_end:
 	; 在这里用0~255的范围仅是为了方便处理而使用。
 	; 0~16：HTML规定的标准16色、Windows cmd.exe默认颜色等。可参照：
 	; https://www.w3.org/TR/REC-html40/types.html#idx-color
-	color 0, 0, 0
-	color 0, 0, 128
-	color 0, 128, 0
-	color 0, 128, 128
-	color 128, 0, 0
-	color 128, 0, 128
-	color 128, 128, 0
-	color 192, 192, 192
-	color 128, 128, 128
-	color 0, 0, 255
-	color 0, 255, 0
-	color 0, 255, 255
-	color 255, 0, 0
-	color 255, 0, 255
-	color 255, 255, 0
-	color 255, 255, 255
+	%include "src/generated/colors-nasm.txt"
 	%unmacro color 3
 	popfd
 
