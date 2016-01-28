@@ -35,7 +35,7 @@ clean:
 	rm -f *.o *.lst $(FN_BIN) $(FN_ISO) $(FN_GDBINIT)
 .PHONY: all run debug clean
 
-boot.o: boot.asm
+everything.asm.o: everything.asm src/
 	$(ASM) $(ASM_FLAGS) $< -o $@ -l $(basename $@).lst
 everything.cpp.o: everything.cpp src/
 	$(CC) -c $< -o $@ $(CC_FLAGS)
