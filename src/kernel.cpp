@@ -5,10 +5,16 @@
 //=============================================================================
 
 //---------------------------------------------------------------------------
-// ● Multiboot
+// ● 处理Multiboot启动信息结构，参照：
+//   https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Boot-information-format
 //---------------------------------------------------------------------------
 void initialize_multiboot(type_address address) {
-	int a = Memory::read32_at(address);
+	uint32_t flags = Memory::read32_at(address);
+	uint32_t mem_lower, mem_upper;
+	if (flags & 1 << 0) {
+		mem_lower = Memory::read32_at(address + 4);
+		mem_upper = Memory::read32_at(address + 8);
+	}
 }
 
 //---------------------------------------------------------------------------
