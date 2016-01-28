@@ -4,7 +4,7 @@
 //   这个文件是干什么的？www
 //=============================================================================
 
-#include "global.h"
+#include "global.cpp"
 #include "core/util.cpp"
 #include "core/terminal.cpp"
 #include "core/graphics.cpp"

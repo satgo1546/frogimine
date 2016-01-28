@@ -4,7 +4,7 @@
 //   实用的过程和函数集合。
 //=============================================================================
 
-#include "../global.h"
+#include "../global.cpp"
 #ifndef INCLUDE_UTIL_CPP
 #define INCLUDE_UTIL_CPP
 

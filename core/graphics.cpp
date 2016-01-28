@@ -4,7 +4,7 @@
 //   图形模式显卡驱动。
 //=============================================================================
 
-#include "../global.h"
+#include "../global.cpp"
 #include "util.cpp"
 #ifndef INCLUDE_GRAPHICS_CPP
 #define INCLUDE_GRAPHICS_CPP

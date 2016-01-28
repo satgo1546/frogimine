@@ -4,7 +4,7 @@
 //   字符模式显卡驱动。
 //=============================================================================
 
-#include "../global.h"
+#include "../global.cpp"
 #include "util.cpp"
 #ifndef INCLUDE_TERMINAL_CPP
 #define INCLUDE_TERMINAL_CPP
