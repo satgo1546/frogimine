@@ -39,7 +39,7 @@ everything.asm.o: everything.asm src/
 	$(ASM) $(ASM_FLAGS) $< -o $@ -l $(basename $@).lst
 everything.cpp.o: everything.cpp src/
 	$(CC) -c $< -o $@ $(CC_FLAGS)
-$(FN_BIN): linker.ld boot.o everything.cpp.o
+$(FN_BIN): linker.ld everything.asm.o everything.cpp.o
 	$(LD) -T $^ -o $@ $(LD_FLAGS)
 $(FN_ISO): $(FN_BIN) grub.cfg
 	mkdir -p isodir/boot/grub
