@@ -5,7 +5,7 @@
 //   只是这个项目中的这个文件有点不正常……
 //=============================================================================
 
-#include "global.cpp"
+#include "src/global.cpp"
 #include "src/util.cpp"
 #include "src/terminal.cpp"
 #include "src/graphics.cpp"
