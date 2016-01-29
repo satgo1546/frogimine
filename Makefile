@@ -14,7 +14,7 @@ all:
 	mkdir -p isodir/boot/grub
 	cp mine.bin isodir/boot/
 	cp grub.cfg isodir/boot/grub/
-	grub-mkrescue --fonts="" --locales="" --themes="" --compress=no --output=frogimine.iso isodir -- -quiet
+	grub-mkrescue --directory=/usr/lib/grub/i386-pc --fonts="" --locales="" --themes="" --compress=no --output=frogimine.iso isodir -- -quiet
 run: all
 	qemu-system-i386 -cdrom frogimine.iso
 debug: all
