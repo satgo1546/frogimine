@@ -63,7 +63,7 @@ namespace Graphics {
 		uint8_t line;
 		type_address address;
 		unsigned int index = c - 32;
-		for (i = 0; i < 12; i++) {
+		for (i = 0; i < default_font_height; i++) {
 			y = pos.y + i;
 			line = default_font[index][i];
 			address = memory_address((struct pos) {pos.x, y});
