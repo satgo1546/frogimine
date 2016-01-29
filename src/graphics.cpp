@@ -58,7 +58,7 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	// ● 绘制字符
 	//-------------------------------------------------------------------------
-	void draw_char(char c, struct pos pos, enum indexed_color color) {
+	void draw_char(struct pos pos, char c, enum indexed_color color) {
 		int i, y;
 		uint8_t line;
 		type_address address;
@@ -82,6 +82,6 @@ namespace Graphics {
 	// ● 绘制“a”
 	//-------------------------------------------------------------------------
 	void draw_a(struct pos pos, enum indexed_color color) {
-		draw_char('a', pos, color);
+		draw_char(pos, 'a', color);
 	}
 }
