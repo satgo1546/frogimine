@@ -31,8 +31,8 @@ void initialize_main() {
 	Graphics::height = 200;
 	Graphics::fill_rect(16, 16, Graphics::width - 16 * 2,
 		Graphics::height - 16 * 2, Graphics::TEAL);
-	Graphics::set_pixel((struct pos) {16, 16}, Graphics::LIME);
-	Graphics::draw_a((struct pos) {20, 20}, Graphics::AQUA);
+	Graphics::draw_text((struct pos) {32, 32}, "Hello, world!", Graphics::WHITE);
+	Graphics::draw_text((struct pos) {32, 64}, "from Frogimine", Graphics::WHITE);
 	return;
 }
 

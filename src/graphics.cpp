@@ -84,4 +84,16 @@ namespace Graphics {
 	void draw_a(struct pos pos, enum indexed_color color) {
 		draw_char(pos, 'a', color);
 	}
+
+	//-------------------------------------------------------------------------
+	// ● 绘制文本
+	//-------------------------------------------------------------------------
+	void draw_text(struct pos pos, const char* str, enum indexed_color color) {
+		int x = pos.x, y = pos.y;
+		while (*str != '\0') {
+			draw_char((struct pos) {x, y}, *str, color);
+			x += default_font_width;
+			str++;
+		}
+	}
 }
