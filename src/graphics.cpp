@@ -9,6 +9,7 @@ namespace Graphics {
 	// ● 定义
 	//-------------------------------------------------------------------------
 	#include "default-font.cpp"
+	const type_address vram_base = 0xa0000;
 
 	enum indexed_color {
 		#include "generated/colors-cpp.txt"
@@ -21,7 +22,7 @@ namespace Graphics {
 	// ● 计算显示位置的内存地址
 	//-------------------------------------------------------------------------
 	inline type_address memory_address(struct pos pos) {
-		return 0xa0000 + pos.x + pos.y * width;
+		return vram_base + pos.x + pos.y * width;
 	}
 
 	//-------------------------------------------------------------------------
@@ -58,17 +59,22 @@ namespace Graphics {
 	// ● 绘制字符
 	//-------------------------------------------------------------------------
 	void draw_char(char c, struct pos pos, enum indexed_color color) {
-		int i;
+		int i, y;
+		uint8_t line;
+		type_address address;
 		unsigned int index = c - 32;
 		for (i = 0; i < 12; i++) {
-			if (default_font[index][i] & 1     ) { set_pixel((struct pos) {pos.x + 7, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 1) { set_pixel((struct pos) {pos.x + 6, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 2) { set_pixel((struct pos) {pos.x + 5, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 3) { set_pixel((struct pos) {pos.x + 4, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 4) { set_pixel((struct pos) {pos.x + 3, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 5) { set_pixel((struct pos) {pos.x + 2, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 6) { set_pixel((struct pos) {pos.x + 1, pos.y + i}, color); }
-			if (default_font[index][i] & 1 << 7) { set_pixel((struct pos) {pos.x    , pos.y + i}, color); }
+			y = pos.y + i;
+			line = default_font[index][i];
+			address = memory_address((struct pos) {pos.x, y});
+			if (line & 1 << 0) { Memory::write8_at(address + 7, color); }
+			if (line & 1 << 1) { Memory::write8_at(address + 6, color); }
+			if (line & 1 << 2) { Memory::write8_at(address + 5, color); }
+			if (line & 1 << 3) { Memory::write8_at(address + 4, color); }
+			if (line & 1 << 4) { Memory::write8_at(address + 3, color); }
+			if (line & 1 << 5) { Memory::write8_at(address + 2, color); }
+			if (line & 1 << 6) { Memory::write8_at(address + 1, color); }
+			if (line & 1 << 7) { Memory::write8_at(address    , color); }
 		}
 	}
 
