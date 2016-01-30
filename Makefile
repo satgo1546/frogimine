@@ -10,7 +10,7 @@ all:
 	awk -f src/colors-nasm.awk src/indexed-colors.csv > src/generated/colors-nasm.txt
 	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
 	nasm -f elf32 everything.asm -o everything.asm.o -l everything.asm.lst
-	ld -T src/linker.ld everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib
+	ld -T src/linker.lds everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib
 	mkdir -p isodir/boot/grub
 	cp mine.bin isodir/boot/
 	cp grub.cfg isodir/boot/grub/
