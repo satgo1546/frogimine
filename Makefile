@@ -8,7 +8,7 @@ all:
 	mkdir -p src/generated
 	awk -f src/colors-cpp.awk src/indexed-colors.csv > src/generated/colors-cpp.txt
 	awk -f src/colors-nasm.awk src/indexed-colors.csv > src/generated/colors-nasm.txt
-	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
+	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -std=c++11 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
 	nasm -f elf32 everything.asm -o everything.asm.o -l everything.asm.lst
 	ld -T src/linker.lds everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib
 	mkdir -p isodir/boot/grub

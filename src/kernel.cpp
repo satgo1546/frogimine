@@ -41,5 +41,6 @@ void initialize_main() {
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
 	initialize_multiboot(multiboot_info_address);
+	IDT::initialize();
 	initialize_main();
 }

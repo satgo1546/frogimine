@@ -7,6 +7,7 @@
 
 #include "src/global.cpp"
 #include "src/asm.cpp"
+#include "src/gdt-idt.cpp"
 #include "src/memory.cpp"
 #include "src/terminal.cpp"
 #include "src/graphics.cpp"

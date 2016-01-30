@@ -38,7 +38,7 @@ namespace GDT {
 		uint8_t a;
 		uint8_t b;
 		uint8_t base3;
-	}
+	};
 	void set(struct segment_descriptor* s, type_address base, uint32_t limit, uint16_t a) {
 		if (limit > 0xfffff) {
 			a |= 1 << 15;
@@ -55,7 +55,7 @@ namespace GDT {
 	void initialize() {
 		// 随便找了个内存地址
 		// 参照：http://wiki.osdev.org/Memory_Map_%28x86%29
-		const type_address address = 0x310000
+		const type_address address = 0x310000;
 		auto gdt = (struct segment_descriptor*) address;
 		int i;
 		for (i = 3; i < 8192; i++) {
@@ -63,7 +63,7 @@ namespace GDT {
 		}
 		set(gdt, 0, 0, 0);
 		set(gdt + 1, 0xffffffff, 0, 0x4092);
-		ASM::set_gdtr(0xffff, address);
+		//ASM::set_gdtr(0xffff, address);
 	}
 }
 
@@ -92,13 +92,13 @@ namespace IDT {
 		uint8_t a;
 		uint8_t b;
 		uint16_t offset2;
-	}
+	};
 	void set(struct idt_descriptor* i, int offset, int selector, int a) {
 		i -> offset1 = offset & 0xffff;
 		i -> offset2 = (offset & 0xffff0000) / 0x10000;
 		i -> segment_selector = selector;
 		i -> a = (a & 0xff00) / 0x100;
-		i -> b = a & 0xff
+		i -> b = a & 0xff;
 	}
 	void initialize() {
 		const type_address address = 0x301000;
