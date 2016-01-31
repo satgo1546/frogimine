@@ -43,7 +43,8 @@ namespace ASM {
 	}
 
 	//-------------------------------------------------------------------------
-	// ● 设置IDTR寄存器
+	// ● 设置GDTR/IDTR寄存器
 	//-------------------------------------------------------------------------
+	extern "C" void set_gdtr(int limit, type_address address);
 	extern "C" void set_idtr(int limit, type_address address);
 }

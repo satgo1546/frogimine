@@ -39,7 +39,6 @@ namespace Interrupt {
 	//-------------------------------------------------------------------------
 	void int33(uint32_t* esp) {
 		Graphics::draw_text((struct pos) {32, 128}, "INT 0x21", Graphics::WHITE);
-		for (;;) ;
 	}
 }
 

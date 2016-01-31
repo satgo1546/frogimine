@@ -7,7 +7,9 @@
 //=============================================================================
 
 namespace GDT {
-	// 参照：3.4.5 Segment Descriptors
+	//-------------------------------------------------------------------------
+	// ● 定义
+	//   参照：3.4.5 Segment Descriptors
 	// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 	// ┃                         Segment Descriptor                         ┃
 	// ┃                                                                    ┃
@@ -31,6 +33,7 @@ namespace GDT {
 	// ┃ S     — Descriptor type (0 = system; 1 = code or data)             ┃
 	// ┃ Type  — Segment type                                               ┃
 	// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+	//-------------------------------------------------------------------------
 	struct segment_descriptor {
 		uint16_t limit1;
 		uint16_t base1;
@@ -62,13 +65,15 @@ namespace GDT {
 			set(gdt + i, 0, 0, 0);
 		}
 		set(gdt, 0, 0, 0);
-		set(gdt + 1, 0xffffffff, 0, 0x4092);
-		//ASM::set_gdtr(0xffff, address);
+		set(gdt + 1, 0, 0xffffffff, 0x4092);
+		ASM::set_gdtr(0xffff, address);
 	}
 }
 
 namespace IDT {
-	// 参照：6.11 IDT DESCRIPTORS
+	//-------------------------------------------------------------------------
+	// ● 定义
+	//   参照：6.11 IDT DESCRIPTORS
 	// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 	// ┃                           Interrupt Gate                           ┃
 	// ┃                                                                    ┃
@@ -86,6 +91,7 @@ namespace IDT {
 	// ┃ Selector   Segment Selector for destination code segment           ┃
 	// ┃ D          Size of gate: 1 = 32 bits; 0 = 16 bits                  ┃
 	// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+	//-------------------------------------------------------------------------
 	struct idt_descriptor {
 		uint16_t offset1;
 		uint16_t segment_selector;
@@ -93,13 +99,27 @@ namespace IDT {
 		uint8_t b;
 		uint16_t offset2;
 	};
-	void set(struct idt_descriptor* i, int offset, int selector, int a) {
+
+	//-------------------------------------------------------------------------
+	// ● 设定中断描述符
+	//-------------------------------------------------------------------------
+	void set(struct idt_descriptor* i, uint32_t offset, uint32_t selector,
+	uint32_t a) {
 		i -> offset1 = offset & 0xffff;
 		i -> offset2 = (offset & 0xffff0000) / 0x10000;
 		i -> segment_selector = selector;
 		i -> a = (a & 0xff00) / 0x100;
 		i -> b = a & 0xff;
 	}
+
+	//-------------------------------------------------------------------------
+	// ● 包装后的中断函数们
+	//-------------------------------------------------------------------------
+	extern "C" void asm_int33();
+
+	//-------------------------------------------------------------------------
+	// ● 初始化
+	//-------------------------------------------------------------------------
 	void initialize() {
 		const type_address address = 0x301000;
 		auto idt = (struct idt_descriptor*) address;
@@ -108,5 +128,6 @@ namespace IDT {
 			set(idt + i, 0, 0, 0);
 		}
 		ASM::set_idtr(0x7ff, address);
+		set(idt + 0x21, (uint32_t) asm_int33, 0 << 1, 0x8e);
 	}
 }
