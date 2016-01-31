@@ -20,7 +20,7 @@ run: all
 debug: all
 	qemu-system-i386 -cdrom frogimine.iso -S -gdb tcp::23333 &
 	sleep 1
-	gdb -tui
+	gdb -tui -x src/gdbinit
 clean:
 	rm -rf isodir src/generated
 	rm -f *.o *.lst 
