@@ -13,7 +13,7 @@ all:
 	ld -T src/linker.lds everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib
 	mkdir -p isodir/boot/grub
 	cp mine.bin isodir/boot/
-	cp grub.cfg isodir/boot/grub/
+	cp src/grub.cfg isodir/boot/grub/
 	grub-mkrescue --directory=/usr/lib/grub/i386-pc --fonts="" --locales="" --themes="" --compress=no --output=frogimine.iso isodir -- -quiet
 run: all
 	qemu-system-i386 -cdrom frogimine.iso
