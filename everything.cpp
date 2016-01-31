@@ -8,6 +8,7 @@
 #include "src/global.cpp"
 #include "src/asm.cpp"
 #include "src/memory.cpp"
+#include "src/multiboot-info.cpp"
 #include "src/terminal.cpp"
 #include "src/graphics.cpp"
 #include "src/interrupt.cpp"

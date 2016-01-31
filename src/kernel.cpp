@@ -4,24 +4,6 @@
 //   这个文件是干什么的？www
 //=============================================================================
 
-static const char* boot_loader_name;
-
-//---------------------------------------------------------------------------
-// ● 处理Multiboot启动信息结构，参照：
-//   https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Boot-information-format
-//---------------------------------------------------------------------------
-void initialize_multiboot(type_address address) {
-	uint32_t flags = Memory::read32_at(address);
-	uint32_t mem_lower, mem_upper;
-	if (flags & 1 << 0) {
-		mem_lower = Memory::read32_at(address + 4);
-		mem_upper = Memory::read32_at(address + 8);
-	}
-	if (flags & 1 << 9) {
-		boot_loader_name = (const char*) Memory::read32_at(address + 64);
-	}
-}
-
 //---------------------------------------------------------------------------
 // ● 主程序
 //---------------------------------------------------------------------------
@@ -38,7 +20,8 @@ void initialize_main() {
 		Graphics::height - 16 * 2, Graphics::GREEN);
 	Graphics::draw_text((struct pos) {32, 32}, "Frogimine", Graphics::LIME);
 	Graphics::set_pixel((struct pos) {64, 64}, Graphics::YELLOW);
-	Graphics::draw_text((struct pos) {32, 0}, boot_loader_name, Graphics::FUCHSIA);
+	Graphics::draw_text((struct pos) {32, 0}, "Proudly booted by", Graphics::FUCHSIA);
+	Graphics::draw_text((struct pos) {32, 12}, MultibootInfo::boot_loader_name, Graphics::FUCHSIA);
 	return;
 }
 
@@ -46,7 +29,7 @@ void initialize_main() {
 // ● 内核主程序
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
-	initialize_multiboot(multiboot_info_address);
+	MultibootInfo::initialize(multiboot_info_address);
 	GDT::initialize();
 	IDT::initialize();
 	Interrupt::initialize();
