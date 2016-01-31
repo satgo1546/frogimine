@@ -35,11 +35,18 @@ namespace Interrupt {
 	}
 
 	//-------------------------------------------------------------------------
-	// ● INT 0x21：PS/2键盘
+	// ● 初始化2（？）
 	//-------------------------------------------------------------------------
-	void int33(uint32_t* esp) {
-		Graphics::draw_text((struct pos) {32, 128}, "INT 0x21", Graphics::WHITE);
+	void initialize_stage2() {
+		//           #1 INT 33 ←┐
+		//    PIC0↘  #2 PIC1 ✗ ↰│
+		ASM::out8(0x21, 0b11111101);
 	}
 }
 
-extern "C" void int33(uint32_t* esp) { Interrupt::int33(esp); }
+//---------------------------------------------------------------------------
+// ● INT 0x21：PS/2键盘
+//---------------------------------------------------------------------------
+extern "C" void int33(uint32_t* esp) {
+	Graphics::draw_text((struct pos) {32, 128}, "INT 0x21", Graphics::WHITE);
+}

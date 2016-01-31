@@ -44,5 +44,7 @@ extern "C" void kernel_main(type_address multiboot_info_address) {
 	GDT::initialize();
 	IDT::initialize();
 	Interrupt::initialize();
+	ASM::sti();
 	initialize_main();
+	Interrupt::initialize_stage2();
 }
