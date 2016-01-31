@@ -4,6 +4,8 @@
 //   这个文件是干什么的？www
 //=============================================================================
 
+static const char* boot_loader_name;
+
 //---------------------------------------------------------------------------
 // ● 处理Multiboot启动信息结构，参照：
 //   https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Boot-information-format
@@ -14,6 +16,9 @@ void initialize_multiboot(type_address address) {
 	if (flags & 1 << 0) {
 		mem_lower = Memory::read32_at(address + 4);
 		mem_upper = Memory::read32_at(address + 8);
+	}
+	if (flags & 1 << 9) {
+		boot_loader_name = (const char*) Memory::read32_at(address + 64);
 	}
 }
 
@@ -33,6 +38,7 @@ void initialize_main() {
 		Graphics::height - 16 * 2, Graphics::GREEN);
 	Graphics::draw_text((struct pos) {32, 32}, "Frogimine", Graphics::LIME);
 	Graphics::set_pixel((struct pos) {64, 64}, Graphics::YELLOW);
+	Graphics::draw_text((struct pos) {32, 0}, boot_loader_name, Graphics::FUCHSIA);
 	return;
 }
 
