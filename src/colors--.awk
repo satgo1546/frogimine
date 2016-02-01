@@ -11,11 +11,26 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+#==============================================================================
+# ■ colors--.awk
+#------------------------------------------------------------------------------
+#   *-colors.csv → C++ / NASM
+#==============================================================================
 
 BEGIN {
 	FS = ","
-	print "; %macro color 3"
+	if (output == "nasm") {
+		print "; %macro color 3"
+	}
 }
-{
+output == "cpp" {
+	printf "%s = %d,\n", $1, NR - 1
+}
+output == "nasm" {
 	printf "color %d, %d, %d ; %d\n", $2, $3, $4, NR - 1
+}
+END {
+	if (output != "cpp" && output != "nasm") {
+		print "[!!] awk -v output=<cpp|nasm> -f ..."
+	}
 }

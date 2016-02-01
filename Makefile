@@ -20,9 +20,9 @@ SRC_OUT = src/generated
 
 all:
 	mkdir -p $(SRC_OUT)
-	awk -f src/colors-cpp.awk src/indexed-colors.csv > $(SRC_OUT)/colors-cpp.txt
-	awk -f src/colors-nasm.awk src/indexed-colors.csv > $(SRC_OUT)/colors-nasm.txt
-	awk -f src/font-data-cpp.awk src/default-font-data.txt > $(SRC_OUT)/default-font-data.txt
+	awk -v output=cpp -f src/colors--.awk src/indexed-colors.csv > $(SRC_OUT)/colors-cpp.txt
+	awk -v output=nasm -f src/colors--.awk src/indexed-colors.csv > $(SRC_OUT)/colors-nasm.txt
+	awk -f src/font-data--cpp.awk src/default-font-data.txt > $(SRC_OUT)/default-font-data.txt
 	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -std=c++11 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
 	nasm -f elf32 everything.asm -o everything.asm.o -l everything.asm.lst
 	ld -T src/linker.lds everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib

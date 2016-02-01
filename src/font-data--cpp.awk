@@ -11,10 +11,21 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+#==============================================================================
+# ■ font-data--cpp.awk
+#------------------------------------------------------------------------------
+#   *-font-data.txt → C++
+#==============================================================================
 
 BEGIN {
-	FS = ","
+	print "{"
 }
-{
-	printf "%s = %d,\n", $1, NR - 1
+/^[01]/ {
+	printf "0b%s,\n", $0
+}
+/^$/ {
+	print "}, {"
+}
+END {
+	print "}"
 }
