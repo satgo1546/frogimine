@@ -22,6 +22,9 @@ void initialize_main() {
 	Graphics::set_pixel((struct pos) {64, 64}, Graphics::YELLOW);
 	Graphics::draw_text((struct pos) {32, 0}, "Proudly booted by", Graphics::FUCHSIA);
 	Graphics::draw_text((struct pos) {32, 12}, MultibootInfo::boot_loader_name, Graphics::FUCHSIA);
+	char buf[15];
+	FMString::long2charbuf(buf, 233);
+	Graphics::draw_text((struct pos) {32, 24}, buf, Graphics::WHITE);
 	return;
 }
 
