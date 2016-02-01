@@ -36,7 +36,7 @@ multiboot_end:
 	xor al, al
 	out dx, al
 	inc dx
-	%macro color 3
+	%macro color 3.nolist
 		mov al, %1 >> 2
 		out dx, al
 		%if %1 != %2
