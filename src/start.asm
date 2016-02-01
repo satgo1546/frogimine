@@ -39,9 +39,13 @@ multiboot_end:
 	%macro color 3
 		mov al, %1 >> 2
 		out dx, al
-		mov al, %2 >> 2
+		%if %1 != %2
+			mov al, %2 >> 2
+		%endif
 		out dx, al
-		mov al, %3 >> 2
+		%if %2 != %3
+			mov al, %3 >> 2
+		%endif
 		out dx, al
 	%endmacro
 	; 调色板数据
