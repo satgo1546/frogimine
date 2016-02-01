@@ -25,6 +25,7 @@ void initialize_main() {
 	char buf[15];
 	FMString::long2charbuf(buf, 233);
 	Graphics::draw_text((struct pos) {32, 24}, buf, Graphics::WHITE);
+	Graphics::draw_text((struct pos) {32, 64}, MultibootInfo::cmdline, Graphics::WEB_CCC);
 	return;
 }
 
