@@ -86,8 +86,8 @@ namespace GDT {
 			set(i, 0, 0, 0);
 		}
 		set(0, 0, 0, 0);
-		set(1, 0, 0xffffffff, 0b10010010);
-		set(2, 0, 0xffffffff, 0b10011010);
+		set(1, 0, 0xffffffff, 0b10011010);
+		set(2, 0, 0xffffffff, 0b10010010);
 		ASM::set_gdtr(0xffff, (type_address) &gdt);
 	}
 }

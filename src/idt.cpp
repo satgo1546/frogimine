@@ -44,34 +44,33 @@ namespace IDT {
 	struct idt_descriptor {
 		uint16_t offset1;
 		uint16_t segment_selector;
-		uint8_t a;
-		uint8_t b;
+		uint8_t a; // 0
+		uint8_t b; // P << 7 | DPL << 5 | D << 3 | 0b110
 		uint16_t offset2;
-	};
+	} __attribute__((packed));
+	const int idt_count = 256;
+	struct idt_descriptor idt[idt_count];
 
 	//-------------------------------------------------------------------------
 	// ● 设定中断描述符
 	//-------------------------------------------------------------------------
-	void set(struct idt_descriptor* i, uint32_t offset, uint32_t selector,
-	uint32_t a) {
-		i -> offset1 = offset & 0xffff;
-		i -> offset2 = (offset & 0xffff0000) / 0x10000;
-		i -> segment_selector = selector;
-		i -> a = (a & 0xff00) / 0x100;
-		i -> b = a & 0xff;
+	void set(int index, type_address offset, uint32_t selector, uint8_t b) {
+		idt[index].offset1 = offset & 0xffff;
+		idt[index].offset2 = (offset & 0xffff0000) / 0x10000;
+		idt[index].segment_selector = selector;
+		idt[index].a = 0;
+		idt[index].b = b;
 	}
 
 	//-------------------------------------------------------------------------
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize() {
-		const type_address address = 0x301000;
-		auto idt = (struct idt_descriptor*) address;
 		int i;
-		for (i = 0; i < 256; i++) {
-			set(idt + i, 0, 0, 0);
+		for (i = 0; i < idt_count; i++) {
+			set(i, 0, 0, 0);
 		}
-		ASM::set_idtr(0x7ff, address);
-		set(idt + 0x21, (uint32_t) ASM::asm_int33, 1 << 1, 0x8e);
+		set(0x21, (type_address) ASM::asm_int33, 1 << 3, 0x8e);
+		ASM::set_idtr(0x7ff, (type_address) idt);
 	}
 }

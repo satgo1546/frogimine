@@ -22,24 +22,22 @@ namespace Interrupt {
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize() {
+		// 设定中断前，先屏蔽所有中断
 		//  PIC0&1↘       ✗✗✗✗✗✗✗✗
 		ASM::out8(0x21, 0b11111111);
 		ASM::out8(0xa1, 0b11111111);
 		// 边沿触发模式
 		ASM::out8(0x20, 0x11);
-		// IRQ 0~7 → INT 0x20~0x27
-		ASM::out8(0x21, 0x20);
-		// PIC1 -- IRQ2
-		ASM::out8(0x21, 1 << 2);
-		// 无缓冲区模式
-		ASM::out8(0x21, 0x01);
-		// 边沿触发模式
 		ASM::out8(0xa0, 0x11);
+		// IRQ 0~7  → INT 0x20~0x27
 		// IRQ 8~15 → INT 0x28~0x2f
+		ASM::out8(0x21, 0x20);
 		ASM::out8(0xa1, 0x28);
 		// PIC1 -- IRQ2
-		ASM::out8(0xa1, 0x02);
+		ASM::out8(0x21, 1 << 2);
+		ASM::out8(0xa1, 2);
 		// 无缓冲区模式
+		ASM::out8(0x21, 0x01);
 		ASM::out8(0xa1, 0x01);
 		//    PIC0↘  #2 PIC1 ✓ ↴
 		ASM::out8(0x21, 0b11111011);
