@@ -52,6 +52,5 @@ extern "C" void kernel_main(type_address multiboot_info_address) {
 	Interrupt::initialize();
 	ASM::sti();
 	initialize_main();
-	Interrupt::initialize_stage2();
 	for (;;) ASM::hlt();
 }

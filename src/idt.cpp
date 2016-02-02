@@ -70,7 +70,6 @@ namespace IDT {
 		for (i = 0; i < idt_count; i++) {
 			set(i, 0, 0, 0);
 		}
-		set(0x21, (type_address) ASM::asm_int33, 1 << 3, 0x8e);
 		ASM::set_idtr(0x7ff, (type_address) idt);
 	}
 }

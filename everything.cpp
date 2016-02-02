@@ -25,7 +25,7 @@
 #include "src/multiboot-info.cpp"
 #include "src/terminal.cpp"
 #include "src/graphics.cpp"
-#include "src/interrupt.cpp"
 #include "src/gdt.cpp"
 #include "src/idt.cpp"
+#include "src/interrupt.cpp"
 #include "src/kernel.cpp"
