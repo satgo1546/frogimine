@@ -52,24 +52,3 @@ set_idtr:
 	mov [esp + 6], ax
 	lidt [esp + 6]
 	ret
-
-;----------------------------------------------------------------------------
-; ● INT 0x21
-;----------------------------------------------------------------------------
-extern int33
-global asm_int33
-asm_int33:
-	push es
-	push ds
-	pushad
-	mov eax, esp
-	push eax
-	mov ax, ss
-	mov ds, ax
-	mov es, ax
-	call int33
-	pop eax
-	popad
-	pop ds
-	pop es
-	iretd

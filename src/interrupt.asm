@@ -12,13 +12,29 @@
 ;  See the License for the specific language governing permissions and
 ;  limitations under the License.
 ;==============================================================================
-; ■ everything.asm
+; ■ interrupt.asm
 ;------------------------------------------------------------------------------
-;   用%include把所有汇编代码塞到这里，免除不会链接的烦恼。
+;   处理中断专用的汇编文件。
 ;==============================================================================
 
-[bits 32]
-%include "src/multiboot-head.asm"
-%include "src/start.asm"
-%include "src/asm.asm"
-%include "src/interrupt.asm"
+%macro make_int 1
+	extern int%1
+	global asm_int%1
+	asm_int%1:
+		push es
+		push ds
+		pushad
+		mov eax, esp
+		push eax
+		mov ax, ss
+		mov ds, ax
+		mov es, ax
+		call int%1
+		pop eax
+		popad
+		pop ds
+		pop es
+		iretd
+%endmacro
+
+make_int 33

@@ -70,5 +70,9 @@ namespace Interrupt {
 // ● INT 0x21：PS/2键盘
 //---------------------------------------------------------------------------
 extern "C" void int33(uint32_t* esp) {
-	Graphics::draw_text((struct pos) {32, 128}, "INT 0x21", Graphics::WHITE);
+	ASM::out8(0x20, 64 + 33);
+	uint8_t data = ASM::in8(0x60);
+	char buf[4];
+	FMString::long2charbuf(buf, data);
+	Graphics::draw_text((struct pos) {32, 128}, buf, Graphics::WHITE);
 }
