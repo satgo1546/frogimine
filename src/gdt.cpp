@@ -89,5 +89,6 @@ namespace GDT {
 		set(1, 0, 0xffffffff, 0b10011010);
 		set(2, 0, 0xffffffff, 0b10010010);
 		ASM::set_gdtr(0xffff, (type_address) &gdt);
+		ASM::update_segment_registers();
 	}
 }
