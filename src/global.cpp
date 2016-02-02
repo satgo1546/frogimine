@@ -29,6 +29,7 @@ typedef __UINT16_TYPE__ uint16_t;
 typedef __UINT32_TYPE__ uint32_t;
 typedef __UINT64_TYPE__ uint64_t;
 typedef uint32_t type_address;
+typedef uint32_t type_size;
 typedef uint16_t type_port;
 struct pos {
 	int x;

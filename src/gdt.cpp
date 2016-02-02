@@ -34,15 +34,15 @@ namespace GDT {
 	// ┃ ┌┴─────────────────────────────┴┬┴─────────────────────────────┴┐  ┃
 	// ┃ │      Base Address  15:00      │      Segment Limit 15:00      │0 ┃
 	// ┃ └───────────────────────────────┴───────────────────────────────┘  ┃
-	// ┃ L     — 64-bit code segment (IA-32e mode only)                     ┃
-	// ┃ A     — Available for use by system software                       ┃
 	// ┃ BASE  — Segment base address                                       ┃
+	// ┃ SL    — Segment Limit                                              ┃
+	// ┃ G     — Granularity                                                ┃
 	// ┃ D     — Default operation size                                     ┃
 	// ┃         (0 = 16-bit segment; 1 = 32-bit segment)                   ┃
-	// ┃ DPL   — Descriptor privilege level                                 ┃
-	// ┃ G     — Granularity                                                ┃
-	// ┃ LIMIT — Segment Limit                                              ┃
+	// ┃ L     — 64-bit code segment (IA-32e mode only)                     ┃
+	// ┃ A     — Available for use by system software                       ┃
 	// ┃ P     — Segment present                                            ┃
+	// ┃ DPL   — Descriptor privilege level                                 ┃
 	// ┃ S     — Descriptor type (0 = system; 1 = code or data)             ┃
 	// ┃ Type  — Segment type                                               ┃
 	// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -51,42 +51,43 @@ namespace GDT {
 		uint16_t limit1;
 		uint16_t base1;
 		uint8_t base2;
-		uint8_t a;
-		uint8_t b;
+		uint8_t a; // G << 7 | D << 6 | L << 5 | A << 4 | SL
+		uint8_t b; // P << 7 | DPL << 5 | S << 4 | Type
 		uint8_t base3;
-	};
+	} __attribute__((packed));
+	const int gdt_count = 8192;
+	struct segment_descriptor gdt[gdt_count];
 
 	//-------------------------------------------------------------------------
 	// ● 设定段描述符
+	//   a : 12位的段属性中的低8位。高4位固定为×100，G位（×）由本函数自行处理。
 	//-------------------------------------------------------------------------
-	void set(struct segment_descriptor* s, type_address base, uint32_t limit, uint16_t a) {
+	void set(int index, type_address base, type_size limit, uint8_t a) {
+		uint8_t b = 1 << 6;
 		if (limit > 0xfffff) {
-			a |= 1 << 15;
+			b |= 1 << 7;
 			limit >>= 12;
 		}
-		s -> limit1 = limit & 0xffff;
-		s -> b = (limit >> 16) & 0xf;
-		s -> base1 = base & 0xffff;
-		s -> base2 = (base & 0xff0000) / 0x10000;
-		s -> base3 = (base & 0xff000000) / 0x1000000;
-		s -> b |= (a >> 8) & 0xf0;
-		s -> a = a & 0xff;
+		gdt[index].limit1 = limit & 0xffff;
+		gdt[index].b = (limit >> 16) & 0xf;
+		gdt[index].base1 = base & 0xffff;
+		gdt[index].base2 = (base & 0xff0000) / 0x10000;
+		gdt[index].base3 = (base & 0xff000000) / 0x1000000;
+		gdt[index].a = a;
+		gdt[index].b |= b;
 	}
 
 	//-------------------------------------------------------------------------
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize() {
-		// 随便找了个内存地址
-		// 参照：http://wiki.osdev.org/Memory_Map_%28x86%29
-		const type_address address = 0x310000;
-		auto gdt = (struct segment_descriptor*) address;
 		int i;
-		for (i = 3; i < 8192; i++) {
-			set(gdt + i, 0, 0, 0);
+		for (i = 3; i < gdt_count; i++) {
+			set(i, 0, 0, 0);
 		}
-		set(gdt, 0, 0, 0);
-		set(gdt + 1, 0, 0xffffffff, 0x4092);
-		ASM::set_gdtr(0xffff, address);
+		set(0, 0, 0, 0);
+		set(1, 0, 0xffffffff, 0b10010010);
+		set(2, 0, 0xffffffff, 0b10011010);
+		ASM::set_gdtr(0xffff, (type_address) &gdt);
 	}
 }
