@@ -79,8 +79,8 @@ extern "C" void int33(uint32_t* esp) {
 		.x = 0,
 		.y = 128,
 		.width = Graphics::width,
-		.height = Graphics::default_font_height}, Graphics::BLACK
-	);
+		.height = Graphics::default_font_height,
+	}, Graphics::BLACK);
 	FMString::long2charbuf(buf, job);
 	Graphics::draw_text((struct pos) {0, 128}, buf, Graphics::WHITE);
 	FMString::long2charbuf(buf, data);
