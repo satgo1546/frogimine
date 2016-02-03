@@ -18,39 +18,60 @@
 //=============================================================================
 
 //---------------------------------------------------------------------------
-// ● 主程序
+// ● 初始化
 //---------------------------------------------------------------------------
-void initialize_main() {
+void initialize(type_address multiboot_info_address) {
+	MultibootInfo::initialize(multiboot_info_address);
+	GDT::initialize();
+	IDT::initialize();
+	Interrupt::initialize();
+	ASM::sti();
 	Terminal::width = 80;
 	Terminal::height = 25;
+	// 给可怜的只能用字符终端的用户一个系统成功启动的提示，然后就没有然后了
 	Terminal::write_char((struct pos) {4, 4}, '%', (struct Terminal::char_color) {
 		.fg = Terminal::AQUA,
 		.bg = Terminal::NAVY,
 	});
 	Graphics::width = 320;
 	Graphics::height = 200;
-	Graphics::fill_rect(16, 16, Graphics::width - 16 * 2,
-		Graphics::height - 16 * 2, Graphics::GREEN);
-	Graphics::draw_text((struct pos) {32, 32}, "Frogimine", Graphics::LIME);
-	Graphics::set_pixel((struct pos) {64, 64}, Graphics::YELLOW);
-	Graphics::draw_text((struct pos) {32, 0}, "Proudly booted by", Graphics::FUCHSIA);
-	Graphics::draw_text((struct pos) {32, 12}, MultibootInfo::boot_loader_name, Graphics::FUCHSIA);
+}
+//---------------------------------------------------------------------------
+// ● 主程序
+//   函数名字main是C/C++保留的。
+//---------------------------------------------------------------------------
+void m_a_i_n() {
 	char buf[15];
-	FMString::long2charbuf(buf, 233);
-	Graphics::draw_text((struct pos) {32, 24}, buf, Graphics::WHITE);
-	Graphics::draw_text((struct pos) {32, 64}, MultibootInfo::cmdline, Graphics::WEB_CCC);
-	return;
+	uint8_t a[6];
+	FMQueue8 q(a, 6);
+	q.push(1 + 1);
+	q.push(0233);
+	q.push(0xff);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
+	q.push(1);
+	q.push(2);
+	q.push(3);
+	q.push(4);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 20}, buf, Graphics::WHITE);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 40}, buf, Graphics::WHITE);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 60}, buf, Graphics::WHITE);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 80}, buf, Graphics::WHITE);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 100}, buf, Graphics::WHITE);
+	FMString::long2charbuf(buf, q.shift());
+	Graphics::draw_text((struct pos) {0, 120}, buf, Graphics::WHITE);
 }
 
 //---------------------------------------------------------------------------
 // ● 内核主程序
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
-	MultibootInfo::initialize(multiboot_info_address);
-	GDT::initialize();
-	IDT::initialize();
-	Interrupt::initialize();
-	ASM::sti();
-	initialize_main();
+	initialize(multiboot_info_address);
+	m_a_i_n();
 	for (;;) ASM::hlt();
 }

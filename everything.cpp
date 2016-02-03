@@ -20,6 +20,7 @@
 
 #include "src/global.cpp"
 #include "src/fmstring.cpp"
+#include "src/fmqueue.cpp"
 #include "src/asm.cpp"
 #include "src/memory.cpp"
 #include "src/multiboot-info.cpp"
