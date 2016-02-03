@@ -14,50 +14,56 @@
 //=============================================================================
 // ■ kernel.cpp
 //-----------------------------------------------------------------------------
-//   这个文件是干什么的？www
+//   内核。不知道有什么用。
 //=============================================================================
 
-//---------------------------------------------------------------------------
-// ● 初始化
-//---------------------------------------------------------------------------
-void initialize(type_address multiboot_info_address) {
-	MultibootInfo::initialize(multiboot_info_address);
-	GDT::initialize();
-	IDT::initialize();
-	Interrupt::initialize();
-	ASM::sti();
-	Terminal::width = 80;
-	Terminal::height = 25;
-	// 给可怜的只能用字符终端的用户一个系统成功启动的提示，然后就没有然后了
-	Terminal::write_char((struct pos) {4, 4}, '%', (struct Terminal::char_color) {
-		.fg = Terminal::AQUA,
-		.bg = Terminal::NAVY,
-	});
-	Graphics::width = 320;
-	Graphics::height = 200;
-}
-//---------------------------------------------------------------------------
-// ● 主程序
-//   函数名字main是C/C++保留的。
-//---------------------------------------------------------------------------
-void m_a_i_n() {
-	char buf[15];
-	uint8_t a[6];
-	FMQueue8 q(a, 6);
-	q.push(2 * 2);
-	if (q.is_empty()) Graphics::set_pixel((struct pos) {5, 5}, Graphics::WHITE);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 120}, buf, Graphics::WHITE);
-	if (q.is_empty()) Graphics::set_pixel((struct pos) {10, 10}, Graphics::WHITE);
+namespace Kernel {
+	//-------------------------------------------------------------------------
+	// ● 初始化
+	//-------------------------------------------------------------------------
+	void initialize(type_address multiboot_info_address) {
+		MultibootInfo::initialize(multiboot_info_address);
+		GDT::initialize();
+		IDT::initialize();
+		Interrupt::initialize();
+		ASM::sti();
+		Terminal::width = 80;
+		Terminal::height = 25;
+		// 给可怜的只能用字符终端的用户一个系统成功启动的提示，然后就没有然后了
+		Terminal::write_char(
+			(struct pos) {4, 4},
+			'%',
+			(struct Terminal::char_color) {
+				.fg = Terminal::AQUA,
+				.bg = Terminal::NAVY,
+			}
+		);
+		Graphics::width = 320;
+		Graphics::height = 200;
+	}
+
+	//-------------------------------------------------------------------------
+	// ● 主程序
+	//-------------------------------------------------------------------------
+	void main() {
+		char buf[15];
+		uint8_t a[6];
+		FMQueue8 q(a, 6);
+		q.push(2 * 2);
+		if (q.is_empty()) Graphics::set_pixel((struct pos) {5, 5}, Graphics::WHITE);
+		FMString::long2charbuf(buf, q.shift());
+		Graphics::draw_text((struct pos) {0, 120}, buf, Graphics::WHITE);
+		if (q.is_empty()) Graphics::set_pixel((struct pos) {10, 10}, Graphics::WHITE);
+	}
 }
 
 //---------------------------------------------------------------------------
-// ● 内核主程序
+// ● 供外部调用的内核主程序
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
 	char buf[15];
-	initialize(multiboot_info_address);
-	m_a_i_n();
+	Kernel::initialize(multiboot_info_address);
+	Kernel::main();
 	for (;;) {
 		ASM::cli();
 		if (keyboard_queue.is_empty()) {
