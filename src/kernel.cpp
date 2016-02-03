@@ -19,12 +19,6 @@
 
 namespace Kernel {
 	//-------------------------------------------------------------------------
-	// ● 等待键盘响应
-	//-------------------------------------------------------------------------
-	inline void wait_keyboard() {
-		while (ASM::in8(0x64) & 1 << 1);
-	}
-	//-------------------------------------------------------------------------
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize(type_address multiboot_info_address) {
@@ -46,11 +40,7 @@ namespace Kernel {
 		);
 		Graphics::width = 320;
 		Graphics::height = 200;
-		// 初始化键盘并启用鼠标
-		wait_keyboard(); ASM::out8(0x64, 0x60);
-		wait_keyboard(); ASM::out8(0x60, 0x47);
-		wait_keyboard(); ASM::out8(0x64, 0xd4);
-		wait_keyboard(); ASM::out8(0x60, 0xf4);
+		Keyboard::initialize();
 	}
 
 	//-------------------------------------------------------------------------
@@ -64,15 +54,12 @@ namespace Kernel {
 // ● 供外部调用的内核主程序
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
-	char buf[15];
 	Kernel::initialize(multiboot_info_address);
 	Kernel::main();
 	for (;;) {
 		ASM::cli();
-		if (!keyboard_queue.is_empty()) {
-			Graphics::fill_rect(0, 0, Graphics::width, Graphics::default_font_height, Graphics::BLACK);
-			FMString::long2charbuf(buf, keyboard_queue.shift());
-			Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
+		if (!Keyboard::queue.is_empty()) {
+			Keyboard::process_data();
 		} else if (!Mouse::queue.is_empty()) {
 			Mouse::process_data();
 		} else {

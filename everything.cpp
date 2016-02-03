@@ -28,6 +28,7 @@
 #include "src/graphics.cpp"
 #include "src/gdt.cpp"
 #include "src/idt.cpp"
+#include "src/keyboard.cpp"
 #include "src/mouse.cpp"
 #include "src/interrupt.cpp"
 #include "src/kernel.cpp"

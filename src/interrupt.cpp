@@ -77,12 +77,9 @@ namespace Interrupt {
 //---------------------------------------------------------------------------
 // ● INT 0x21：PS/2键盘
 //---------------------------------------------------------------------------
-const unsigned int keyboard_queue_size = 32;
-static uint8_t keyboard_queue_data[keyboard_queue_size];
-static FMQueue8 keyboard_queue(keyboard_queue_data, keyboard_queue_size);
 extern "C" void int33(uint32_t* esp) {
 	ASM::out8(0x20, 64 + 33);
-	keyboard_queue.push(ASM::in8(0x60));
+	Keyboard::queue.push(ASM::in8(0x60));
 }
 
 //---------------------------------------------------------------------------
