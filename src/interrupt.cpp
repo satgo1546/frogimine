@@ -69,20 +69,10 @@ namespace Interrupt {
 //---------------------------------------------------------------------------
 // ● INT 0x21：PS/2键盘
 //---------------------------------------------------------------------------
+const unsigned int keyboard_queue_size = 32;
+static uint8_t keyboard_queue_data[keyboard_queue_size];
+static FMQueue8 keyboard_queue(keyboard_queue_data, keyboard_queue_size);
 extern "C" void int33(uint32_t* esp) {
-	static unsigned int job = 0;
-	job++;
 	ASM::out8(0x20, 64 + 33);
-	uint8_t data = ASM::in8(0x60);
-	char buf[4];
-	Graphics::fill_rect((struct rect) {
-		.x = 0,
-		.y = 128,
-		.width = Graphics::width,
-		.height = Graphics::default_font_height,
-	}, Graphics::BLACK);
-	FMString::long2charbuf(buf, job);
-	Graphics::draw_text((struct pos) {0, 128}, buf, Graphics::WHITE);
-	FMString::long2charbuf(buf, data);
-	Graphics::draw_text((struct pos) {32, 128}, buf, Graphics::WHITE);
+	keyboard_queue.push(ASM::in8(0x60));
 }

@@ -55,7 +55,16 @@ void m_a_i_n() {
 // ● 内核主程序
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
+	char buf[15];
 	initialize(multiboot_info_address);
 	m_a_i_n();
-	for (;;) ASM::hlt();
+	for (;;) {
+		ASM::cli();
+		if (keyboard_queue.is_empty()) {
+			ASM::sti_hlt();
+		} else {
+			FMString::long2charbuf(buf, keyboard_queue.shift());
+			Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
+		}
+	}
 }
