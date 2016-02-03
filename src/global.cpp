@@ -37,6 +37,10 @@ namespace Global {
 		int x;
 		int y;
 	};
+	struct vector {
+		int x;
+		int y;
+	};
 	struct rect {
 		int x;
 		int y;
