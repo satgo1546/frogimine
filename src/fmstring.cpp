@@ -26,6 +26,7 @@ namespace FMString {
 		if (a == 0) {
 			buf[0] = '0';
 			buf[1] = '\0';
+			return;
 		};
 		// 确定符号位
 		buf[0] = (a > 0 ? '+' : '-');
