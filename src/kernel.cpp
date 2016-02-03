@@ -44,27 +44,11 @@ void m_a_i_n() {
 	char buf[15];
 	uint8_t a[6];
 	FMQueue8 q(a, 6);
-	q.push(1 + 1);
-	q.push(0233);
-	q.push(0xff);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
-	q.push(1);
-	q.push(2);
-	q.push(3);
-	q.push(4);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 20}, buf, Graphics::WHITE);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 40}, buf, Graphics::WHITE);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 60}, buf, Graphics::WHITE);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 80}, buf, Graphics::WHITE);
-	FMString::long2charbuf(buf, q.shift());
-	Graphics::draw_text((struct pos) {0, 100}, buf, Graphics::WHITE);
+	q.push(2 * 2);
+	if (q.is_empty()) Graphics::set_pixel((struct pos) {5, 5}, Graphics::WHITE);
 	FMString::long2charbuf(buf, q.shift());
 	Graphics::draw_text((struct pos) {0, 120}, buf, Graphics::WHITE);
+	if (q.is_empty()) Graphics::set_pixel((struct pos) {10, 10}, Graphics::WHITE);
 }
 
 //---------------------------------------------------------------------------
