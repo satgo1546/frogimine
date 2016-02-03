@@ -65,9 +65,6 @@ namespace Kernel {
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
 	char buf[15];
-	char mouse_stage = 0;
-	uint8_t msg;
-	uint8_t mouse_msg[3];
 	Kernel::initialize(multiboot_info_address);
 	Kernel::main();
 	for (;;) {
@@ -76,28 +73,8 @@ extern "C" void kernel_main(type_address multiboot_info_address) {
 			Graphics::fill_rect(0, 0, Graphics::width, Graphics::default_font_height, Graphics::BLACK);
 			FMString::long2charbuf(buf, keyboard_queue.shift());
 			Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
-		} else if (!mouse_queue.is_empty()) {
-			msg = mouse_queue.shift();
-			switch (mouse_stage) {
-				case 1:
-				case 2:
-					mouse_msg[mouse_stage - 1] = msg;
-					mouse_stage++;
-					break;
-				case 3:
-					mouse_msg[2] = msg;
-					mouse_stage = 1;
-					Graphics::fill_rect(0, 32, Graphics::width, Graphics::default_font_height, Graphics::BLACK);
-					FMString::long2charbuf(buf, mouse_msg[0]);
-					Graphics::draw_text((struct pos) {0, 32}, buf, Graphics::WHITE);
-					FMString::long2charbuf(buf, mouse_msg[1]);
-					Graphics::draw_text((struct pos) {64, 32}, buf, Graphics::WHITE);
-					FMString::long2charbuf(buf, mouse_msg[2]);
-					Graphics::draw_text((struct pos) {128, 32}, buf, Graphics::WHITE);
-					break;
-				default:
-					if (msg == 0xfa) mouse_stage = 1;
-			}
+		} else if (!Mouse::queue.is_empty()) {
+			Mouse::process_data();
 		} else {
 			ASM::sti_hlt();
 		}
