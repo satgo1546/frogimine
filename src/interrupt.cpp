@@ -86,8 +86,13 @@ extern "C" void int33(uint32_t* esp) {
 }
 
 //---------------------------------------------------------------------------
-// ● INT 0x：鼠标
+// ● INT 0x2c：PS/2鼠标
 //---------------------------------------------------------------------------
+const unsigned int mouse_queue_size = 256;
+static uint8_t mouse_queue_data[mouse_queue_size];
+static FMQueue8 mouse_queue(mouse_queue_data, mouse_queue_size);
 extern "C" void int44(uint32_t* esp) {
-	Graphics::draw_text((struct pos) {100, 100}, "Mouse", Graphics::WHITE);
+	ASM::out8(0xa0, 0x64);
+	ASM::out8(0x20, 0x62);
+	mouse_queue.push(ASM::in8(0x60));
 }

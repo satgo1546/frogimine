@@ -57,14 +57,6 @@ namespace Kernel {
 	// ● 主程序
 	//-------------------------------------------------------------------------
 	void main() {
-		char buf[15];
-		uint8_t a[6];
-		FMQueue8 q(a, 6);
-		q.push(2 * 2);
-		if (q.is_empty()) Graphics::set_pixel((struct pos) {5, 5}, Graphics::WHITE);
-		FMString::long2charbuf(buf, q.shift());
-		Graphics::draw_text((struct pos) {0, 120}, buf, Graphics::WHITE);
-		if (q.is_empty()) Graphics::set_pixel((struct pos) {10, 10}, Graphics::WHITE);
 	}
 }
 
@@ -77,11 +69,16 @@ extern "C" void kernel_main(type_address multiboot_info_address) {
 	Kernel::main();
 	for (;;) {
 		ASM::cli();
-		if (keyboard_queue.is_empty()) {
-			ASM::sti_hlt();
-		} else {
+		if (!keyboard_queue.is_empty()) {
+			Graphics::fill_rect(0, 0, Graphics::width, Graphics::height, Graphics::BLACK);
 			FMString::long2charbuf(buf, keyboard_queue.shift());
 			Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
+		} else if (!mouse_queue.is_empty()) {
+			Graphics::fill_rect(0, 0, Graphics::width, Graphics::height, Graphics::BLACK);
+			FMString::long2charbuf(buf, mouse_queue.shift());
+			Graphics::draw_text((struct pos) {0, 32}, buf, Graphics::WHITE);
+		} else {
+			ASM::sti_hlt();
 		}
 	}
 }
