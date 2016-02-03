@@ -46,7 +46,7 @@ namespace Keyboard {
 	// ● 处理队列中的数据（一项）
 	//-------------------------------------------------------------------------
 	void process_data() {
-	char buf[15];
+		char buf[15];
 		Graphics::fill_rect(0, 0, Graphics::width, Graphics::default_font_height, Graphics::BLACK);
 		FMString::long2charbuf(buf, queue.shift());
 		Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);

@@ -14,7 +14,7 @@
 //=============================================================================
 // ■ mouse.cpp
 //-----------------------------------------------------------------------------
-//   鼠标驱动程序。
+//   鼠标驱动程序。参照：http://wiki.osdev.org/PS/2_Mouse
 //=============================================================================
 
 namespace Mouse {
@@ -25,9 +25,16 @@ namespace Mouse {
 	static uint8_t queue_data[queue_size];
 	static FMQueue8 queue(queue_data, queue_size);
 	struct info {
-		char stage = 0;
+		char stage;
 		uint8_t msg[3];
 	} info;
+
+	//-------------------------------------------------------------------------
+	// ● 初始化
+	//-------------------------------------------------------------------------
+	void initialize() {
+		info.stage = -1;
+	}
 
 	//-------------------------------------------------------------------------
 	// ● 处理队列中的数据（一项）
@@ -36,14 +43,14 @@ namespace Mouse {
 		char buf[15];
 		uint8_t msg = queue.shift();
 		switch (info.stage) {
+			case 0:
 			case 1:
-			case 2:
-				info.msg[info.stage - 1] = msg;
+				info.msg[(unsigned int) info.stage] = msg;
 				info.stage++;
 				break;
-			case 3:
+			case 2:
 				info.msg[2] = msg;
-				info.stage = 1;
+				info.stage = 0;
 				Graphics::fill_rect(0, 32, Graphics::width, Graphics::default_font_height, Graphics::BLACK);
 				FMString::long2charbuf(buf, info.msg[0]);
 				Graphics::draw_text((struct pos) {0, 32}, buf, Graphics::WHITE);
@@ -53,7 +60,7 @@ namespace Mouse {
 				Graphics::draw_text((struct pos) {128, 32}, buf, Graphics::WHITE);
 				break;
 			default:
-				if (msg == 0xfa) info.stage = 1;
+				if (msg == 0xfa) info.stage = 0;
 		}
 	}
 }

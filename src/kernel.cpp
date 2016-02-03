@@ -41,6 +41,7 @@ namespace Kernel {
 		Graphics::width = 320;
 		Graphics::height = 200;
 		Keyboard::initialize();
+		Mouse::initialize();
 	}
 
 	//-------------------------------------------------------------------------
