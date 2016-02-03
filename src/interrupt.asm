@@ -38,3 +38,4 @@
 %endmacro
 
 make_int 33
+make_int 44

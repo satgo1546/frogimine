@@ -46,15 +46,23 @@ namespace Interrupt {
 	}
 
 	//-------------------------------------------------------------------------
+	// ● 包装后的中断函数们
+	//-------------------------------------------------------------------------
+	extern "C" void asm_int33();
+	extern "C" void asm_int44();
+
+	//-------------------------------------------------------------------------
 	// ● 初始化中断
 	//-------------------------------------------------------------------------
 	void initialize_interrupt() {
 		// 设置IDT中的值
-		IDT::set(33, (type_address) ASM::asm_int33, 1 << 3, 0x8e);
+		IDT::set(33, (type_address) asm_int33, 1 << 3, 0x8e);
+		IDT::set(44, (type_address) asm_int44, 1 << 3, 0x8e);
 		//           #1 INT 33 ←┐
 		//    PIC0↘  #2 PIC1   ↰│
-		ASM::out8(0x21, 0b11111101);
-		ASM::out8(0xa1, 0b11111111);
+		ASM::out8(0x21, 0b11111001);
+		//    PIC1↘  #4 INT 44
+		ASM::out8(0xa1, 0b11101111);
 	}
 
 	//-------------------------------------------------------------------------
@@ -75,4 +83,11 @@ static FMQueue8 keyboard_queue(keyboard_queue_data, keyboard_queue_size);
 extern "C" void int33(uint32_t* esp) {
 	ASM::out8(0x20, 64 + 33);
 	keyboard_queue.push(ASM::in8(0x60));
+}
+
+//---------------------------------------------------------------------------
+// ● INT 0x：鼠标
+//---------------------------------------------------------------------------
+extern "C" void int44(uint32_t* esp) {
+	Graphics::draw_text((struct pos) {100, 100}, "Mouse", Graphics::WHITE);
 }
