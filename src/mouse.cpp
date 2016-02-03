@@ -44,9 +44,14 @@ namespace Mouse {
 		uint8_t msg = queue.shift();
 		switch (info.stage) {
 			case 0:
+				if (msg & 1 << 3){
+					info.msg[0] = msg;
+					info.stage = 1;
+				}
+				break;
 			case 1:
-				info.msg[(unsigned int) info.stage] = msg;
-				info.stage++;
+				info.msg[1] = msg;
+				info.stage = 2;
 				break;
 			case 2:
 				info.msg[2] = msg;
