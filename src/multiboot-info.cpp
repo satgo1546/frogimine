@@ -20,7 +20,7 @@
 
 namespace MultibootInfo {
 	uint32_t flags;
-	uint32_t mem_lower, mem_upper;
+	type_address mem_lower, mem_upper;
 	const char* cmdline;
 	const char* boot_loader_name;
 	void initialize(type_address address) {
@@ -28,6 +28,8 @@ namespace MultibootInfo {
 		if (flags & 1 << 0) {
 			mem_lower = Memory::read32_at(address + 4);
 			mem_upper = Memory::read32_at(address + 8);
+		} else {
+			mem_lower = mem_upper = 0;
 		}
 		if (flags & 1 << 2) {
 			cmdline = (const char*) Memory::read32_at(address + 16);
