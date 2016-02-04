@@ -80,14 +80,14 @@ namespace Graphics {
 			y = pos.y + i;
 			line = default_font[index][i];
 			address = memory_address((struct pos) {pos.x, y});
-			if (line & 1 << 0) { Memory::write8_at(address + 7, color); }
-			if (line & 1 << 1) { Memory::write8_at(address + 6, color); }
-			if (line & 1 << 2) { Memory::write8_at(address + 5, color); }
-			if (line & 1 << 3) { Memory::write8_at(address + 4, color); }
-			if (line & 1 << 4) { Memory::write8_at(address + 3, color); }
-			if (line & 1 << 5) { Memory::write8_at(address + 2, color); }
-			if (line & 1 << 6) { Memory::write8_at(address + 1, color); }
-			if (line & 1 << 7) { Memory::write8_at(address    , color); }
+			if (line & 1 << 0) Memory::write8_at(address + 7, color);
+			if (line & 1 << 1) Memory::write8_at(address + 6, color);
+			if (line & 1 << 2) Memory::write8_at(address + 5, color);
+			if (line & 1 << 3) Memory::write8_at(address + 4, color);
+			if (line & 1 << 4) Memory::write8_at(address + 3, color);
+			if (line & 1 << 5) Memory::write8_at(address + 2, color);
+			if (line & 1 << 6) Memory::write8_at(address + 1, color);
+			if (line & 1 << 7) Memory::write8_at(address    , color);
 		}
 	}
 
