@@ -70,4 +70,21 @@ namespace Terminal {
 		uint8_t attribute = 1 << 7 | color.bg << 4 | color.fg;
 		Memory::write8_at(address + 1, attribute);
 	}
+
+	//-------------------------------------------------------------------------
+	// ● 初始化
+	//-------------------------------------------------------------------------
+	void initialize() {
+		width = 80;
+		height = 25;
+		// 给可怜的只能用字符终端的用户一个系统成功启动的提示，然后就没有然后了
+		write_char(
+			(struct pos) {4, 4},
+			'%',
+			(struct Terminal::char_color) {
+				.fg = Terminal::AQUA,
+				.bg = Terminal::NAVY,
+			}
+		);
+	}
 }

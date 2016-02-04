@@ -70,4 +70,10 @@ namespace ASM {
 	extern "C" void set_gdtr(int limit, type_address address);
 	extern "C" void update_segment_registers();
 	extern "C" void set_idtr(int limit, type_address address);
+
+	//-------------------------------------------------------------------------
+	// ● 初始化调色板
+	//   并不知道这个函数用汇编写的意义。
+	//-------------------------------------------------------------------------
+	extern "C" void initialize_pattle();
 }

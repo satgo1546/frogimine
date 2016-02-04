@@ -27,19 +27,8 @@ namespace Kernel {
 		IDT::initialize();
 		Interrupt::initialize();
 		ASM::sti();
-		Terminal::width = 80;
-		Terminal::height = 25;
-		// 给可怜的只能用字符终端的用户一个系统成功启动的提示，然后就没有然后了
-		Terminal::write_char(
-			(struct pos) {4, 4},
-			'%',
-			(struct Terminal::char_color) {
-				.fg = Terminal::AQUA,
-				.bg = Terminal::NAVY,
-			}
-		);
-		Graphics::width = 320;
-		Graphics::height = 200;
+		Terminal::initialize();
+		Graphics::initialize();
 		Keyboard::initialize();
 		Mouse::initialize();
 	}
@@ -51,15 +40,11 @@ namespace Kernel {
 		Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
 		Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
 	}
-}
 
-//---------------------------------------------------------------------------
-// ● 供外部调用的内核主程序
-//---------------------------------------------------------------------------
-extern "C" void kernel_main(type_address multiboot_info_address) {
-	Kernel::initialize(multiboot_info_address);
-	Kernel::main();
-	for (;;) {
+	//-------------------------------------------------------------------------
+	// ● 主循环
+	//-------------------------------------------------------------------------
+	void loop() {
 		ASM::cli();
 		if (!Keyboard::queue.is_empty()) {
 			Keyboard::process_data();
@@ -69,4 +54,13 @@ extern "C" void kernel_main(type_address multiboot_info_address) {
 			ASM::sti_hlt();
 		}
 	}
+}
+
+//---------------------------------------------------------------------------
+// ● 供外部调用的内核主程序
+//---------------------------------------------------------------------------
+extern "C" void kernel_main(type_address multiboot_info_address) {
+	Kernel::initialize(multiboot_info_address);
+	Kernel::main();
+	for (;;) Kernel::loop();
 }

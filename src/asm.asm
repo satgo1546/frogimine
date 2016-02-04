@@ -15,7 +15,7 @@
 ; ■ asm.asm
 ;------------------------------------------------------------------------------
 ;   asm.cpp和其它一些程序需要的、一定要用汇编写的函数。
-;   这个文件能正确嵌入C++程序中已是一个奇迹……
+;   附注：一定要写ret！总计被这个坑过1次。
 ;==============================================================================
 
 ;----------------------------------------------------------------------------
@@ -60,4 +60,38 @@ set_idtr:
 	mov ax, [esp + 4]
 	mov [esp + 6], ax
 	lidt [esp + 6]
+	ret
+
+;----------------------------------------------------------------------------
+; ● 设置调色板
+;   参照：http://wiki.osdev.org/VGA_Hardware#Port_0x3C8
+;----------------------------------------------------------------------------
+global initialize_pattle
+initialize_pattle:
+	pushfd
+	cli
+	mov dx, 0x03c8
+	xor al, al
+	out dx, al
+	inc dx
+	%macro color 3.nolist
+		mov al, %1 >> 2
+		out dx, al
+		%if %1 != %2
+			mov al, %2 >> 2
+		%endif
+		out dx, al
+		%if %2 != %3
+			mov al, %3 >> 2
+		%endif
+		out dx, al
+	%endmacro
+	; 调色板数据
+	; 由于内部使用的是0~63数据范围，因此即使在这里指定得很精确也毫无作用。
+	; 在这里用0~255的范围仅是为了方便处理而使用。
+	; 0~15：HTML规定的标准16色、Windows cmd.exe默认颜色等。可参照：
+	; https://www.w3.org/TR/REC-html40/types.html#idx-color
+	%include "src/generated/colors-nasm.txt"
+	%unmacro color 3
+	popfd
 	ret
