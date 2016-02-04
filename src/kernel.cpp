@@ -48,6 +48,8 @@ namespace Kernel {
 	// ● 主程序
 	//-------------------------------------------------------------------------
 	void main() {
+		Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
+		Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
 	}
 }
 
