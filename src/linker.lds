@@ -17,12 +17,12 @@
 /*   链接器脚本。话说这注释格式真够蛋疼的……
 /*===========================================================================*/
 
-/* 引导程序会寻找这个符号，当作入口点并从这里开始执行。 */
 ENTRY(_start)
 
 SECTIONS {
 	/* 从1MiB处开始放置区块，这里比较方便。 */
 	. = 1M;
+	PROVIDE(kernel_start__defined_by_linker_script = .);
 
 	/* 首先把Multiboot头部扔进去。Multiboot规范要求这个头在系统的最初8192字节内，
 	/* 而且是越早越好。在此之后是.text区块。 */
@@ -31,14 +31,10 @@ SECTIONS {
 		*(.text)
 	}
 
-	/* 只读数据 */
-	.rodata BLOCK(4K) : ALIGN(4K) {
-		*(.rodata)
-	}
-
-	/* 已初始化的可读写数据 */
+	/* 数据 */
 	.data BLOCK(4K) : ALIGN(4K) {
 		*(.data)
+		*(.rodata)
 	}
 
 	/* 未初始化的可读写数据和栈 */
@@ -48,6 +44,5 @@ SECTIONS {
 		*(.bootstrap_stack)
 	}
 
-	/* 编译器可能会造出其它区块，默认情况下会放在有相同名字的区块里。
-	/* 如有需要，可以在下面添加。 */
+	PROVIDE(kernel_end__defined_by_linker_script = .);
 }
