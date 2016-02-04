@@ -36,10 +36,10 @@ $(SRC_OUT)/colors-cpp.txt: src/indexed-colors.csv
 $(SRC_OUT)/colors-nasm.txt: src/indexed-colors.csv
 	mkdir -p $(SRC_OUT)
 	awk -v output=nasm -f src/colors--.awk $< > $@
-$(SRC_OUT)/default_font-data.txt: src/default-font-data.txt
+$(SRC_OUT)/default-font-data.txt: src/default-font-data.txt
 	mkdir -p $(SRC_OUT)
 	awk -f src/font-data--cpp.awk $< > $@
-src-out: $(SRC_OUT)/colors-cpp.txt $(SRC_OUT)/colors-nasm.txt $(SRC_OUT)/default_font-data.txt
+src-out: $(SRC_OUT)/colors-cpp.txt $(SRC_OUT)/colors-nasm.txt $(SRC_OUT)/default-font-data.txt
 
 compile: src-out
 	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -std=c++11 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
