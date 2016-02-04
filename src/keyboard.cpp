@@ -21,9 +21,9 @@ namespace Keyboard {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
-	const unsigned int queue_size = 32;
-	static uint8_t queue_data[queue_size];
-	static FMQueue8 queue(queue_data, queue_size);
+	const unsigned int QUEUE_SIZE = 32;
+	uint8_t queue_data[QUEUE_SIZE];
+	FMQueue8 queue(queue_data, QUEUE_SIZE);
 
 	//-------------------------------------------------------------------------
 	// ● 等待键盘的回应
@@ -46,9 +46,6 @@ namespace Keyboard {
 	// ● 处理队列中的数据（一项）
 	//-------------------------------------------------------------------------
 	void process_data() {
-		char buf[15];
-		Graphics::fill_rect(0, 0, Graphics::width, Graphics::default_font_height, Graphics::BLACK);
-		FMString::long2charbuf(buf, queue.shift());
-		Graphics::draw_text((struct pos) {0, 0}, buf, Graphics::WHITE);
+		queue.shift();
 	}
 }

@@ -21,9 +21,10 @@ namespace Mouse {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
-	const unsigned int queue_size = 256;
-	static uint8_t queue_data[queue_size];
-	static FMQueue8 queue(queue_data, queue_size);
+	const unsigned int QUEUE_SIZE = 256;
+	const uint8_t ACKNOWLEDGE = 0xfa;
+	uint8_t queue_data[QUEUE_SIZE];
+	FMQueue8 queue(queue_data, QUEUE_SIZE);
 	struct info {
 		char stage;
 		uint8_t msg[3];
@@ -46,10 +47,47 @@ namespace Mouse {
 	}
 
 	//-------------------------------------------------------------------------
+	// ● 根据第1个字节更新按键状态
+	//-------------------------------------------------------------------------
+	void update_button_state(uint8_t msg0) {
+		state.left_button = msg0 & 1 << 0;
+		state.middle_button = msg0 & 1 << 2;
+		state.right_button = msg0 & 1 << 1;
+	}
+
+	//-------------------------------------------------------------------------
+	// ● 根据3个字节计算运动向量
+	//-------------------------------------------------------------------------
+	void update_motion(uint8_t msg0, uint8_t msg1, uint8_t msg2) {
+		state.motion.x = msg1;
+		state.motion.y = msg2;
+		if (msg0 & 1 << 4) state.motion.x |= 0xffffff00;
+		if (msg0 & 1 << 5) state.motion.y |= 0xffffff00;
+		state.motion.y *= -1;
+	}
+
+	//-------------------------------------------------------------------------
+	// ● 对坐标应用向量
+	//-------------------------------------------------------------------------
+	void apply_motion(struct vector motion) {
+		state.pos.x += motion.x;
+		state.pos.y += motion.y;
+	}
+
+	//-------------------------------------------------------------------------
+	// ● 修理鼠标指针（超出画面边界的处理）
+	//-------------------------------------------------------------------------
+	void fix_pos() {
+		if (state.pos.x < 0) state.pos.x = 0;
+		if (state.pos.x >= Graphics::width) state.pos.x = Graphics::width - 1;
+		if (state.pos.y < 0) state.pos.y = 0;
+		if (state.pos.y >= Graphics::height) state.pos.y = Graphics::height - 1;
+	}
+
+	//-------------------------------------------------------------------------
 	// ● 处理队列中的数据（一项）
 	//-------------------------------------------------------------------------
 	void process_data() {
-		char buf[15];
 		uint8_t msg = queue.shift();
 		switch (info.stage) {
 			case 0:
@@ -67,42 +105,18 @@ namespace Mouse {
 				// 集齐鼠标的3个字节……
 				info.msg[2] = msg;
 				info.stage = 0;
-				// 更新三个键是否按下的状态
-				state.left_button = info.msg[0] & 1 << 0;
-				state.middle_button = info.msg[0] & 1 << 2;
-				state.right_button = info.msg[0] & 1 << 1;
-				// 计算运动向量
-				state.motion.x = info.msg[1];
-				state.motion.y = info.msg[2];
-				if (info.msg[0] & 1 << 4) state.motion.x |= 0xffffff00;
-				if (info.msg[0] & 1 << 5) state.motion.y |= 0xffffff00;
-				state.motion.y *= -1;
-				// 对鼠标坐标应用向量
-				state.pos.x += state.motion.x;
-				state.pos.y += state.motion.y;
-				// 超出画面边界的处理
-				if (state.pos.x < 0) state.pos.x = 0;
-				if (state.pos.x >= Graphics::width) state.pos.x = Graphics::width;
-				if (state.pos.y < 0) state.pos.y = 0;
-				if (state.pos.y >= Graphics::height) state.pos.y = Graphics::height;
-				// 绘制鼠标指针
-				Graphics::set_pixel(state.pos,
-					state.left_button ? Graphics::FUCHSIA : Graphics::YELLOW);
-				// 绘制鼠标坐标
-				Graphics::fill_rect((struct rect) {
-					.x = 0,
-					.y = 12,
-					.width = Graphics::width,
-					.height = Graphics::default_font_height,
-				}, Graphics::BLACK);
-				FMString::long2charbuf(buf, state.pos.x);
-				Graphics::draw_text((struct pos) {0, 12}, buf, Graphics::WHITE);
-				FMString::long2charbuf(buf, state.pos.y);
-				Graphics::draw_text((struct pos) {100, 12}, buf, Graphics::WHITE);
+				// 更新状态
+				update_button_state(info.msg[0]);
+				update_motion(info.msg[0], info.msg[1], info.msg[2]);
+				apply_motion(state.motion);
+				fix_pos();
+				// 绘制
+				Graphics::draw_cursor(state.pos);
 				break;
 			default:
 				// 鼠标准备好了后会发送这个数据
-				if (msg == 0xfa) info.stage = 0;
+				if (msg == ACKNOWLEDGE) info.stage = 0;
 		}
 	}
+
 }
