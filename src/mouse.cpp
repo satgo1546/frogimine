@@ -24,7 +24,7 @@ namespace Mouse {
 	const unsigned int QUEUE_SIZE = 256;
 	const uint8_t ACKNOWLEDGE = 0xfa;
 	uint8_t queue_data[QUEUE_SIZE];
-	FMQueue8 queue(queue_data, QUEUE_SIZE);
+	FMQueue<uint8_t> queue(queue_data, QUEUE_SIZE);
 	struct info {
 		char stage;
 		uint8_t msg[3];
