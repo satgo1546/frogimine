@@ -123,7 +123,7 @@ namespace Graphics {
 	// ● 绘制数值
 	//-------------------------------------------------------------------------
 	void draw_text(struct pos pos, long value, enum indexed_color color) {
-		char buf[11];
+		char buf[12];
 		FMString::long2charbuf(buf, value);
 		draw_text(pos, buf, color);
 	}
