@@ -20,7 +20,7 @@
 
 namespace MultibootInfo {
 	uint32_t flags;
-	type_address mem_lower, mem_upper;
+	uint32_t mem_lower, mem_upper; // 可用的连续内存地址，单位为KB
 	const char* cmdline;
 	const char* boot_loader_name;
 	void initialize(type_address address) {
