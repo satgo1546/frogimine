@@ -55,8 +55,8 @@ namespace GDT {
 		uint8_t b; // P << 7 | DPL << 5 | S << 4 | Type
 		uint8_t base3;
 	} __attribute__((packed));
-	const int gdt_count = 8192;
-	struct segment_descriptor gdt[gdt_count];
+	const int GDT_COUNT = 8192;
+	struct segment_descriptor gdt[GDT_COUNT];
 
 	//-------------------------------------------------------------------------
 	// ● 设定段描述符
@@ -82,7 +82,7 @@ namespace GDT {
 	//-------------------------------------------------------------------------
 	void initialize() {
 		int i;
-		for (i = 3; i < gdt_count; i++) {
+		for (i = 3; i < GDT_COUNT; i++) {
 			set(i, 0, 0, 0);
 		}
 		set(0, 0, 0, 0);

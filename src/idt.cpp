@@ -48,8 +48,8 @@ namespace IDT {
 		uint8_t b; // P << 7 | DPL << 5 | D << 3 | 0b110
 		uint16_t offset2;
 	} __attribute__((packed));
-	const int idt_count = 256;
-	struct idt_descriptor idt[idt_count];
+	const int IDT_COUNT = 256;
+	struct idt_descriptor idt[IDT_COUNT];
 
 	//-------------------------------------------------------------------------
 	// ● 设定中断描述符
@@ -67,7 +67,7 @@ namespace IDT {
 	//-------------------------------------------------------------------------
 	void initialize() {
 		int i;
-		for (i = 0; i < idt_count; i++) {
+		for (i = 0; i < IDT_COUNT; i++) {
 			set(i, 0, 0, 0);
 		}
 		ASM::set_idtr(0x7ff, (type_address) idt);
