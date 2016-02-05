@@ -30,6 +30,7 @@ namespace Graphics {
 
 	unsigned int width;
 	unsigned int height;
+	enum indexed_color cursor_color;
 
 	//-------------------------------------------------------------------------
 	// ● 初始化
@@ -38,6 +39,7 @@ namespace Graphics {
 		width = 320;
 		height = 200;
 		ASM::initialize_pattle();
+		cursor_color = WEB_CCC;
 	}
 
 	//-------------------------------------------------------------------------
@@ -132,17 +134,7 @@ namespace Graphics {
 	// ● 绘制鼠标指针
 	//-------------------------------------------------------------------------
 	void draw_cursor(struct pos pos) {
-		char buf[15];
-		set_pixel(pos, WEB_C99);
-		fill_rect((struct rect) {
-			.x = 0,
-			.y = 12,
-			.width = Graphics::width,
-			.height = Graphics::default_font_height,
-		}, BLACK);
-		FMString::long2charbuf(buf, pos.x);
-		draw_text((struct pos) {0, 12}, buf, WHITE);
-		FMString::long2charbuf(buf, pos.y);
-		draw_text((struct pos) {100, 12}, buf, WHITE);
+		fill_rect((struct rect) {pos.x - 3, pos.y, 7, 1}, cursor_color);
+		fill_rect((struct rect) {pos.x, pos.y - 3, 1, 7}, cursor_color);
 	}
 }
