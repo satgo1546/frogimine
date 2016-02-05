@@ -39,7 +39,7 @@ namespace Graphics {
 		width = 320;
 		height = 200;
 		ASM::initialize_pattle();
-		cursor_color = WEB_CCC;
+		cursor_color = GRAY_DDD;
 	}
 
 	//-------------------------------------------------------------------------
