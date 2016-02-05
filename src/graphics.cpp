@@ -53,6 +53,7 @@ namespace Graphics {
 	// ● 设定像素的颜色
 	//-------------------------------------------------------------------------
 	void set_pixel(struct pos pos, enum indexed_color color) {
+		if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height) return;
 		Memory::write8_at(memory_address(pos), color);
 	}
 
@@ -62,9 +63,11 @@ namespace Graphics {
 	void fill_rect(struct rect rect, enum indexed_color color) {
 		int x, y;
 		int end_x = rect.x + rect.width;
+		if (end_x >= width) end_x = width;
 		int end_y = rect.y + rect.height;
-		for (y = rect.y; y < end_y; y++) {
-			for (x = rect.x; x < end_x; x++) {
+		if (end_y >= height) end_y = height;
+		for (y = (rect.y < 0 ? 0 : rect.y); y < end_y; y++) {
+			for (x = (rect.x < 0 ? 0 : rect.x); x < end_x; x++) {
 				set_pixel((struct pos) {x, y}, color);
 			}
 		}
@@ -83,10 +86,10 @@ namespace Graphics {
 	// ● 绘制字符
 	//-------------------------------------------------------------------------
 	void draw_char(struct pos pos, char c, enum indexed_color color) {
-		int i, y;
-		uint8_t line;
+		int i, y; uint8_t line;
 		type_address address;
 		unsigned int index = c - 32;
+		if (pos.x >= width || pos.y >= height || index <= 0 || c > '~') return;
 		for (i = 0; i < default_font_height; i++) {
 			y = pos.y + i;
 			line = default_font[index][i];
@@ -98,15 +101,8 @@ namespace Graphics {
 			if (line & 1 << 4) Memory::write8_at(address + 3, color);
 			if (line & 1 << 5) Memory::write8_at(address + 2, color);
 			if (line & 1 << 6) Memory::write8_at(address + 1, color);
-			if (line & 1 << 7) Memory::write8_at(address    , color);
+			if (line & 1 << 7) Memory::write8_at(address + 0, color);
 		}
-	}
-
-	//-------------------------------------------------------------------------
-	// ● 绘制“a”
-	//-------------------------------------------------------------------------
-	void draw_a(struct pos pos, enum indexed_color color) {
-		draw_char(pos, 'a', color);
 	}
 
 	//-------------------------------------------------------------------------
@@ -114,6 +110,7 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	void draw_text(struct pos pos, const char* str, enum indexed_color color) {
 		int x = pos.x, y = pos.y;
+		if (x >= width || y >= height) return;
 		while (*str != '\0') {
 			draw_char((struct pos) {x, y}, *str, color);
 			x += default_font_width;
@@ -134,7 +131,10 @@ namespace Graphics {
 	// ● 绘制鼠标指针
 	//-------------------------------------------------------------------------
 	void draw_cursor(struct pos pos) {
+		fill_rect((struct rect) {0, 0, width, height}, BLACK);
 		fill_rect((struct rect) {pos.x - 3, pos.y, 7, 1}, cursor_color);
 		fill_rect((struct rect) {pos.x, pos.y - 3, 1, 7}, cursor_color);
+		draw_text((struct pos) {0, 0}, pos.x, WHITE);
+		draw_text((struct pos) {static_cast<int>(width / 2), 0}, pos.y, WHITE);
 	}
 }
