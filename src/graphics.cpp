@@ -139,6 +139,6 @@ namespace Graphics {
 	// ● 重绘
 	//-------------------------------------------------------------------------
 	void redraw() {
-		draw_cursor((struct pos) {0, 0});
+		draw_cursor(Mouse::state.pos);
 	}
 }
