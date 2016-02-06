@@ -34,7 +34,7 @@ namespace Mouse {
 		bool middle_button = false;
 		bool right_button = false;
 		struct vector motion = {0, 0};
-		struct pos pos = {0, 0};
+		struct pos pos = {Screen::width / 2, Screen::height / 2};
 	} state;
 
 	//-------------------------------------------------------------------------

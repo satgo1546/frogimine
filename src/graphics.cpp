@@ -23,13 +23,9 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	#include "default-font.cpp"
 	const type_address vram_base = 0xa0000;
-
 	enum indexed_color {
 		#include "generated/colors-cpp.txt"
 	};
-
-	int width = 320;
-	int height = 200;
 	enum indexed_color cursor_color = GRAY_DDD;
 
 	//-------------------------------------------------------------------------
@@ -40,17 +36,26 @@ namespace Graphics {
 	}
 
 	//-------------------------------------------------------------------------
+	// ● 填充整个屏幕
+	//-------------------------------------------------------------------------
+	void fill(enum indexed_color color) {
+		type_address i;
+		type_address end_i = vram_base + Screen::width * Screen::height;
+		for (i = vram_base; i < end_i; i++) Memory::write8_at(i, color);
+	}
+
+	//-------------------------------------------------------------------------
 	// ● 计算显示位置的内存地址
 	//-------------------------------------------------------------------------
 	inline type_address memory_address(struct pos pos) {
-		return vram_base + pos.x + pos.y * width;
+		return vram_base + pos.x + pos.y * Screen::width;
 	}
 
 	//-------------------------------------------------------------------------
 	// ● 设定像素的颜色
 	//-------------------------------------------------------------------------
 	void set_pixel(struct pos pos, enum indexed_color color) {
-		if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height) return;
+		if (pos.x < 0 || pos.x >= Screen::width || pos.y < 0 || pos.y >= Screen::height) return;
 		Memory::write8_at(memory_address(pos), color);
 	}
 
@@ -60,9 +65,9 @@ namespace Graphics {
 	void fill_rect(struct rect rect, enum indexed_color color) {
 		int x, y;
 		int end_x = rect.x + rect.width;
-		if (end_x >= width) end_x = width;
+		if (end_x >= Screen::width) end_x = Screen::width;
 		int end_y = rect.y + rect.height;
-		if (end_y >= height) end_y = height;
+		if (end_y >= Screen::height) end_y = Screen::height;
 		for (y = (rect.y < 0 ? 0 : rect.y); y < end_y; y++) {
 			for (x = (rect.x < 0 ? 0 : rect.x); x < end_x; x++) {
 				set_pixel((struct pos) {x, y}, color);
@@ -86,7 +91,7 @@ namespace Graphics {
 		int i, y; uint8_t line;
 		type_address address;
 		int index = c - 32;
-		if (pos.x >= width || pos.y >= height || index <= 0 || c > '~') return;
+		if (pos.x >= Screen::width || pos.y >= Screen::height || index <= 0 || c > '~') return;
 		for (i = 0; i < default_font_height; i++) {
 			y = pos.y + i;
 			line = default_font[index][i];
@@ -107,7 +112,7 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	void draw_text(struct pos pos, const char* str, enum indexed_color color) {
 		int x = pos.x, y = pos.y;
-		if (x >= width || y >= height) return;
+		if (x >= Screen::width || y >= Screen::height) return;
 		while (*str != '\0') {
 			draw_char((struct pos) {x, y}, *str, color);
 			x += default_font_width;
@@ -128,17 +133,15 @@ namespace Graphics {
 	// ● 绘制鼠标指针
 	//-------------------------------------------------------------------------
 	void draw_cursor(struct pos pos) {
-		fill_rect((struct rect) {0, 0, width, height}, BLACK);
 		fill_rect((struct rect) {pos.x - 3, pos.y, 7, 1}, cursor_color);
 		fill_rect((struct rect) {pos.x, pos.y - 3, 1, 7}, cursor_color);
-		draw_text((struct pos) {0, 0}, pos.x, WHITE);
-		draw_text((struct pos) {width / 2, 0}, pos.y, WHITE);
 	}
 
 	//-------------------------------------------------------------------------
 	// ● 重绘
 	//-------------------------------------------------------------------------
 	void redraw() {
+		fill(GRAY);
 		draw_cursor(Mouse::state.pos);
 	}
 }
