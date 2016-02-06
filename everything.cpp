@@ -36,9 +36,6 @@
 // 设备
 #include "src/keyboard.cpp"
 #include "src/mouse.cpp"
-
-// 图像输出
-#include "src/terminal.cpp"
 #include "src/graphics.cpp"
 
 // 主程序
