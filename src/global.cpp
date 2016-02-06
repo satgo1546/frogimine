@@ -41,6 +41,10 @@ namespace Global {
 		int x;
 		int y;
 	};
+	struct size {
+		int width;
+		int height;
+	};
 	struct rect {
 		int x;
 		int y;
