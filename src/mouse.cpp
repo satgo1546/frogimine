@@ -110,8 +110,6 @@ namespace Mouse {
 				update_motion(info.msg[0], info.msg[1], info.msg[2]);
 				apply_motion(state.motion);
 				fix_pos();
-				// 绘制
-				Graphics::draw_cursor(state.pos);
 				break;
 			default:
 				// 鼠标准备好了后会发送这个数据

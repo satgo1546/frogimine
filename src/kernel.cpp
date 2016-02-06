@@ -49,8 +49,10 @@ namespace Kernel {
 		ASM::cli();
 		if (!Keyboard::queue.is_empty()) {
 			Keyboard::process_data();
+			Graphics::redraw();
 		} else if (!Mouse::queue.is_empty()) {
 			Mouse::process_data();
+			Graphics::redraw();
 		} else {
 			ASM::sti_hlt();
 		}

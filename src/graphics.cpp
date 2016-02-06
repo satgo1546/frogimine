@@ -137,4 +137,11 @@ namespace Graphics {
 		draw_text((struct pos) {0, 0}, pos.x, WHITE);
 		draw_text((struct pos) {width / 2, 0}, pos.y, WHITE);
 	}
+
+	//-------------------------------------------------------------------------
+	// ● 重绘
+	//-------------------------------------------------------------------------
+	void redraw() {
+		draw_cursor((struct pos) {0, 0});
+	}
 }
