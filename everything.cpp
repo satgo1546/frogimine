@@ -33,10 +33,10 @@
 #include "src/idt.cpp"
 #include "src/interrupt.cpp"
 
-#include "src/terminal.cpp"
-#include "src/graphics.cpp"
 #include "src/keyboard.cpp"
 #include "src/mouse.cpp"
+#include "src/terminal.cpp"
+#include "src/graphics.cpp"
 
 // 主程序
 #include "src/kernel.cpp"

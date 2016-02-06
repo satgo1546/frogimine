@@ -70,9 +70,9 @@ namespace Mouse {
 	//-------------------------------------------------------------------------
 	void fix_pos() {
 		if (state.pos.x < 0) state.pos.x = 0;
-		if (state.pos.x >= Graphics::width) state.pos.x = Graphics::width - 1;
+		if (state.pos.x >= 320) state.pos.x = 320 - 1;
 		if (state.pos.y < 0) state.pos.y = 0;
-		if (state.pos.y >= Graphics::height) state.pos.y = Graphics::height - 1;
+		if (state.pos.y >= 200) state.pos.y = 200 - 1;
 	}
 
 	//-------------------------------------------------------------------------
