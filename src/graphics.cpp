@@ -28,18 +28,15 @@ namespace Graphics {
 		#include "generated/colors-cpp.txt"
 	};
 
-	int width;
-	int height;
-	enum indexed_color cursor_color;
+	int width = 320;
+	int height = 200;
+	enum indexed_color cursor_color = GRAY_DDD;
 
 	//-------------------------------------------------------------------------
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize() {
-		width = 320;
-		height = 200;
 		ASM::initialize_pattle();
-		cursor_color = GRAY_DDD;
 	}
 
 	//-------------------------------------------------------------------------

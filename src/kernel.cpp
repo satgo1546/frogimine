@@ -29,7 +29,6 @@ namespace Kernel {
 		Terminal::initialize();
 		Graphics::initialize();
 		Keyboard::initialize();
-		Mouse::initialize();
 	}
 
 	//-------------------------------------------------------------------------

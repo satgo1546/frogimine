@@ -26,25 +26,16 @@ namespace Mouse {
 	uint8_t queue_data[QUEUE_SIZE];
 	FMQueue<uint8_t> queue(queue_data, QUEUE_SIZE);
 	struct info {
-		char stage;
+		char stage = -1;
 		uint8_t msg[3];
 	} info;
 	struct state {
-		bool left_button, middle_button, right_button;
-		struct vector motion;
-		struct pos pos;
+		bool left_button = false;
+		bool middle_button = false;
+		bool right_button = false;
+		struct vector motion = {0, 0};
+		struct pos pos = {0, 0};
 	} state;
-
-	//-------------------------------------------------------------------------
-	// ● 初始化
-	//-------------------------------------------------------------------------
-	void initialize() {
-		info.stage = -1;
-		state.left_button = state.middle_button = state.right_button = false;
-		state.motion = (struct vector) {0, 0};
-		state.pos.x = Graphics::width / 2;
-		state.pos.y = Graphics::height / 2;
-	}
 
 	//-------------------------------------------------------------------------
 	// ● 根据第1个字节更新按键状态
