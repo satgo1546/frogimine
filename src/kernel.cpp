@@ -26,7 +26,6 @@ namespace Kernel {
 		GDT::initialize();
 		IDT::initialize();
 		Interrupt::initialize();
-		ASM::sti();
 		Terminal::initialize();
 		Graphics::initialize();
 		Keyboard::initialize();
