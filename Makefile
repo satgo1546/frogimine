@@ -13,6 +13,8 @@
 #  limitations under the License.
 #==============================================================================
 # ■ Makefile
+#------------------------------------------------------------------------------
+#   make真是太神奇了，吓得我都不愿意用它了。
 #==============================================================================
 
 SOURCES = $(shell find src | grep --invert-match "/generated|^src$|/\\.")
@@ -52,5 +54,5 @@ frogimine.iso: compile
 	grub-mkrescue --directory=/usr/lib/grub/i386-pc --fonts="" --locales="" --themes="" --compress=no --output=frogimine.iso isodir -- -quiet
 listing: src-out
 	nasm -f elf32 everything.asm -l everything.asm.lst
-	clang -S everything.cpp -o everything.cpp.lst
+	clang -E everything.cpp -o everything.cpp.lst -m32 -std=c++11 -nostdinc -fno-builtin -fno-stack-protector
 .PHONY: all run debug clean src-out compile listing
