@@ -18,17 +18,25 @@
 //   只是这个项目中的这个文件有点不正常……
 //=============================================================================
 
+// 全局（系统无关）
 #include "src/global.cpp"
 #include "src/fmstring.cpp"
 #include "src/fmqueue.cpp"
+
+// 低级函数库
 #include "src/asm.cpp"
 #include "src/memory.cpp"
+
+// 基础设施
 #include "src/multiboot-info.cpp"
-#include "src/terminal.cpp"
-#include "src/graphics.cpp"
 #include "src/gdt.cpp"
 #include "src/idt.cpp"
+#include "src/interrupt.cpp"
+
+#include "src/terminal.cpp"
+#include "src/graphics.cpp"
 #include "src/keyboard.cpp"
 #include "src/mouse.cpp"
-#include "src/interrupt.cpp"
+
+// 主程序
 #include "src/kernel.cpp"
