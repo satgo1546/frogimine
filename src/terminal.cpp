@@ -33,8 +33,8 @@ namespace Terminal {
 	//-------------------------------------------------------------------------
 	// ● 定义变量
 	//-------------------------------------------------------------------------
-	unsigned int width;
-	unsigned int height;
+	int width;
+	int height;
 	static int cursor_x;
 	static int cursor_y;
 

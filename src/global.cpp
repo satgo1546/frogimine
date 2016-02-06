@@ -44,8 +44,8 @@ namespace Global {
 	struct rect {
 		int x;
 		int y;
-		unsigned int width;
-		unsigned int height;
+		int width;
+		int height;
 	};
 }
 

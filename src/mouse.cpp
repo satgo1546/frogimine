@@ -21,7 +21,7 @@ namespace Mouse {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
-	const unsigned int QUEUE_SIZE = 256;
+	const int QUEUE_SIZE = 256;
 	const uint8_t ACKNOWLEDGE = 0xfa;
 	uint8_t queue_data[QUEUE_SIZE];
 	FMQueue<uint8_t> queue(queue_data, QUEUE_SIZE);
@@ -42,8 +42,8 @@ namespace Mouse {
 		info.stage = -1;
 		state.left_button = state.middle_button = state.right_button = false;
 		state.motion = (struct vector) {0, 0};
-		state.pos.x = static_cast<int>(Graphics::width / 2);
-		state.pos.y = static_cast<int>(Graphics::height / 2);
+		state.pos.x = Graphics::width / 2;
+		state.pos.y = Graphics::height / 2;
 	}
 
 	//-------------------------------------------------------------------------
@@ -118,5 +118,4 @@ namespace Mouse {
 				if (msg == ACKNOWLEDGE) info.stage = 0;
 		}
 	}
-
 }

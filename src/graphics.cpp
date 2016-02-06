@@ -28,8 +28,8 @@ namespace Graphics {
 		#include "generated/colors-cpp.txt"
 	};
 
-	unsigned int width;
-	unsigned int height;
+	int width;
+	int height;
 	enum indexed_color cursor_color;
 
 	//-------------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace Graphics {
 			}
 		}
 	}
-	void fill_rect(int x, int y, unsigned int width, unsigned int height,
+	void fill_rect(int x, int y, int width, int height,
 	enum indexed_color color) {
 		fill_rect((struct rect) {
 			.x = x,
@@ -88,7 +88,7 @@ namespace Graphics {
 	void draw_char(struct pos pos, char c, enum indexed_color color) {
 		int i, y; uint8_t line;
 		type_address address;
-		unsigned int index = c - 32;
+		int index = c - 32;
 		if (pos.x >= width || pos.y >= height || index <= 0 || c > '~') return;
 		for (i = 0; i < default_font_height; i++) {
 			y = pos.y + i;
@@ -135,6 +135,6 @@ namespace Graphics {
 		fill_rect((struct rect) {pos.x - 3, pos.y, 7, 1}, cursor_color);
 		fill_rect((struct rect) {pos.x, pos.y - 3, 1, 7}, cursor_color);
 		draw_text((struct pos) {0, 0}, pos.x, WHITE);
-		draw_text((struct pos) {static_cast<int>(width / 2), 0}, pos.y, WHITE);
+		draw_text((struct pos) {width / 2, 0}, pos.y, WHITE);
 	}
 }

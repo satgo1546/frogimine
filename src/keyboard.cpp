@@ -21,7 +21,7 @@ namespace Keyboard {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
-	const unsigned int QUEUE_SIZE = 32;
+	const int QUEUE_SIZE = 32;
 	uint8_t queue_data[QUEUE_SIZE];
 	FMQueue<uint8_t> queue(queue_data, QUEUE_SIZE);
 

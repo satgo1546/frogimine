@@ -31,7 +31,7 @@ private:
 	// ● 初始化对象
 	//-------------------------------------------------------------------------
 public:
-	FMQueue(T* array, unsigned int size) {
+	FMQueue(T* array, int size) {
 		array_start = array;
 		array_end = array + size - 1;
 		front = array;
