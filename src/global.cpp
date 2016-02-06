@@ -37,10 +37,6 @@ namespace Global {
 		int x;
 		int y;
 	};
-	struct size {
-		int width;
-		int height;
-	};
 	struct vector {
 		int x;
 		int y;
