@@ -12,35 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-// ■ everything.cpp
+// ■ screen.cpp
 //-----------------------------------------------------------------------------
-//   正常的项目中都会有的、只用来包含其它文件的文件。
-//   只是这个项目中的这个文件有点不正常……
+//   提供有关屏幕大小等的信息。字符和图形界面通用。
 //=============================================================================
 
-// 全局（系统无关）
-#include "src/global.cpp"
-#include "src/fmstring.cpp"
-#include "src/fmqueue.cpp"
-
-// 汇编/低级函数
-#include "src/asm.cpp"
-#include "src/memory.cpp"
-
-// 基础设施
-#include "src/multiboot-info.cpp"
-#include "src/gdt.cpp"
-#include "src/idt.cpp"
-#include "src/interrupt.cpp"
-
-// 设备
-#include "src/screen.cpp"
-#include "src/keyboard.cpp"
-#include "src/mouse.cpp"
-
-// 图像输出
-#include "src/terminal.cpp"
-#include "src/graphics.cpp"
-
-// 主程序
-#include "src/kernel.cpp"
+namespace Screen {
+	const int pixel_width = 320;
+	const int pixel_height = 200;
+	const struct size pixel_size = {pixel_width, pixel_height};
+};

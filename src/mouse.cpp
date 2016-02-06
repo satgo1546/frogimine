@@ -42,8 +42,8 @@ namespace Mouse {
 		info.stage = -1;
 		state.left_button = state.middle_button = state.right_button = false;
 		state.motion = (struct vector) {0, 0};
-		state.pos.x = Graphics::width / 2;
-		state.pos.y = Graphics::height / 2;
+		state.pos.x = Screen::pixel_width / 2;
+		state.pos.y = Screen::pixel_height / 2;
 	}
 
 	//-------------------------------------------------------------------------
@@ -79,9 +79,9 @@ namespace Mouse {
 	//-------------------------------------------------------------------------
 	void fix_pos() {
 		if (state.pos.x < 0) state.pos.x = 0;
-		if (state.pos.x >= Graphics::width) state.pos.x = Graphics::width - 1;
+		if (state.pos.x >= Screen::pixel_width) state.pos.x = Screen::pixel_width - 1;
 		if (state.pos.y < 0) state.pos.y = 0;
-		if (state.pos.y >= Graphics::height) state.pos.y = Graphics::height - 1;
+		if (state.pos.y >= Screen::pixel_height) state.pos.y = Screen::pixel_height - 1;
 	}
 
 	//-------------------------------------------------------------------------
@@ -111,7 +111,7 @@ namespace Mouse {
 				apply_motion(state.motion);
 				fix_pos();
 				// 绘制
-				Graphics::draw_cursor(state.pos);
+				//Graphics::draw_cursor(state.pos);
 				break;
 			default:
 				// 鼠标准备好了后会发送这个数据
