@@ -33,8 +33,11 @@
 #include "src/idt.cpp"
 #include "src/interrupt.cpp"
 
+// 设备
 #include "src/keyboard.cpp"
 #include "src/mouse.cpp"
+
+// 图像输出
 #include "src/terminal.cpp"
 #include "src/graphics.cpp"
 

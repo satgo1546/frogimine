@@ -83,7 +83,7 @@ namespace Mouse {
 		switch (info.stage) {
 			case 0:
 				// 第1个字节的第3位一定是1
-				if (msg & 1 << 3){
+				if (msg & 1 << 3) {
 					info.msg[0] = msg;
 					info.stage = 1;
 				}
