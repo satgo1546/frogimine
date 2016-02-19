@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+#==============================================================================
 #  Copyright 2016 Frog Chen
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");

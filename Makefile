@@ -1,3 +1,4 @@
+#==============================================================================
 #  Copyright 2016 Frog Chen
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@
 #==============================================================================
 # ■ Makefile
 #------------------------------------------------------------------------------
-#   make真是太神奇了，吓得我都不愿意用它了。
+#   make真是太神奇了，吓得我都不敢用它了。
 #==============================================================================
 
 SOURCES = $(shell find src | grep --invert-match "/generated|^src$|/\\.")
@@ -29,7 +30,7 @@ debug: all
 	gdb -tui -x scripts/gdbinit
 clean:
 	rm -rf isodir src/generated
-	rm -f *.o *.lst 
+	rm -f *.o *.lst
 	rm -f mine.bin frogimine.iso
 
 $(SRC_OUT)/colors-cpp.txt: src/indexed-colors.csv
