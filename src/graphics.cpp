@@ -23,7 +23,7 @@ namespace Graphics {
 	// ● 定义
 	//-------------------------------------------------------------------------
 	#include "default-font.cpp"
-	const type_address vram_base = 0xa0000;
+	const intptr_t vram_base = 0xa0000;
 	enum indexed_color {
 		#include "generated/colors-cpp.txt"
 	};
@@ -33,15 +33,15 @@ namespace Graphics {
 	// ● 填充整个屏幕
 	//-------------------------------------------------------------------------
 	void fill(enum indexed_color color) {
-		type_address i;
-		type_address end_i = vram_base + Screen::width * Screen::height;
+		intptr_t i;
+		intptr_t end_i = vram_base + Screen::width * Screen::height;
 		for (i = vram_base; i < end_i; i++) Memory::write8_at(i, color);
 	}
 
 	//-------------------------------------------------------------------------
 	// ● 计算显示位置的内存地址
 	//-------------------------------------------------------------------------
-	inline type_address memory_address(struct pos pos) {
+	inline intptr_t memory_address(struct pos pos) {
 		return vram_base + pos.x + pos.y * Screen::width;
 	}
 
@@ -83,7 +83,7 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	void draw_char(struct pos pos, char c, enum indexed_color color) {
 		int i, y; uint8_t line;
-		type_address address;
+		intptr_t address;
 		int index = c - 32;
 		if (pos.x >= Screen::width || pos.y >= Screen::height || index <= 0 || c > '~') return;
 		for (i = 0; i < default_font_height; i++) {
@@ -119,7 +119,7 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	void draw_text(struct pos pos, long value, enum indexed_color color) {
 		char buf[12];
-		FMString::long2charbuf(buf, value);
+		FMString::i_to_s(buf, value);
 		draw_text(pos, buf, color);
 	}
 

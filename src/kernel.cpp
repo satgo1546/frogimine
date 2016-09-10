@@ -18,42 +18,29 @@
 //   内核。不知道有什么用。
 //=============================================================================
 
-namespace Kernel {
-	//-------------------------------------------------------------------------
-	// ● 主程序
-	//-------------------------------------------------------------------------
-	void main() {
-		Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
-		Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
-		Graphics::draw_text((struct pos) {0, 24}, Memory::kernel_start, Graphics::WHITE);
-		Graphics::draw_text((struct pos) {100, 24}, Memory::kernel_end, Graphics::WHITE);
-	}
-
-	//-------------------------------------------------------------------------
-	// ● 主循环
-	//-------------------------------------------------------------------------
-	void loop() {
-		ASM::cli();
-		if (!Keyboard::queue.is_empty()) {
-			Keyboard::process_data();
-			Graphics::redraw();
-		} else if (!Mouse::queue.is_empty()) {
-			Mouse::process_data();
-			Graphics::redraw();
-		} else {
-			ASM::sti_hlt();
-		}
+//-----------------------------------------------------------------------------
+// ● 主循环
+//-----------------------------------------------------------------------------
+void kernel_loop() {
+	ASM::cli();
+	if (!Keyboard::queue.is_empty()) {
+		Keyboard::process_data();
+		Graphics::redraw();
+	} else if (!Mouse::queue.is_empty()) {
+		Mouse::process_data();
+		Graphics::redraw();
+	} else {
+		ASM::sti_hlt();
 	}
 }
 
-//---------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // ● 供外部调用的内核主程序
 //   需确保此程序不返回。
-//---------------------------------------------------------------------------
-extern "C" void kernel_main(type_address multiboot_info_address) {
+//-----------------------------------------------------------------------------
+extern "C" void kernel_main(intptr_t multiboot_info_address) {
 	initialize(multiboot_info_address);
-	Kernel::main();
-	for (;;) Kernel::loop();
+	for (;;) kernel_loop();
 	// 万一返回了，还有一点药可救
 	for (;;) ASM::hlt();
 }

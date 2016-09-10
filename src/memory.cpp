@@ -27,23 +27,23 @@ namespace Memory {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
-	auto kernel_start = (type_address) kernel_start__defined_by_linker_script;
-	auto kernel_end = (type_address) kernel_end__defined_by_linker_script;
+	auto kernel_start = (intptr_t) kernel_start__defined_by_linker_script;
+	auto kernel_end = (intptr_t) kernel_end__defined_by_linker_script;
 
 	//-------------------------------------------------------------------------
 	// ● 根据地址读出内存
 	//-------------------------------------------------------------------------
-	inline uint8_t read8_at(type_address address) {
+	inline uint8_t read8_at(intptr_t address) {
 		return *((uint8_t*) address);
 	}
-	inline uint32_t read32_at(type_address address) {
+	inline uint32_t read32_at(intptr_t address) {
 		return *((uint32_t*) address);
 	}
 
 	//-------------------------------------------------------------------------
 	// ● 根据地址写入内存
 	//-------------------------------------------------------------------------
-	inline void write8_at(type_address address, uint8_t value) {
+	inline void write8_at(intptr_t address, uint8_t value) {
 		*((uint8_t*) address) = value;
 	}
 }

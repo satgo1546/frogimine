@@ -63,7 +63,7 @@ namespace GDT {
 	// ● 设定段描述符
 	//   a : 12位的段属性中的低8位。高4位固定为×100，G位（×）由本函数自行处理。
 	//-------------------------------------------------------------------------
-	void set(int index, type_address base, type_size limit, uint8_t a) {
+	void set(int index, intptr_t base, size_t limit, uint8_t a) {
 		uint8_t b = 1 << 6;
 		if (limit > 0xfffff) {
 			b |= 1 << 7;
@@ -88,7 +88,7 @@ namespace GDT {
 		set(0, 0, 0, 0);
 		set(1, 0, 0xffffffff, 0b10011010);
 		set(2, 0, 0xffffffff, 0b10010010);
-		ASM::set_gdtr(0xffff, (type_address) &gdt);
+		ASM::set_gdtr(0xffff, (intptr_t) &gdt);
 		ASM::update_segment_registers();
 	}
 }

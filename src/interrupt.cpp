@@ -57,8 +57,8 @@ namespace Interrupt {
 	//-------------------------------------------------------------------------
 	void initialize_interrupt() {
 		// 设置IDT中的值
-		IDT::set(33, (type_address) asm_int33, 1 << 3, 0x8e);
-		IDT::set(44, (type_address) asm_int44, 1 << 3, 0x8e);
+		IDT::set(33, (intptr_t) asm_int33, 1 << 3, 0x8e);
+		IDT::set(44, (intptr_t) asm_int44, 1 << 3, 0x8e);
 		//           #1 INT 33 ←┐
 		//    PIC0↘  #2 PIC1   ↰│
 		ASM::out8(0x21, 0b11111001);

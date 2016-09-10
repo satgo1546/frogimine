@@ -21,11 +21,15 @@
 //-----------------------------------------------------------------------------
 // ● 初始化
 //-----------------------------------------------------------------------------
-void initialize(type_address multiboot_info_address) {
+void initialize(intptr_t multiboot_info_address) {
 	MultibootInfo::initialize(multiboot_info_address);
 	GDT::initialize();
 	IDT::initialize();
 	Interrupt::initialize();
 	Keyboard::initialize();
 	ASM::initialize_pattle();
+	Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
+	Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
+	Graphics::draw_text((struct pos) {0, 24}, Memory::kernel_start, Graphics::WHITE);
+	Graphics::draw_text((struct pos) {100, 24}, Memory::kernel_end, Graphics::WHITE);
 }

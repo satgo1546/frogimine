@@ -55,7 +55,7 @@ namespace IDT {
 	//-------------------------------------------------------------------------
 	// ● 设定中断描述符
 	//-------------------------------------------------------------------------
-	void set(int index, type_address offset, uint32_t selector, uint8_t b) {
+	void set(int index, intptr_t offset, uint32_t selector, uint8_t b) {
 		idt[index].offset1 = offset & 0xffff;
 		idt[index].offset2 = (offset & 0xffff0000) / 0x10000;
 		idt[index].segment_selector = selector;
@@ -68,6 +68,6 @@ namespace IDT {
 	//-------------------------------------------------------------------------
 	void initialize() {
 		for (int i = 0; i < IDT_COUNT; i++) set(i, 0, 0, 0);
-		ASM::set_idtr(0x7ff, (type_address) idt);
+		ASM::set_idtr(0x7ff, (intptr_t) idt);
 	}
 }

@@ -24,7 +24,7 @@ namespace MultibootInfo {
 	uint32_t mem_lower, mem_upper; // 可用的连续内存地址，单位为KB
 	const char* cmdline;
 	const char* boot_loader_name;
-	void initialize(type_address address) {
+	void initialize(intptr_t address) {
 		flags = Memory::read32_at(address);
 		if (flags & 1 << 0) {
 			mem_lower = Memory::read32_at(address + 4);
