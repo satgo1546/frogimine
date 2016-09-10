@@ -34,48 +34,46 @@ GRUB_MKRESCUE_FLAGS = \
 	--directory=/usr/lib/grub/i386-pc \
 	--fonts="" --locales="" --themes="" --compress=no
 
-QEMU_COMMAND = qemu-system-i386 -cdrom frogimine.iso -display sdl
+QEMU_COMMAND = qemu-system-i386 -cdrom $(MINE_ISO) -display sdl
 
-SOURCES = $(shell find src | grep --invert-match "/generated|^src$|/\\.")
-SRC_OUT_DIR = src/generated
+SOURCES = $(shell find src -name "*.c" -o -name "*.asm" | \
+	grep --invert-match "/generated|^src$|/\\.")
 ISO_DIR = /tmp/iso_dir
+MINE_BIN = mine.bin
+MINE_ISO = frogimine.iso
 
 #------------------------------------------------------------------------------
 # ● 构建目标
 #------------------------------------------------------------------------------
-all: frogimine.iso
+all: $(MINE_ISO)
 run: all
 	$(QEMU_COMMAND)
 debug: all
-	$(QEMU_COMMAND) -S -gdb tcp::23333 &
+	$(QEMU_COMMAND) -gdb tcp::23333 &
 	sleep .5
-	gdb -tui -x scripts/gdbinit
+	gdb -x scripts/gdbinit
 clean:
-	$(RM) -r $(ISO_DIR) $(SRC_OUT_DIR)
+	$(RM) -r $(ISO_DIR) src/generated
 	$(RM) *.o *.lst
-	$(RM) mine.bin frogimine.iso
+	$(RM) $(MINE_BIN) $(MINE_ISO)
 
-$(SRC_OUT_DIR)/colors-cpp.txt: src/indexed-colors.csv
-	mkdir -p $(SRC_OUT_DIR)
-	awk -v output=cpp -f src/colors--.awk $< > $@
-$(SRC_OUT_DIR)/colors-nasm.txt: src/indexed-colors.csv
-	mkdir -p $(SRC_OUT_DIR)
-	awk -v output=nasm -f src/colors--.awk $< > $@
-$(SRC_OUT_DIR)/default-font-data.txt: src/default-font-data.txt
-	mkdir -p $(SRC_OUT_DIR)
-	awk -f src/font-data--cpp.awk $< > $@
-src-out: $(SRC_OUT_DIR)/colors-cpp.txt $(SRC_OUT_DIR)/colors-nasm.txt $(SRC_OUT_DIR)/default-font-data.txt
+src/generated: src/indexed-colors.csv src/default-font-data.txt
+	mkdir -p src/generated
+	awk -v output=cpp -f src/colors--.awk src/indexed-colors.csv > src/generated/colors-cpp.txt
+	awk -v output=nasm -f src/colors--.awk src/indexed-colors.csv > src/generated/colors-nasm.txt
+	awk -f src/font-data--cpp.awk src/default-font-data.txt > src/generated/default-font-data.txt
 
-compile: src-out
+$(MINE_BIN): src/generated $(SOURCES)
 	$(CXX) -c everything.cpp -o everything.cpp.o $(CFLAGS)
 	$(AS) $(ASFLAGS) everything.asm -o everything.asm.o
-	$(LD) $(LDFLAGS) everything.asm.o everything.cpp.o -o mine.bin
-frogimine.iso: compile
+	$(LD) $(LDFLAGS) everything.asm.o everything.cpp.o -o $(MINE_BIN)
+$(MINE_ISO): $(MINE_BIN)
 	mkdir -p $(ISO_DIR)/boot/grub
-	cp mine.bin $(ISO_DIR)/boot/
+	cp $(MINE_BIN) $(ISO_DIR)/boot/
 	cp src/grub.cfg $(ISO_DIR)/boot/grub/
-	grub-mkrescue $(GRUB_MKRESCUE_FLAGS) --output=frogimine.iso $(ISO_DIR)
-listing: src-out
+	grub-mkrescue $(GRUB_MKRESCUE_FLAGS) --output=$(MINE_ISO) $(ISO_DIR)
+listing: src/generated
 	$(AS) $(ASFLAGS) everything.asm -l everything.asm.lst
 	$(CXX) -E everything.cpp -o everything.cpp.lst $(CFLAGS)
-.PHONY: all run debug clean src-out compile listing
+
+.PHONY: all run debug clean listing
