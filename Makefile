@@ -18,42 +18,64 @@
 #   make真是太神奇了，吓得我都不敢用它了。
 #==============================================================================
 
-SOURCES = $(shell find src | grep --invert-match "/generated|^src$|/\\.")
-SRC_OUT = src/generated
+#------------------------------------------------------------------------------
+# ● 定义变量
+#------------------------------------------------------------------------------
+CC = clang
+CXX = clang++
+AS = nasm
+LD = ld
+CFLAGS = \
+	-m32 -O2 -std=gnu++11 -Wall -Wextra -ggdb \
+	-nostdinc -fno-builtin -fno-stack-protector
+ASFLAGS = -f elf32 -g -F stabs
+LDFLAGS = -T scripts/linker.lds -melf_i386 -no-builtin -nostdlib -O2
+GRUB_MKRESCUE_FLAGS = \
+	--directory=/usr/lib/grub/i386-pc \
+	--fonts="" --locales="" --themes="" --compress=no
 
+QEMU_COMMAND = qemu-system-i386 -cdrom frogimine.iso -display sdl
+
+SOURCES = $(shell find src | grep --invert-match "/generated|^src$|/\\.")
+SRC_OUT_DIR = src/generated
+ISO_DIR = /tmp/iso_dir
+
+#------------------------------------------------------------------------------
+# ● 构建目标
+#------------------------------------------------------------------------------
 all: frogimine.iso
 run: all
-	qemu-system-i386 -cdrom frogimine.iso
+	$(QEMU_COMMAND)
 debug: all
-	qemu-system-i386 -cdrom frogimine.iso -S -gdb tcp::23333 &
-	sleep 1
+	$(QEMU_COMMAND) -S -gdb tcp::23333 &
+	sleep .5
 	gdb -tui -x scripts/gdbinit
 clean:
-	rm -rf isodir src/generated
-	rm -f *.o *.lst
-	rm -f mine.bin frogimine.iso
+	$(RM) -r $(ISO_DIR) $(SRC_OUT_DIR)
+	$(RM) *.o *.lst
+	$(RM) mine.bin frogimine.iso
 
-$(SRC_OUT)/colors-cpp.txt: src/indexed-colors.csv
-	mkdir -p $(SRC_OUT)
+$(SRC_OUT_DIR)/colors-cpp.txt: src/indexed-colors.csv
+	mkdir -p $(SRC_OUT_DIR)
 	awk -v output=cpp -f src/colors--.awk $< > $@
-$(SRC_OUT)/colors-nasm.txt: src/indexed-colors.csv
-	mkdir -p $(SRC_OUT)
+$(SRC_OUT_DIR)/colors-nasm.txt: src/indexed-colors.csv
+	mkdir -p $(SRC_OUT_DIR)
 	awk -v output=nasm -f src/colors--.awk $< > $@
-$(SRC_OUT)/default-font-data.txt: src/default-font-data.txt
-	mkdir -p $(SRC_OUT)
+$(SRC_OUT_DIR)/default-font-data.txt: src/default-font-data.txt
+	mkdir -p $(SRC_OUT_DIR)
 	awk -f src/font-data--cpp.awk $< > $@
-src-out: $(SRC_OUT)/colors-cpp.txt $(SRC_OUT)/colors-nasm.txt $(SRC_OUT)/default-font-data.txt
+src-out: $(SRC_OUT_DIR)/colors-cpp.txt $(SRC_OUT_DIR)/colors-nasm.txt $(SRC_OUT_DIR)/default-font-data.txt
 
 compile: src-out
-	clang -c everything.cpp -o everything.cpp.o -m32 -O2 -std=c++11 -Wall -ggdb -nostdinc -fno-builtin -fno-stack-protector
-	nasm -f elf32 everything.asm -o everything.asm.o
-	ld -T src/linker.lds everything.asm.o everything.cpp.o -o mine.bin -melf_i386 -O2 -nostdlib
+	$(CXX) -c everything.cpp -o everything.cpp.o $(CFLAGS)
+	$(AS) $(ASFLAGS) everything.asm -o everything.asm.o
+	$(LD) $(LDFLAGS) everything.asm.o everything.cpp.o -o mine.bin
 frogimine.iso: compile
-	mkdir -p isodir/boot/grub
-	cp mine.bin isodir/boot/
-	cp src/grub.cfg isodir/boot/grub/
-	grub-mkrescue --directory=/usr/lib/grub/i386-pc --fonts="" --locales="" --themes="" --compress=no --output=frogimine.iso isodir -- -quiet
+	mkdir -p $(ISO_DIR)/boot/grub
+	cp mine.bin $(ISO_DIR)/boot/
+	cp src/grub.cfg $(ISO_DIR)/boot/grub/
+	grub-mkrescue $(GRUB_MKRESCUE_FLAGS) --output=frogimine.iso $(ISO_DIR)
 listing: src-out
-	nasm -f elf32 everything.asm -l everything.asm.lst
-	clang -E everything.cpp -o everything.cpp.lst -m32 -std=c++11 -nostdinc -fno-builtin -fno-stack-protector
+	$(AS) $(ASFLAGS) everything.asm -l everything.asm.lst
+	$(CXX) -E everything.cpp -o everything.cpp.lst $(CFLAGS)
 .PHONY: all run debug clean src-out compile listing
