@@ -23,7 +23,7 @@ namespace Graphics {
 	// ● 定义
 	//-------------------------------------------------------------------------
 	#include "default-font.cpp"
-	const intptr_t vram_base = 0xa0000;
+	const intptr_t vram_base = 0xb8000; // 临时的，原来是0xa0000
 	enum indexed_color {
 		#include "generated/colors-cpp.txt"
 	};

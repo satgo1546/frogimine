@@ -22,7 +22,8 @@
 // ● 初始化
 //-----------------------------------------------------------------------------
 void initialize(intptr_t multiboot_info_address) {
-	MultibootInfo::initialize(multiboot_info_address);
+	Memory::multiboot_info_address = multiboot_info_address;
+	MultibootInfo::initialize();
 	GDT::initialize();
 	IDT::initialize();
 	Interrupt::initialize();

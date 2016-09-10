@@ -19,7 +19,9 @@
 //=============================================================================
 
 // 这两个数据在linker.lds中定义。这个做法真是太神奇了——依旧不明白它的运作机理。
-// PS1：必须放在最外面。PS2：extern后面的"C"不是必要的。
+// PS1：必须放在最外面。
+// PS2：extern后面的"C"不是必要的。
+// PS3：必须用数组而非指针。
 extern uint8_t kernel_start__defined_by_linker_script[];
 extern uint8_t kernel_end__defined_by_linker_script[];
 
@@ -29,12 +31,16 @@ namespace Memory {
 	//-------------------------------------------------------------------------
 	auto kernel_start = (intptr_t) kernel_start__defined_by_linker_script;
 	auto kernel_end = (intptr_t) kernel_end__defined_by_linker_script;
+	intptr_t multiboot_info_address = 0xffffffff;
 
 	//-------------------------------------------------------------------------
 	// ● 根据地址读出内存
 	//-------------------------------------------------------------------------
 	inline uint8_t read8_at(intptr_t address) {
 		return *((uint8_t*) address);
+	}
+	inline uint16_t read16_at(intptr_t address) {
+		return *((uint16_t*) address);
 	}
 	inline uint32_t read32_at(intptr_t address) {
 		return *((uint32_t*) address);
@@ -45,5 +51,11 @@ namespace Memory {
 	//-------------------------------------------------------------------------
 	inline void write8_at(intptr_t address, uint8_t value) {
 		*((uint8_t*) address) = value;
+	}
+	inline void write16_at(intptr_t address, uint16_t value) {
+		*((uint16_t*) address) = value;
+	}
+	inline void write32_at(intptr_t address, uint32_t value) {
+		*((uint32_t*) address) = value;
 	}
 }

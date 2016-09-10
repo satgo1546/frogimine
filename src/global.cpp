@@ -20,6 +20,12 @@
 
 namespace Global {
 	//-------------------------------------------------------------------------
+	// ● 宏魔法
+	//-------------------------------------------------------------------------
+	#define UNUSED __attribute__((unused))
+	#define ARRAY_SIZE (sizeof(arr) / sizeof(*(arr)))
+	#define EXPLOSION (asm("ud2"))
+	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
 	// 因为没有头，所以只能这样定义uint*_t了。
@@ -32,13 +38,12 @@ namespace Global {
 	typedef __INT16_TYPE__ int16_t;
 	typedef __INT32_TYPE__ int32_t;
 	typedef __INT64_TYPE__ int64_t;
-
-	// 看上去是另一种类型，但其实就是无符号的整数
+	// 看上去是另一种类型，但其实就是无符号的整数。
 	typedef int32_t intptr_t;
 	typedef uint32_t size_t;
 	typedef uint16_t type_port;
 
-	// 通用的数据类型
+	// 图形学的数据类型
 	struct pos {
 		int x;
 		int y;

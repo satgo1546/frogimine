@@ -82,9 +82,7 @@ namespace GDT {
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize() {
-		for (int i = 3; i < GDT_COUNT; i++) {
-			set(i, 0, 0, 0);
-		}
+		for (int i = 3; i < GDT_COUNT; i++) set(i, 0, 0, 0);
 		set(0, 0, 0, 0);
 		set(1, 0, 0xffffffff, 0b10011010);
 		set(2, 0, 0xffffffff, 0b10010010);
