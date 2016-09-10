@@ -18,7 +18,27 @@
 ;   系统内核的入口点。
 ;==============================================================================
 
-; 分配堆栈所使用的空间
+;------------------------------------------------------------------------------
+; ● Multiboot的头。参照Multiboot规范中“OS image format”一段：
+;   https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#OS-image-format
+;------------------------------------------------------------------------------
+MULTIBOOT_MAGIC equ 0x1badb002
+; 对齐页面 + 提供内存图
+; 不指定图像模式，也不指定载入地址
+MULTIBOOT_FLAGS equ 0b00000011
+
+; 单独的Multiboot区段
+section .multiboot
+align 4
+	dd MULTIBOOT_MAGIC
+	dd MULTIBOOT_FLAGS
+	dd -(MULTIBOOT_MAGIC + MULTIBOOT_FLAGS)
+	times 5 dd 0
+	times 4 dd 0
+
+;------------------------------------------------------------------------------
+; ● 分配堆栈与启动系统
+;------------------------------------------------------------------------------
 section .bootstrap_stack, nobits
 align 4
 stack_bottom:
@@ -42,14 +62,20 @@ not_multiboot:
 	push dword 0xffffffff
 multiboot_end:
 
+	; 写一段不知道干什么用的文字
+	mov esi, booting_message
+	mov edi, 0xb8142
+	mov ecx, 40
+	cld
+	rep movsb
+
 	; 调用系统内核的主程序
 	extern kernel_main
 	call kernel_main
 
-	; 当内核主程序返回后，就让电脑进入死循环
-	; 禁用中断
-	cli
-.loop:
-	; 等待到下一次中断来临
-	hlt
-	jmp .loop
+booting_message:
+	db 'F', 0x0a, 'r', 0x0a, 'o', 0x0a, 'g', 0x0a
+	db 'i', 0x0a, 'm', 0x0a, 'i', 0x0a, 'n', 0x0a
+	db 'e', 0x0a, '?', 0x00, '-', 0x07, '?', 0x00
+	db 'W', 0x02, 'e', 0x02, 'l', 0x02, 'c', 0x02
+	db 'o', 0x02, 'm', 0x02, 'e', 0x02, '!', 0x02

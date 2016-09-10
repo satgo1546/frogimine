@@ -19,7 +19,6 @@
 ;==============================================================================
 
 [bits 32]
-%include "src/multiboot-head.asm"
 %include "src/start.asm"
 %include "src/asm.asm"
 %include "src/interrupt.asm"

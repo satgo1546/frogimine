@@ -13,32 +13,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-// ■ everything.cpp
+// ■ initialize.cpp
 //-----------------------------------------------------------------------------
-//   正常的C++项目中都不会有的、只用来包含其它文件的文件。
+//   一开始叫我把初始化部分提取出来，我是拒绝的。
 //=============================================================================
 
-// 全局（系统无关）
-#include "src/global.cpp"
-#include "src/fmstring.cpp"
-#include "src/fmqueue.cpp"
-
-// 低级函数库
-#include "src/asm.cpp"
-#include "src/memory.cpp"
-
-// 基础设施
-#include "src/multiboot-info.cpp"
-#include "src/gdt.cpp"
-#include "src/idt.cpp"
-#include "src/interrupt.cpp"
-
-// 设备
-#include "src/screen.cpp"
-#include "src/keyboard.cpp"
-#include "src/mouse.cpp"
-#include "src/graphics.cpp"
-
-// 主程序
-#include "src/initialize.cpp"
-#include "src/kernel.cpp"
+//-----------------------------------------------------------------------------
+// ● 初始化
+//-----------------------------------------------------------------------------
+void initialize(type_address multiboot_info_address) {
+	MultibootInfo::initialize(multiboot_info_address);
+	GDT::initialize();
+	IDT::initialize();
+	Interrupt::initialize();
+	Keyboard::initialize();
+	ASM::initialize_pattle();
+}

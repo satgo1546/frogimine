@@ -67,10 +67,7 @@ namespace IDT {
 	// ● 初始化
 	//-------------------------------------------------------------------------
 	void initialize() {
-		int i;
-		for (i = 0; i < IDT_COUNT; i++) {
-			set(i, 0, 0, 0);
-		}
+		for (int i = 0; i < IDT_COUNT; i++) set(i, 0, 0, 0);
 		ASM::set_idtr(0x7ff, (type_address) idt);
 	}
 }

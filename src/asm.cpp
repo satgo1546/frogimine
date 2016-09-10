@@ -39,7 +39,9 @@ namespace ASM {
 	inline void cli() {
 		asm("cli");
 	}
-	extern "C" void sti_hlt();
+	inline void sti_hlt() {
+		asm("sti\n\thlt");
+	};
 
 	//-------------------------------------------------------------------------
 	// ● 端口写入

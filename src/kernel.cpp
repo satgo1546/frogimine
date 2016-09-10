@@ -20,18 +20,6 @@
 
 namespace Kernel {
 	//-------------------------------------------------------------------------
-	// ● 初始化
-	//-------------------------------------------------------------------------
-	void initialize(type_address multiboot_info_address) {
-		MultibootInfo::initialize(multiboot_info_address);
-		GDT::initialize();
-		IDT::initialize();
-		Interrupt::initialize();
-		Keyboard::initialize();
-		Graphics::initialize();
-	}
-
-	//-------------------------------------------------------------------------
 	// ● 主程序
 	//-------------------------------------------------------------------------
 	void main() {
@@ -60,9 +48,12 @@ namespace Kernel {
 
 //---------------------------------------------------------------------------
 // ● 供外部调用的内核主程序
+//   需确保此程序不返回。
 //---------------------------------------------------------------------------
 extern "C" void kernel_main(type_address multiboot_info_address) {
-	Kernel::initialize(multiboot_info_address);
+	initialize(multiboot_info_address);
 	Kernel::main();
 	for (;;) Kernel::loop();
+	// 万一返回了，还有一点药可救
+	for (;;) ASM::hlt();
 }
