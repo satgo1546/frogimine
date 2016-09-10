@@ -36,8 +36,8 @@ GRUB_MKRESCUE_FLAGS = \
 
 QEMU_COMMAND = qemu-system-i386 -cdrom $(MINE_ISO) -display sdl
 
-SOURCES = $(shell find src -name "*.c" -o -name "*.asm" | \
-	grep --invert-match "/generated|^src$|/\\.")
+SOURCES = $(shell find src -name "*.cpp" -or -name "*.asm" | \
+	grep --invert-match "/generated")
 ISO_DIR = /tmp/iso_dir
 MINE_BIN = mine.bin
 MINE_ISO = frogimine.iso
