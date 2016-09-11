@@ -28,7 +28,6 @@
 #include "src/memory.cpp"
 
 // 基础设施
-#include "src/multiboot-info.cpp"
 #include "src/gdt.cpp"
 #include "src/idt.cpp"
 #include "src/interrupt.cpp"

@@ -18,19 +18,86 @@
 //   一开始叫我把初始化部分提取出来，我是拒绝的。
 //=============================================================================
 
-//-----------------------------------------------------------------------------
-// ● 初始化
-//-----------------------------------------------------------------------------
-void initialize(intptr_t multiboot_info_address) {
-	Memory::multiboot_info_address = multiboot_info_address;
-	MultibootInfo::initialize();
-	GDT::initialize();
-	IDT::initialize();
-	Interrupt::initialize();
-	Keyboard::initialize();
-	ASM::initialize_pattle();
-	Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
-	Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
-	Graphics::draw_text((struct pos) {0, 24}, Memory::kernel_start, Graphics::WHITE);
-	Graphics::draw_text((struct pos) {100, 24}, Memory::kernel_end, Graphics::WHITE);
+namespace Global {
+	//-------------------------------------------------------------------------
+	// ● 定义
+	//-------------------------------------------------------------------------
+	struct bootinfo {
+		uint32_t multiboot_flags = 0;
+		// 可用的连续内存地址，单位为KB
+		uint32_t memory_lower = 0, memory_upper = 0;
+		char cmdline[256] = {0};
+		const char* bootloader = nullptr;
+	} bootinfo;
+	// Multiboot信息
+	// 参照：https://www.gnu.org/software/grub/
+	// manual/multiboot/multiboot.html#Boot-information-format
+	struct multiboot_info {
+		uint32_t flags;
+		uint32_t mem_lower, mem_upper;
+		uint32_t boot_device;
+		uint32_t cmdline;
+		uint32_t mods_count;
+		uint32_t mods_addr;
+		uint32_t syms[4];
+		union {
+			struct a_out {
+				uint32_t tabsize;
+				uint32_t strsize;
+				uint32_t addr;
+				uint32_t reserved;
+			};
+			struct elf {
+				uint32_t num;
+				uint32_t size;
+				uint32_t addr;
+				uint32_t shndx;
+			}
+		} syms;
+		uint32_t mmap_length;
+		uint32_t mmap_addr;
+		uint32_t drives_length;
+		uint32_t drives_addr;
+		uint32_t config_table;
+		uint32_t boot_loader_name;
+		uint32_t apm_table;
+		uint32_t vbe_control_info;
+		uint32_t vbe_mode_info;
+		uint16_t vbe_mode;
+		uint16_t vbe_interface_seg;
+		uint16_t vbe_interface_off;
+		uint16_t vbe_interface_len;
+	} __attribute__((packed));
+	//-------------------------------------------------------------------------
+	// ● 读取Multiboot信息
+	//-------------------------------------------------------------------------
+	void load_multiboot() {
+		auto info = (struct multiboot_info*) Memory::multiboot_info_address;
+		if (info->flags & 1 << 0) {
+			bootinfo.memory_lower = info->mem_lower;
+			bootinfo.memory_upper = info->mem_upper;
+		}
+		if (info->flags & 1 << 2) {
+			// strcpy(bootinfo.cmdline = Memory::read32_at(address + 16));
+		}
+		if (info->flags & 1 << 9) {
+			bootinfo.bootloader = (const char*) Memory::read32_at(address + 64);
+		}
+	}
+	//-------------------------------------------------------------------------
+	// ● 初始化
+	//-------------------------------------------------------------------------
+	void initialize(intptr_t multiboot_info_address) {
+		Memory::multiboot_info_address = multiboot_info_address;
+		load_multiboot();
+		GDT::initialize();
+		IDT::initialize();
+		Interrupt::initialize();
+		Keyboard::initialize();
+		ASM::initialize_pattle();
+		Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
+		Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
+		Graphics::draw_text((struct pos) {0, 24}, Memory::kernel_start, Graphics::WHITE);
+		Graphics::draw_text((struct pos) {100, 24}, Memory::kernel_end, Graphics::WHITE);
+	}
 }
