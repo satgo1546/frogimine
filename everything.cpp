@@ -28,12 +28,14 @@
 #include "src/asm.cpp"
 #include "src/memory.cpp"
 
-// 基础设施
+// 基础设施和驱动
 #include "src/gdt.cpp"
 #include "src/idt.cpp"
 #include "src/interrupt.cpp"
+#include "src/drivers/vga_text.cpp"
+//#include "src/drivers/vga_graphics.cpp"
 
-// 设备
+// 硬件抽象层
 #include "src/screen.cpp"
 #include "src/keyboard.cpp"
 #include "src/mouse.cpp"

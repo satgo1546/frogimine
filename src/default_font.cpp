@@ -23,5 +23,5 @@
 const int default_font_width = 8;
 const int default_font_height = 12;
 const uint8_t default_font[][default_font_height] = {
-	#include "generated/default-font-data.txt"
+	#include "generated/default_font_data.txt"
 };

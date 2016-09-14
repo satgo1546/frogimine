@@ -57,11 +57,11 @@ clean:
 	$(RM) *.o *.lst
 	$(RM) $(MINE_BIN) $(MINE_ISO)
 
-src/generated: src/indexed-colors.csv src/default-font-data.txt
+src/generated: data scripts
 	mkdir -p src/generated
-	awk -v output=cpp -f src/colors--.awk src/indexed-colors.csv > src/generated/colors-cpp.txt
-	awk -v output=nasm -f src/colors--.awk src/indexed-colors.csv > src/generated/colors-nasm.txt
-	awk -f src/font-data--cpp.awk src/default-font-data.txt > src/generated/default-font-data.txt
+	awk -v output=cpp -f scripts/colors--.awk data/indexed_colors.csv > src/generated/colors_cpp.txt
+	awk -v output=nasm -f scripts/colors--.awk data/indexed_colors.csv > src/generated/colors_nasm.txt
+	awk -f scripts/font-data--cpp.awk data/default_font_data.txt > src/generated/default_font_data.txt
 
 $(MINE_BIN): src/generated $(SOURCES)
 	$(CXX) -c everything.cpp -o everything.cpp.o $(CFLAGS)
