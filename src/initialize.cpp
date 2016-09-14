@@ -22,12 +22,13 @@ namespace Global {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
+	// Frogimine的启动信息
 	struct bootinfo {
 		uint32_t multiboot_flags = 0;
 		// 可用的连续内存地址，单位为KB
 		uint32_t memory_lower = 0, memory_upper = 0;
-		char cmdline[256] = {0};
-		const char* bootloader = nullptr;
+		char commandline[256] = {0};
+		char bootloader[32] = {0};
 	} bootinfo;
 	// Multiboot信息
 	// 参照：https://www.gnu.org/software/grub/
@@ -39,7 +40,6 @@ namespace Global {
 		uint32_t cmdline;
 		uint32_t mods_count;
 		uint32_t mods_addr;
-		uint32_t syms[4];
 		union {
 			struct a_out {
 				uint32_t tabsize;
@@ -52,7 +52,7 @@ namespace Global {
 				uint32_t size;
 				uint32_t addr;
 				uint32_t shndx;
-			}
+			};
 		} syms;
 		uint32_t mmap_length;
 		uint32_t mmap_addr;
@@ -78,10 +78,10 @@ namespace Global {
 			bootinfo.memory_upper = info->mem_upper;
 		}
 		if (info->flags & 1 << 2) {
-			// strcpy(bootinfo.cmdline = Memory::read32_at(address + 16));
+			FMString::strcpy(bootinfo.commandline, (const char*) info->cmdline);
 		}
 		if (info->flags & 1 << 9) {
-			bootinfo.bootloader = (const char*) Memory::read32_at(address + 64);
+			FMString::strcpy(bootinfo.bootloader, (const char*) info->boot_loader_name);
 		}
 	}
 	//-------------------------------------------------------------------------
@@ -95,8 +95,8 @@ namespace Global {
 		Interrupt::initialize();
 		Keyboard::initialize();
 		ASM::initialize_pattle();
-		Graphics::draw_text((struct pos) {0, 0}, MultibootInfo::mem_lower, Graphics::WHITE);
-		Graphics::draw_text((struct pos) {100, 0}, MultibootInfo::mem_upper, Graphics::WHITE);
+		Graphics::draw_text((struct pos) {0, 0}, bootinfo.memory_lower, Graphics::WHITE);
+		Graphics::draw_text((struct pos) {100, 0}, bootinfo.memory_upper, Graphics::WHITE);
 		Graphics::draw_text((struct pos) {0, 24}, Memory::kernel_start, Graphics::WHITE);
 		Graphics::draw_text((struct pos) {100, 24}, Memory::kernel_end, Graphics::WHITE);
 	}

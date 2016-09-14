@@ -52,4 +52,37 @@ namespace FMString {
 		// 填入数字
 		u_to_s(buf + 1, a, base);
 	}
+	//-------------------------------------------------------------------------
+	// ● strcpy
+	//-------------------------------------------------------------------------
+	char* strcpy(char* dest, const char* src) {
+		while (*src) {
+			*dest = *src;
+			dest++; src++;
+		}
+		return dest;
+	}
+	//-------------------------------------------------------------------------
+	// ● strlen
+	//   标准规定的strlen接受参数类型只是char*。这里允许const。
+	//-------------------------------------------------------------------------
+	size_t strlen(const char* str) {
+		size_t r = 0;
+		while (*str) {
+			r++; str++;
+		}
+		return r;
+	}
+	//-------------------------------------------------------------------------
+	// ● memset
+	//-------------------------------------------------------------------------
+	void* memset(void* dest, int ch, size_t count) {
+		auto dest_char = (unsigned char*) dest;
+		auto ch_char = (unsigned char) ch;
+		while (count) {
+			*dest_char = ch_char;
+			dest_char++; count--;
+		}
+		return dest;
+	}
 }
