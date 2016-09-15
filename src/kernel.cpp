@@ -26,8 +26,8 @@ void kernel_loop() {
 	if (!Keyboard::queue.is_empty()) {
 		Keyboard::process_data();
 		Graphics::redraw();
-	} else if (!Mouse::queue.is_empty()) {
-		Mouse::process_data();
+	} else if (Mouse::needs_refresh()) {
+		Mouse::refresh();
 		Graphics::redraw();
 	} else {
 		ASM::sti_hlt();

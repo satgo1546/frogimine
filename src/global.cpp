@@ -46,15 +46,15 @@ namespace Global {
 	typedef int32_t ptrdiff_t;
 	typedef uint16_t type_port;
 
-	// 图形学的数据类型
+	// 图形学的数据类型与常量
 	struct pos {
 		int x;
 		int y;
 	};
-	struct vector {
+	const struct vector {
 		int x;
 		int y;
-	};
+	} vector0 = {0, 0};
 	struct size {
 		int width;
 		int height;
@@ -64,6 +64,12 @@ namespace Global {
 		int y;
 		int width;
 		int height;
+	};
+	struct color {
+		uint8_t r;
+		uint8_t g;
+		uint8_t b;
+		uint8_t a;
 	};
 }
 

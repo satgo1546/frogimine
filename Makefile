@@ -15,7 +15,7 @@
 #==============================================================================
 # ■ Makefile
 #------------------------------------------------------------------------------
-#   make真是太神奇了，吓得我都不敢用它了。
+#   《小心翼翼地编写Makefile》
 #==============================================================================
 
 #------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ CXX = clang++
 AS = nasm
 LD = ld
 CFLAGS = \
-	-m32 -O2 -std=gnu++11 -Wall -Wextra -ggdb \
+	-m32 -O2 -std=gnu++11 -Wall -Wextra -ggdb -Isrc \
 	-nostdinc -fno-builtin -fno-stack-protector
 ASFLAGS = -f elf32 -g -F stabs
 LDFLAGS = -T scripts/linker.lds -melf_i386 -no-builtin -nostdlib -O2
@@ -59,9 +59,9 @@ clean:
 
 src/generated: data scripts
 	mkdir -p src/generated
-	awk -v output=cpp -f scripts/colors--.awk data/indexed_colors.csv > src/generated/colors_cpp.txt
-	awk -v output=nasm -f scripts/colors--.awk data/indexed_colors.csv > src/generated/colors_nasm.txt
-	awk -f scripts/font-data--cpp.awk data/default_font_data.txt > src/generated/default_font_data.txt
+	awk -v output=cpp -f scripts/colors__.awk data/indexed_colors.csv > src/generated/colors_cpp.txt
+	awk -v output=nasm -f scripts/colors__.awk data/indexed_colors.csv > src/generated/colors_nasm.txt
+	awk -f scripts/font_data__cpp.awk data/default_font_data.txt > src/generated/default_font_data.txt
 
 $(MINE_BIN): src/generated $(SOURCES)
 	$(CXX) -c everything.cpp -o everything.cpp.o $(CFLAGS)

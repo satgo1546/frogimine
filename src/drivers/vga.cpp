@@ -13,24 +13,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-// ■ mouse.cpp
+// ■ vga.cpp
 //-----------------------------------------------------------------------------
-//   鼠标。
+//   VGA驱动中字符和图形模式共用部分。
 //=============================================================================
 
-namespace Mouse {
+namespace VGA {
 	//-------------------------------------------------------------------------
 	// ● 定义
 	//-------------------------------------------------------------------------
-	struct buttons {
-		bool left = false;
-		bool middle = false;
-		bool right = false;
-	} buttons;
-	struct vector motion = {0, 0};
-	struct pos pixel_pos = {0, 0};
-	struct pos pos;
-	struct vector offset;
-	bool (*needs_refresh)();
-	void (*refresh)();
+	#include "default_font.cpp"
+	enum indexed_color {
+		#include "generated/colors_cpp.txt"
+	};
+	enum indexed_color cursor_color = GRAY_DDD;
+	//-------------------------------------------------------------------------
+	// ● RGB → CGA 16色
+	//   16色有很多种，当初就被微软坑了一次。
+	//   关于Windows是如何坑人的，请访问：
+	//   Wikipedia: List of software palettes
+	//   #Microsoft Windows default 16-color palette
+	//   “..., but with colors arranged in a different order.”
+	//-------------------------------------------------------------------------
+	enum indexed_color rgb_to_cga16(struct color color) {
+		short r = 0;
+		if (color.r & 0xf0) r |= 4;
+		if (color.g & 0xf0) r |= 2;
+		if (color.b & 0xf0) r |= 1;
+		if ((color.r + color.g + color.b) / 3 >= 128) r |= 8;
+		return (enum indexed_color) r;
+	}
 }

@@ -83,7 +83,7 @@ initialize_pattle:
 	; 在这里用0~255的范围仅是为了方便处理而使用。
 	; 0~15：HTML规定的标准16色、Windows cmd.exe默认颜色等。可参照：
 	; https://www.w3.org/TR/REC-html40/types.html#idx-color
-	%include "src/generated/colors-nasm.txt"
+	%include "src/generated/colors_nasm.txt"
 	%unmacro color 3
 	popfd
 	ret

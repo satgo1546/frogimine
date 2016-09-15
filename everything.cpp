@@ -21,25 +21,29 @@
 // 全局（系统无关）
 #include "src/global.cpp"
 #include "src/fm.cpp"
-#include "src/fmstring.cpp"
-#include "src/fmqueue.cpp"
+#include "src/fm_math.cpp"
+#include "src/fm_string.cpp"
+#include "src/fm_queue.cpp"
 
 // 低级函数库
 #include "src/asm.cpp"
 #include "src/memory.cpp"
 
-// 基础设施和驱动
+// 基础设施
 #include "src/gdt.cpp"
 #include "src/idt.cpp"
 #include "src/interrupt.cpp"
-#include "src/drivers/vga_text.cpp"
-//#include "src/drivers/vga_graphics.cpp"
 
 // 硬件抽象层
-#include "src/screen.cpp"
 #include "src/keyboard.cpp"
 #include "src/mouse.cpp"
 #include "src/graphics.cpp"
+
+// 驱动程序
+#include "src/drivers/mouse.cpp"
+#include "src/drivers/vga.cpp"
+#include "src/drivers/vga_text.cpp"
+#include "src/drivers/vga_graphics.cpp"
 
 // 主程序
 #include "src/initialize.cpp"
