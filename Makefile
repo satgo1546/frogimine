@@ -26,15 +26,15 @@ CXX = clang++
 AS = nasm
 LD = ld
 CFLAGS = \
-	-m32 -O2 -std=gnu++11 -Wall -Wextra -ggdb -Isrc \
+	-m32 -O2 -std=gnu++11 -Wall -Wextra -g -Isrc \
 	-nostdinc -fno-builtin -fno-stack-protector
-ASFLAGS = -f elf32 -g -F stabs
+ASFLAGS = -f elf32 -g
 LDFLAGS = -T scripts/linker.lds -melf_i386 -no-builtin -nostdlib -O2
 GRUB_MKRESCUE_FLAGS = \
 	--directory=/usr/lib/grub/i386-pc \
 	--fonts="" --locales="" --themes="" --compress=no
 
-QEMU_COMMAND = qemu-system-i386 -cdrom $(MINE_ISO) -display sdl
+QEMU_COMMAND = qemu-system-i386 -kernel $(MINE_BIN) -display sdl
 
 SOURCES = $(shell find src -name "*.cpp" -or -name "*.asm" | \
 	grep --invert-match "/generated")
@@ -45,11 +45,11 @@ MINE_ISO = frogimine.iso
 #------------------------------------------------------------------------------
 # ● 构建目标
 #------------------------------------------------------------------------------
-all: $(MINE_ISO)
+all: $(MINE_BIN)
 run: all
 	$(QEMU_COMMAND)
 debug: all
-	$(QEMU_COMMAND) -gdb tcp::23333 &
+	$(QEMU_COMMAND) -S -gdb tcp::23333 &
 	sleep .5
 	gdb -x scripts/gdbinit
 clean:

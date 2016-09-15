@@ -25,8 +25,8 @@ namespace Graphics {
 	void (*cleanup)();
 	struct size pixel_size, block_size;
 	void (*fill)(struct color);
-	void (*draw_cursor)(struct pos, struct vector);
 	void (*draw_text)(struct pos, struct vector, const char*, struct color);
+	void (*draw_cursor)(struct pos, struct vector);
 	//-------------------------------------------------------------------------
 	// ● 根据pixel_size更新block_size
 	//-------------------------------------------------------------------------

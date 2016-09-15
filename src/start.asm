@@ -64,7 +64,7 @@ multiboot_end:
 
 	; 写一段不知道干什么用的文字
 	mov esi, booting_message
-	mov edi, 0xb8142
+	mov edi, 0xb8144
 	mov ecx, 40
 	cld
 	rep movsb

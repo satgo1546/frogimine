@@ -93,6 +93,12 @@ namespace VGA { namespace Text {
 	// ● 绘制鼠标指针
 	//-------------------------------------------------------------------------
 	void draw_cursor(struct pos pos, struct vector offset) {
+		char* address = memory_address((struct pos) {pos.x * 2, pos.y});
+		address++;
+		*address = 0x77;
+		address++;
+		address++;
+		*address = 0x77;
 	}
 	//-------------------------------------------------------------------------
 	// ● 启用
@@ -101,9 +107,11 @@ namespace VGA { namespace Text {
 		::Graphics::cleanup = FM::nop;
 		char_size.width = 80;
 		char_size.height = 25;
-		::Graphics::pixel_size = char_size;
+		::Graphics::pixel_size =
+			(struct size) {char_size.width * 8, char_size.height * 16};
 		::Graphics::update_block_size();
 		::Graphics::fill = fill;
+		::Graphics::draw_text = draw_text;
 		::Graphics::draw_cursor = draw_cursor;
 	}
 }}
