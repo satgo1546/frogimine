@@ -95,6 +95,8 @@ namespace Global {
 		Interrupt::initialize();
 		Keyboard::initialize();
 		ASM::initialize_pattle();
+		VGA::Text::set();
+		PS2Mouse::set();
 		/*
 		Graphics::draw_text((struct pos) {0, 0}, bootinfo.memory_lower, Graphics::WHITE);
 		Graphics::draw_text((struct pos) {100, 0}, bootinfo.memory_upper, Graphics::WHITE);
