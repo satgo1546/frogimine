@@ -24,7 +24,7 @@ namespace Keyboard {
 	//-------------------------------------------------------------------------
 	const int QUEUE_SIZE = 32;
 	uint8_t queue_data[QUEUE_SIZE];
-	FMQueue<uint8_t> queue(queue_data, QUEUE_SIZE);
+	FM::Queue<uint8_t> queue(queue_data, QUEUE_SIZE);
 
 	//-------------------------------------------------------------------------
 	// ● 等待键盘的回应

@@ -39,7 +39,7 @@ namespace Graphics {
 	//-------------------------------------------------------------------------
 	void draw_number(struct pos pos, struct vector offset, long value, struct color color) {
 		char buf[12];
-		FMString::i_to_s(buf, value);
+		FM::String::i_to_s(buf, value);
 		draw_text(pos, offset, buf, color);
 	}
 	//-------------------------------------------------------------------------

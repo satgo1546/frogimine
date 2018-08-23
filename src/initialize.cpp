@@ -78,10 +78,10 @@ namespace Global {
 			bootinfo.memory_upper = info->mem_upper;
 		}
 		if (info->flags & 1 << 2) {
-			FMString::strcpy(bootinfo.commandline, (const char*) info->cmdline);
+			FM::String::strcpy(bootinfo.commandline, (const char*) info->cmdline);
 		}
 		if (info->flags & 1 << 9) {
-			FMString::strcpy(bootinfo.bootloader, (const char*) info->boot_loader_name);
+			FM::String::strcpy(bootinfo.bootloader, (const char*) info->boot_loader_name);
 		}
 	}
 	//-------------------------------------------------------------------------

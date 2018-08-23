@@ -1,5 +1,5 @@
 //=============================================================================
-// Copyright 2016 Frog Chen
+// Copyright 2018 Frog Chen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,35 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-// ■ everything.cpp
+// ■ fmlib.cpp
 //-----------------------------------------------------------------------------
-//   正常的C++项目中都不会有的、只用来包含其它文件的文件。
+//   包含所有FMLib函数库的文件。
 //=============================================================================
 
-// 全局（系统无关）
-#include "src/global.cpp"
-#include "src/fmlib/fmlib.cpp"
+#include "global.cpp"
 
-// 低级函数库
-#include "src/asm.cpp"
-#include "src/memory.cpp"
-
-// 基础设施
-#include "src/gdt.cpp"
-#include "src/idt.cpp"
-#include "src/interrupt.cpp"
-
-// 硬件抽象层
-#include "src/keyboard.cpp"
-#include "src/mouse.cpp"
-#include "src/graphics.cpp"
-
-// 驱动程序
-#include "src/drivers/mouse.cpp"
-#include "src/drivers/vga.cpp"
-#include "src/drivers/vga_text.cpp"
-#include "src/drivers/vga_graphics.cpp"
-
-// 主程序
-#include "src/initialize.cpp"
-#include "src/kernel.cpp"
+namespace FM {
+	#include "math.cpp"
+	#include "string.cpp"
+	#include "queue.cpp"
+}

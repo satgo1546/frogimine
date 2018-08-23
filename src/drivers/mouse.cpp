@@ -25,7 +25,7 @@ namespace PS2Mouse {
 	const int QUEUE_SIZE = 256;
 	const uint8_t ACKNOWLEDGE = 0xfa;
 	uint8_t queue_data[QUEUE_SIZE];
-	FMQueue<uint8_t> queue(queue_data, QUEUE_SIZE);
+	FM::Queue<uint8_t> queue(queue_data, QUEUE_SIZE);
 	struct info {
 		char stage = -1;
 		uint8_t msg[3];
@@ -59,11 +59,11 @@ namespace PS2Mouse {
 	// ● 修理鼠标指针（超出画面边界的处理）
 	//-------------------------------------------------------------------------
 	void fix_pos() {
-		Mouse::pixel_pos.x = FMMath::clamp(
+		Mouse::pixel_pos.x = FM::Math::clamp(
 			Mouse::pixel_pos.x,
 			0, Graphics::pixel_size.width - 1
 		);
-		Mouse::pixel_pos.y = FMMath::clamp(
+		Mouse::pixel_pos.y = FM::Math::clamp(
 			Mouse::pixel_pos.y,
 			0, Graphics::pixel_size.width - 1
 		);
