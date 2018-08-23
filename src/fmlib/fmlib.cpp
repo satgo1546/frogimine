@@ -21,7 +21,17 @@
 #include "global.cpp"
 
 namespace FM {
+	// 标准库
 	#include "math.cpp"
 	#include "string.cpp"
+	// 数据类型
+	#include "date.cpp"
+	// 数据结构
 	#include "queue.cpp"
+	#include "stack.cpp"
+	#include "union_find.cpp"
+	#include "binary_heap.cpp"
+	#include "binary_indexed_tree.cpp"
+	// 实用函数
+	#include "iupac.cpp"
 }
