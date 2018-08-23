@@ -34,4 +34,9 @@ namespace FM {
 	#include "binary_indexed_tree.cpp"
 	// 实用函数
 	#include "iupac.cpp"
+	// 单元测试
+	// 我不知道是否已经包含了cstdio和cstdlib，我只能确认宏的存在。
+	#if defined(EOF) && defined(EXIT_SUCCESS)
+		#include "test.cpp"
+	#endif
 }
