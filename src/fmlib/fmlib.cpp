@@ -18,12 +18,23 @@
 //   包含所有FMLib函数库的文件。
 //=============================================================================
 
+#if __STDC_HOSTED__
+	#include <cstddef>
+	#include <cstdint>
+	#include <climits>
+	#include <cinttypes>
+	#include <cstdlib>
+	#include <cstdio>
+	#include <cstring>
+#endif
+
 #include "global.cpp"
 
 namespace FM {
 	// 标准库
 	#include "math.cpp"
 	#include "string.cpp"
+
 	// 数据类型
 	#include "date.cpp"
 	// 数据结构
@@ -34,9 +45,9 @@ namespace FM {
 	#include "binary_indexed_tree.cpp"
 	// 实用函数
 	#include "iupac.cpp"
-	// 单元测试
-	// 我不知道是否已经包含了cstdio和cstdlib，我只能确认宏的存在。
-	#if defined(EOF) && defined(EXIT_SUCCESS)
+
+	#if __STDC_HOSTED__
+		// 单元测试
 		#include "test.cpp"
 	#endif
 }
